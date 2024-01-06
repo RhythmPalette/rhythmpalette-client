@@ -61,7 +61,7 @@ const Searching = () => {
             </MusicText>
             <form>
                 <label>
-                    <InputText type='text' placeholder='검색어를 입력해주세요' value = {inputValue} onChange={changeInputValue} onKeyUp={handleDropDownKey}/>
+                    <InputText type='text' placeholder='Search' value = {inputValue} onChange={changeInputValue} onKeyUp={handleDropDownKey}/>
                     <IoSearchSharp />
                 </label>
             </form>
