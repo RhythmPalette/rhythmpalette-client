@@ -1,7 +1,8 @@
 import React ,{useEffect, useState} from 'react';
-
 import styled from 'styled-components';
 import { IoSearchSharp } from "react-icons/io5";
+import {ReactComponent as NodeBtn} from "../assets/NoteBtn.svg";
+import {ReactComponent as AlbumImgExample} from "../assets/AlbumImgExample.svg";
 const wholeTextArray = [
     'apple',
     'banana',
@@ -81,7 +82,9 @@ const Searching = () => {
                   dropDownItemIndex === dropDownIndex ? 'selected' : ''
                 }
               >
+                <AlbumImgExample width="40px" height="40px" />
                 {dropDownItem}
+                <NodeBtn width="20px" height="20px" />
               </DropDownItem>
             )
           })}
@@ -96,6 +99,9 @@ export default Searching;
 const activeBorderRadius = '16px 16px 0 0'
 const inactiveBorderRadius = '16px 16px 16px 16px'
 
+
+
+
 const SearchingPackage = styled.div`
     height: 100vh;
     display: flex;
@@ -104,7 +110,8 @@ const SearchingPackage = styled.div`
     align-items: center;
 `;
 const DropDownBox = styled.ul`
-  display: block;
+  display: flex;
+  flex-direction: column;
   margin: 0 auto;
   padding: 8px 0;
   background-color: white;
@@ -117,7 +124,14 @@ const DropDownBox = styled.ul`
   z-index: 3;
 `
 const DropDownItem = styled.li`
-  padding: 0 16px;
+  font-size: 20px;
+  font-weight: bold;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  padding: 15px;
+
   &.selected {
     background-color: lightgray;
   }
