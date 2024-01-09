@@ -1,18 +1,116 @@
 import React ,{useEffect, useState} from 'react';
 import styled from 'styled-components';
+import Clouds from './Clouds';
+import {useNavigate} from 'react-router-dom'
 import { IoSearchSharp } from "react-icons/io5";
 import {ReactComponent as NodeBtn} from "../assets/NoteBtn.svg";
 import {ReactComponent as AlbumImgExample} from "../assets/AlbumImgExample.svg";
+
+
 const wholeTextArray = [
     'apple',
     'banana',
 ]
+const DATA = [
+  {
+    id :'1',
+    title: 'first',
+  },
+  {
+    id : '2',
+    title: 'second',
+  },
+  {
+    id : '3',
+    title: 'second',
+  },
+   
+  {
+    id:'3',
+    title: 'third',
+  },
+  {
+    id : '3',
+    title: 'second',
+  },
+  
+  {
+    id : '3',
+    title: 'second',
+  },
+  
+  {
+    id : '3',
+    title: 'second',
+  },
+  
+  {
+    id : '3',
+    title: 'second',
+  },
+  
+  {
+    id : '3',
+    title: 'second',
+  },
+  
+  {
+    id : '3',
+    title: 'second',
+  },
+  
+  {
+    id : '3',
+    title: 'second',
+  },
+  
+  {
+    id : '3',
+    title: 'second',
+  },
+  {
+    id : '3',
+    title: 'second',
+  },
+  {
+    id : '3',
+    title: 'second',
+  },
+  {
+    id : '3',
+    title: 'second',
+  },
+  {
+    id : '3',
+    title: 'second',
+  },
+  {
+    id : '3',
+    title: 'second',
+  },
+  {
+    id : '3',
+    title: 'second',
+  },
+  {
+    id : '3',
+    title: 'second',
+  },
+  {
+    id : '3',
+    title: 'second',
+  },
+
+
+]
 
 const Searching = () => {
+    const navigate = useNavigate();
     const [inputValue, setInputValue] = useState('');
     const [isHaveInputValue, setIsHaveInputValue] = useState(false);
     const [dropDownList, setDropDownList] = useState(wholeTextArray);
     const [dropDownItemIndex, setDropDownItemIndex] = useState(-1);
+    
     const showDropDownList = () =>{
         if(inputValue === ''){
             setIsHaveInputValue(false);
@@ -31,35 +129,43 @@ const Searching = () => {
     } 
     
     const clickDropDownItem = clickedItem =>{
-        setInputValue(clickedItem);
-        setIsHaveInputValue(false);
+    
+      setInputValue(clickedItem);
+      setIsHaveInputValue(false);
+      navigate(`/post/${clickedItem}`); 
+       
+    }
+    const clickListItem = clickedItem =>{
+      navigate(`/post/${clickedItem}`);
+
     }
 
     const handleDropDownKey = event =>{
         if(isHaveInputValue){
-          if(  event.key === 'ArrowDown' && 
+          if(event.key === 'ArrowDown' && 
             dropDownList.length - 1> dropDownItemIndex)
             {
                 setDropDownItemIndex(dropDownItemIndex + 1);
             }
-            else if(event.key === 'ArrowUp' && dropDownItemIndex>=0){
+             if(event.key === 'ArrowUp' && dropDownItemIndex >= 0){
                 setDropDownItemIndex(dropDownItemIndex-1);
             }
-            else if(event.key === 'Enter' && dropDownItemIndex>=0){
+             if(event.key === 'Enter' && dropDownItemIndex >= 0){
+                if(dropDownList[dropDownItemIndex]){
                 clickDropDownItem(dropDownList[dropDownItemIndex]);
                 setDropDownItemIndex(-1);
+                }
+                else{
+                  clickListItem(event);
+                }
             }
-       
         }
-
     }
     useEffect(showDropDownList,[inputValue]);
     return (
         <SearchingPackage>
             <InputBox isHaveInputValue={isHaveInputValue}>
-            <MusicText>
-                {"어떤 음악을 공유하고 싶으신가요?"}
-            </MusicText>
+         
             <form>
                 <label>
                     <InputText type='text' placeholder='Search' value = {inputValue} onChange={changeInputValue} onKeyUp={handleDropDownKey}/>
@@ -67,8 +173,8 @@ const Searching = () => {
                 </label>
             </form>
             </InputBox>
-            {isHaveInputValue && (
-        <DropDownBox>
+          {isHaveInputValue && (
+            <DropDownBox>
           {dropDownList.length === 0 && (
             <DropDownItem>해당하는 단어가 없습니다</DropDownItem>
           )}
@@ -76,12 +182,13 @@ const Searching = () => {
             return (
               <DropDownItem
                 key={dropDownIndex}
-                onClick={() => clickDropDownItem(dropDownItem)}
+                onClick={() => clickListItem(dropDownItem)}
                 onMouseOver={() => setDropDownItemIndex(dropDownIndex)}
                 className={
                   dropDownItemIndex === dropDownIndex ? 'selected' : ''
                 }
               >
+
                 <AlbumImgExample width="40px" height="40px" />
                 {dropDownItem}
                 <NodeBtn width="20px" height="20px" />
@@ -90,20 +197,40 @@ const Searching = () => {
           })}
         </DropDownBox>
       )}  
+        <CloudGrid>
+         {DATA.map((item)=>{
+                return (
+                    <Clouds
+                    title = {item.title}
+                    />
+                )
+            }
+            )
+
+          }
+        </CloudGrid>
         </SearchingPackage>
     );
 };
 
 
 export default Searching;
-const activeBorderRadius = '16px 16px 0 0'
-const inactiveBorderRadius = '16px 16px 16px 16px'
 
+const activeBorderRadius = '20px 20px 0 0';
+const inactiveBorderRadius = '20px 20px 20px 20px';
 
-
+const CloudGrid = styled.div`
+  display: grid;
+  column-gap: 150px;
+  margin-left: 0px;
+  margin-top: 20px;
+  row-gap: 20px;
+  grid-template-rows: 1fr 1fr 1fr 1fr 1fr;
+  grid-template-columns: 100px 100px 100px 100px ;
+`;
 
 const SearchingPackage = styled.div`
-    height: 100vh;
+   
     display: flex;
     justify-content: center;
     flex-direction: column;
@@ -122,7 +249,7 @@ const DropDownBox = styled.ul`
   box-shadow: 0 10px 10px rgb(0, 0, 0, 0.3);
   list-style-type: none;
   z-index: 3;
-`
+`;
 const DropDownItem = styled.li`
   font-size: 20px;
   font-weight: bold;
@@ -135,9 +262,10 @@ const DropDownItem = styled.li`
   &.selected {
     background-color: lightgray;
   }
-`
+`;
 const InputBox = styled.div`
   display: flex;
+  margin-top: 30px;
   flex-direction: column;
   width: 600px;
   padding: 16px;
@@ -147,10 +275,8 @@ const InputBox = styled.div`
   &:focus-within {
     box-shadow: 0 10px 10px rgb(0, 0, 0, 0.3);
   }
-`
-const MusicText = styled.h1`
-  padding-bottom:30px;
 `;
+
 const InputText = styled.input`
   flex: 1 0 0;
   margin: 0;
@@ -162,5 +288,5 @@ const InputText = styled.input`
 
     width: 550px;
     border: none; 
-    border-bottom: solid 2px #aaaa;
+ 
 `;
