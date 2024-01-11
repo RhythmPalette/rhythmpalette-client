@@ -6,6 +6,8 @@ import IconLike from "../assets/IconLike.svg";
 import IconComment from "../assets/IconComment.svg";
 import IconAlarm from "../assets/IconAlarm.svg";
 import IconProfile from "../assets/IconProfile.svg";
+import IconSave from "../assets/IconSave.svg";
+import IconSeeMore from "../assets/IconSeeMore.svg";
 
 
 const PageLayout = styled.div`
@@ -58,14 +60,17 @@ const IconsContainer = styled.div`
     margin-right: 83.73px;
 `;
 
-const IconAlarmStyled = styled(Icon)`
+const IconAlarmStyled = styled.img`
     width: 36.79px;
     height: 39.23px;
+    margin-top: 0px;
+    margin-right: 20px;
 `;
 
-const IconProfileStyled = styled(Icon)`
+const IconProfileStyled = styled.img`
     width: 62.49px;
     height: 62.49px;
+    margin-top: -10px;
 `;
 
 
@@ -83,10 +88,19 @@ const FeedContainer = styled.div`
     width: 756.13px;
     height: 212.23px;
 `;
+
+const ContainerIcon = styled.div`
+    display: flex;
+    justify-content: start;
+    gap: 19.33px;
+`;
+
+
 const IconConatiner = styled.div`
     display: flex;
     justify-content: start;
     gap: 19.33px;
+    margin-right: 560px;
 `;
 
 const Icon = styled.img`
@@ -94,7 +108,6 @@ const Icon = styled.img`
     height: 24px;
     cursor: pointer;
 `
-
 
 
 const Description = styled.div`
@@ -167,10 +180,16 @@ function Home() {
                         </FeedHeader>
                         <ImageComponent />
                         <FeedContainer>
-                            <IconConatiner>
-                                <Icon src={IconLike} alt="Like" />
-                                <Icon src={IconComment} alt="Comment"/>
-                            </IconConatiner>
+                            <ContainerIcon>
+                                <IconConatiner>
+                                    <Icon src={IconLike} alt="Like" />
+                                    <Icon src={IconComment} alt="Comment"/>
+                                </IconConatiner>
+                                <IconConatiner>
+                                    <Icon src={IconSave} alt="Save" />
+                                    <Icon src={IconSeeMore} alt="See more"/>
+                                </IconConatiner>
+                            </ContainerIcon>
                             <Description>{feed.description}</Description>
                         </FeedContainer>
 
