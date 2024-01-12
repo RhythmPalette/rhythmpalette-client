@@ -11,14 +11,21 @@ import IconSeeMore from "../assets/IconSeeMore.svg";
 
 
 const PageLayout = styled.div`
-    display: flex;
-    height: 100vh;
+    display: flex; 
+    justify-content: center;
+    align-items: center;
+    height: 1080px; 
+    max-width: 1910.81px;
+    margin: auto;
 `;
 
 const PageContainer = styled.div`
     display: flex;
     flex-direction: column; 
-`
+    width: 100%;
+    height: 1080px; 
+    overflow: auto;
+`;
 
 const Content = styled.div`
     flex-grow: 1;
@@ -36,8 +43,8 @@ const SearchBarContainer = styled.div`
 
 const SearchBar = styled.div`
   display: flex;
-  flex-grow: 1; /* 나머지 공간을 모두 차지하도록 */
-  align-items: center; /* 세로 중앙 정렬 */
+  flex-grow: 1; 
+  align-items: center; 
 `;
 
 const SearchInput = styled.input`
@@ -51,6 +58,13 @@ const SearchInput = styled.input`
     margin-left: 221.79px;
     margin-top: 49.85px;
     margin-bottom: 49.49px;
+    &:focus {
+        outline: none;
+    }
+    &::placeholder {
+        font-size: 26px;
+        color: #9A9A9A;
+    }
 `;
 
 const IconsContainer = styled.div`

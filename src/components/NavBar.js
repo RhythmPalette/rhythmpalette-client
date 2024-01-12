@@ -10,7 +10,7 @@ const NavBarContainer = styled.div`
     display: flex;
     flex-direction: column;
     background-color: #F9F9F9; 
-    height: 100vh; 
+    height: 1080px;
     width: 348.01px;
 `;
 
