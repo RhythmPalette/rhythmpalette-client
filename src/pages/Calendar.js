@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import dayjs from 'dayjs';
 import styled from 'styled-components';
+import dummyStory from '../store/dummyStory';
+import {ReactComponent as SvgImage} from '../assets/Image1.svg'
 // import 'dayjs/locale/ko'; // 한국어 설정
 
 const CalendarWrapper = styled.div`
@@ -8,13 +10,13 @@ const CalendarWrapper = styled.div`
     justify-content : center;
     align-items : center;
     grid-template-columns: repeat(7, 1fr);
-    gap: 50px;
+    gap: 10px;
     max-width: 800px;
     margin : auto;
     
 `;
 
-const Header = styled.div`
+const DayHeader = styled.div`
     text-align: center;
     padding: 8px;
     background-color: #f0f0f0;
@@ -22,38 +24,52 @@ const Header = styled.div`
     margin-top : 100px;
 `;
 
-const day = styled.div`
+const Day = styled.div`
     text-align: center;
-    padding: 10px;
+    padding : 10px;
     background-color: ${props => props.isHeader ? '#f0f0f0' : 'white'};
-    border-radius: 5px;
+    width: 100px; /* 고정된 가로 크기 */
+    height: 100px; /* 고정된 세로 크기 */
+    display: flex;
+    flex-direction: row; 
+    align-items: flex-start;
+    justify-content: center;
+    
+    
 `;
 
 const MonthHeader = styled.div`
     position : absolute;
     top : 0;
     left: 50%;
-  transform: translateX(-50%);
-  background-color: #f0f0f0;
-  padding: 8px;
-  border-radius: 5px;
-  width: 100%;
-  text-align: center;
+    transform: translateX(-50%);
+    background-color: #f0f0f0;
+    padding: 8px;
+    border-radius: 5px;
+    width: 100%;
+    text-align: center;
 }
 `
-
 const NavigationButtons = styled.div`
 position : absolute;
 top : 0;
-`
-const PreviousMonthButton = styled.div`
+`;
+const PrevMonthButton = styled.button`
 position : absolute;
-top : 0;`
+top : 0;
+`;
 
-const NextMonthButton = styled.div`
+
+const NextMonthButton = styled.button`
 position : absolute;
 align-self : flex- end;
-`
+`;
+
+const ImageContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
 
 
 const Calendar = () => {
@@ -65,38 +81,53 @@ const Calendar = () => {
     const renderCalendar = () => {
         const calendar = [];
         for (let i = 0; i < firstDayOfMonth; i++) {
-            calendar.push(<div key={`empty-${i}`} className="day"></div>);
+            calendar.push(<Day key={`empty-${i}`} ></Day>);
         }
         for (let i = 1; i <= daysInMonth; i++) {
-            calendar.push(<div key={i} className="day">{i}</div>);
+            const imageData = dummyStory.find(item => item.day === i);
+
+
+            calendar.push(
+                <Day key={i}>
+                    <div>
+                      <span>{i}</span> 
+                      {imageData && (
+                        <ImageContainer> 
+                            {imageData.image.component}
+                    </ImageContainer>
+                    )}
+                    </div>
+                </Day>
+            );
         }
         return calendar;
     };
 
-
-    const PreviousMonthButton = ({ onClick }) => (
-    <button className="prev-month-button" onClick={onClick}>◀</button>
-);
-
-    const NextMonthButton = ({ onClick }) => (
-    <button className="next-month-button" onClick={onClick}>▶</button>
-);
+    const PrevMonthButton = ({ onClick }) => (
+        <button onClick={onClick}>◀</button>
+    );
+    
+        const NextMonthButton = ({ onClick }) => (
+        <button onClick={onClick}>▶</button>
+    );
+    
 
     return (
-        <CalendarWrapper>
-        <Header>일</Header>
-        <Header>월</Header>
-        <Header>화</Header>
-        <Header>수</Header>
-        <Header>목</Header>
-        <Header>금</Header>
-        <Header>토</Header>
+   
+        <CalendarWrapper>   
+        <DayHeader>일</DayHeader>
+        <DayHeader>월</DayHeader>
+        <DayHeader>화</DayHeader>
+        <DayHeader>수</DayHeader>
+        <DayHeader>목</DayHeader>
+        <DayHeader>금</DayHeader>
+        <DayHeader>토</DayHeader>
         <MonthHeader>
-            {currentDate.format('MMMM YYYY')} </MonthHeader>
+            {currentDate.format('MMMM YYYY')} </MonthHeader> 
             {renderCalendar()}
             <NavigationButtons>
-                <PreviousMonthButton onClick={() => setCurrentDate(prevDate => prevDate.subtract(1, 'month'))}>이전 달 </PreviousMonthButton>
-                <NextMonthButton onClick={() => setCurrentDate(prevDate => prevDate.add(1, 'month'))}>다음 달 </NextMonthButton>   
+                <PrevMonthButton onClick={() => setCurrentDate(prevDate => prevDate.subtract(1, 'month'))}> ◀ </PrevMonthButton>
+                <NextMonthButton onClick={() => setCurrentDate(prevDate => prevDate.add(1, 'month'))}>▶ </NextMonthButton>   
             </NavigationButtons>
             
     </CalendarWrapper>
@@ -106,4 +137,4 @@ const Calendar = () => {
 
 
 
-export default Calendar;
+export default Calendar; 
