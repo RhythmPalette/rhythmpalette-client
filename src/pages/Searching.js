@@ -197,6 +197,7 @@ const Searching = () => {
           })}
         </DropDownBox>
       )}  
+      <CloudBox>
         <CloudGrid>
          {DATA.map((item)=>{
                 return (
@@ -209,6 +210,7 @@ const Searching = () => {
 
           }
         </CloudGrid>
+        </CloudBox>
         </SearchingPackage>
     );
 };
@@ -219,6 +221,10 @@ export default Searching;
 const activeBorderRadius = '20px 20px 0 0';
 const inactiveBorderRadius = '20px 20px 20px 20px';
 
+const CloudBox = styled.div`
+  position: absolute;
+  margin-top: 1000px;
+`;
 const CloudGrid = styled.div`
   display: grid;
   column-gap: 150px;
@@ -238,6 +244,8 @@ const SearchingPackage = styled.div`
 `;
 const DropDownBox = styled.ul`
   display: flex;
+  position: fixed;
+  top: 85px;
   flex-direction: column;
   margin: 0 auto;
   padding: 8px 0;
@@ -248,7 +256,7 @@ const DropDownBox = styled.ul`
   border-radius: 0 0 16px 16px;
   box-shadow: 0 10px 10px rgb(0, 0, 0, 0.3);
   list-style-type: none;
-  z-index: 3;
+  z-index: 10;
 `;
 const DropDownItem = styled.li`
   font-size: 20px;
