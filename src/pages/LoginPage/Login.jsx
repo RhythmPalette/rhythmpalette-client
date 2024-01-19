@@ -214,7 +214,7 @@ const Login = () => {
   const kakaoLogin = ()=>{
     window.location.href = kakaoURL
   }
-  const code = new URL(window.location.href).searchParams.get("code");
+  // const code = new URL(window.location.href).searchParams.get("code");
 
   return (
     <Background>
