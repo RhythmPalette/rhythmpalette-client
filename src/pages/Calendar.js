@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
+import {Link} from 'react-router-dom';
 import dayjs from 'dayjs';
 import styled from 'styled-components';
 import dummyStory from '../store/dummyStory';
 import {ReactComponent as SvgImage} from '../assets/Image1.svg'
-// import 'dayjs/locale/ko'; // 한국어 설정
+
 
 const CalendarWrapper = styled.div`
     display: grid;
@@ -13,12 +14,12 @@ const CalendarWrapper = styled.div`
     gap: 10px;
     max-width: 800px;
     margin : auto;
-    
+    margin-top : 30px;
 `;
 
 const DayHeader = styled.div`
     text-align: center;
-    padding: 8px;
+    padding: 10px;
     background-color: #f0f0f0;
     border-radius: 5px;
     margin-top : 100px;
@@ -43,7 +44,7 @@ const MonthHeader = styled.div`
     top : 0;
     left: 50%;
     transform: translateX(-50%);
-    background-color: #f0f0f0;
+    
     padding: 8px;
     border-radius: 5px;
     width: 100%;
@@ -79,28 +80,30 @@ const Calendar = () => {
     const firstDayOfMonth = currentDate.startOf('month').day();
 
     const renderCalendar = () => {
-        const calendar = [];
-        for (let i = 0; i < firstDayOfMonth; i++) {
-            calendar.push(<Day key={`empty-${i}`} ></Day>);
-        }
-        for (let i = 1; i <= daysInMonth; i++) {
-            const imageData = dummyStory.find(item => item.day === i);
+        const emptyDays = Array.from({ length: firstDayOfMonth }, (_, i) => (
+            <Day key={`empty-${i}`} />
+          ));
+        
+            const days = Array.from({ length: daysInMonth }, (_, i) => {
+            const imageData = dummyStory.find(item => item.day === i+1);
 
 
-            calendar.push(
-                <Day key={i}>
+            return(
+                <Day key={i+1}>
                     <div>
-                      <span>{i}</span> 
+                      <span>{i+1}</span> 
                       {imageData && (
                         <ImageContainer> 
+                            <Link to = {`/shotform`}>
                             {imageData.image.component}
-                    </ImageContainer>
+                            </Link>
+                        </ImageContainer>
                     )}
                     </div>
                 </Day>
             );
-        }
-        return calendar;
+        });
+        return [...emptyDays, ...days];
     };
 
     const PrevMonthButton = ({ onClick }) => (
@@ -115,15 +118,9 @@ const Calendar = () => {
     return (
    
         <CalendarWrapper>   
-        <DayHeader>일</DayHeader>
-        <DayHeader>월</DayHeader>
-        <DayHeader>화</DayHeader>
-        <DayHeader>수</DayHeader>
-        <DayHeader>목</DayHeader>
-        <DayHeader>금</DayHeader>
-        <DayHeader>토</DayHeader>
+     
         <MonthHeader>
-            {currentDate.format('MMMM YYYY')} </MonthHeader> 
+            {currentDate.format('YYYY.MM')} </MonthHeader> 
             {renderCalendar()}
             <NavigationButtons>
                 <PrevMonthButton onClick={() => setCurrentDate(prevDate => prevDate.subtract(1, 'month'))}> ◀ </PrevMonthButton>

@@ -7,7 +7,7 @@ const StyledImage1 = <Image1 width="80px" height="100px" />;
 
 const dummyStory = [
     { day: 3, image: { component: StyledImage1, alt: 'Image 3' } },
-    { day: 17, image: { component: StyledImage1, alt: 'Image 17' } },
+    { day: 15, image: { component: StyledImage1, alt: 'Image 15' } },
   ];
 
 
