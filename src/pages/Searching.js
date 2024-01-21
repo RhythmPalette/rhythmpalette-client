@@ -6,7 +6,8 @@ import { IoSearchSharp } from "react-icons/io5";
 import {ReactComponent as NodeBtn} from "../assets/NoteBtn.svg";
 import {ReactComponent as AlbumImgExample} from "../assets/AlbumImgExample.svg";
 
-
+const CLIENT_ID = "d1b1e1bd14254ae2b50f43eb69ba9a87";
+const CLIENT_SECRET ="2064724783bd4462b8671a035d864b13";
 const wholeTextArray = [
     'apple',
     'banana',
@@ -106,11 +107,24 @@ const DATA = [
 
 const Searching = () => {
     const navigate = useNavigate();
-    const [inputValue, setInputValue] = useState('');
+    const [inputValue, setInputValue] = useState("");
     const [isHaveInputValue, setIsHaveInputValue] = useState(false);
     const [dropDownList, setDropDownList] = useState(wholeTextArray);
     const [dropDownItemIndex, setDropDownItemIndex] = useState(-1);
     
+    useEffect(()=>{
+      
+      var authParameters = {
+          method : 'POST',
+          headers:{
+            'Content-Type' : 'application/x-www-form-urlencoded'
+          },
+          body : 'grant_type=client_credentials&client_id=' + CLIENT_ID + '&client_secret='+CLIENT_SECRET
+      }      
+      fetch('https://accounts.spotify.com/api/token',authParameters)
+      .then()
+    },[])
+
     const showDropDownList = () =>{
         if(inputValue === ''){
             setIsHaveInputValue(false);
@@ -129,8 +143,7 @@ const Searching = () => {
     } 
     
     const clickDropDownItem = clickedItem =>{
-    
-      setInputValue(clickedItem);
+      
       setIsHaveInputValue(false);
       navigate(`/post/${clickedItem}`); 
        
@@ -142,21 +155,29 @@ const Searching = () => {
 
     const handleDropDownKey = event =>{
         if(isHaveInputValue){
+          
+          console.log(inputValue);
           if(event.key === 'ArrowDown' && 
             dropDownList.length - 1> dropDownItemIndex)
             {
                 setDropDownItemIndex(dropDownItemIndex + 1);
+                console.log("여기 실행되긴 함1");
             }
-             if(event.key === 'ArrowUp' && dropDownItemIndex >= 0){
+            if(event.key === 'ArrowUp' && dropDownItemIndex >= 0){
                 setDropDownItemIndex(dropDownItemIndex-1);
+                console.log("여기 실행되긴 함2");
             }
-             if(event.key === 'Enter' && dropDownItemIndex >= 0){
+            if(event.key=== 'Enter' && dropDownItemIndex >= 0){
+                console.log("여기 실행되긴 함3");
                 if(dropDownList[dropDownItemIndex]){
+                console.log("여기 실행되긴 함4");
                 clickDropDownItem(dropDownList[dropDownItemIndex]);
                 setDropDownItemIndex(-1);
+                console.log(inputValue);
                 }
                 else{
-                  clickListItem(event);
+                  console.log(inputValue);
+                  clickListItem(inputValue);
                 }
             }
         }
@@ -166,12 +187,12 @@ const Searching = () => {
         <SearchingPackage>
             <InputBox isHaveInputValue={isHaveInputValue}>
          
-            <form>
+         
                 <label>
                     <InputText type='text' placeholder='Search' value = {inputValue} onChange={changeInputValue} onKeyUp={handleDropDownKey}/>
                     <IoSearchSharp />
                 </label>
-            </form>
+           
             </InputBox>
           {isHaveInputValue && (
             <DropDownBox>
@@ -182,6 +203,7 @@ const Searching = () => {
             return (
               <DropDownItem
                 key={dropDownIndex}
+              
                 onClick={() => clickListItem(dropDownItem)}
                 onMouseOver={() => setDropDownItemIndex(dropDownIndex)}
                 className={
