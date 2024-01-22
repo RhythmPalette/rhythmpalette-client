@@ -8,10 +8,7 @@ import {ReactComponent as AlbumImgExample} from "../assets/AlbumImgExample.svg";
 
 const CLIENT_ID = "d1b1e1bd14254ae2b50f43eb69ba9a87";
 const CLIENT_SECRET ="2064724783bd4462b8671a035d864b13";
-const wholeTextArray = [
-    'apple',
-    'banana',
-]
+
 const DATA = [
   {
     id :'1',
@@ -109,28 +106,121 @@ const Searching = () => {
     const navigate = useNavigate();
     const [inputValue, setInputValue] = useState("");
     const [isHaveInputValue, setIsHaveInputValue] = useState(false);
-    const [dropDownList, setDropDownList] = useState(wholeTextArray);
+    const [dropDownList, setDropDownList] = useState([]);
     const [dropDownItemIndex, setDropDownItemIndex] = useState(-1);
-    
-    useEffect(()=>{
-      
-      var authParameters = {
-          method : 'POST',
-          headers:{
-            'Content-Type' : 'application/x-www-form-urlencoded'
-          },
-          body : 'grant_type=client_credentials&client_id=' + CLIENT_ID + '&client_secret='+CLIENT_SECRET
-      }      
-      fetch('https://accounts.spotify.com/api/token',authParameters)
-      .then()
-    },[])
+    const [accessToken, setAccessToken] = useState("");
+    const [wholeTextArray,setWholeTextArray] = useState([]);
+   
+    useEffect(()=>{   
+     var authParameters = {
+       method : 'POST',
+      headers:{
+        'Content-Type' : 'application/x-www-form-urlencoded'
+      },
+      body : 'grant_type=client_credentials&client_id=' + CLIENT_ID + '&client_secret='+CLIENT_SECRET
+    };
 
+      fetch('https://accounts.spotify.com/api/token',authParameters)
+        .then(result => result.json())
+        .then(data => setAccessToken(data.access_token))
+     },[])
+     //이건 이렇게 함으로써 처음 업데이트 될 때만 accesstoken을 가져오는 것이고.
+
+
+    //  const getArtists = async () => {
+    //   try {
+    //     const response = await fetch('https://api.spotify.com/v1/search?q=' + inputValue + '&type=artist', {
+    //       method: 'GET',
+    //       headers: {
+    //         Authorization: 'Bearer ' + accessToken,
+    //       },
+    //     });
+    
+    //     if (response.ok) {
+    //       const data =  await response.json();
+    //       // artists 객체가 존재하면서 items 속성이 존재하는지 확인
+    //       if (data.artists && data.artists.items) {
+    //         // 관련 아티스트 목록 업데이트
+    //         console.log(data.artists.items);
+    //         setWholeTextArray(data.artists.items.map((artist) => artist.name));
+    //       } else {
+    //         // 예상치 못한 데이터 형식이거나 검색 결과가 없는 경우
+    //         console.error('Unexpected data format or no search results:', data);
+    //       }
+    //     } else {
+    //       // 오류 응답 처리
+    //       console.error('Error fetching artist data. Status:', response.status);
+    //     }
+    //   } catch (error) {
+    //     console.error('Error fetching artist data:', error);
+    //   }
+    // };
+    useEffect(() => {
+      const getArtists = async () => {
+        try {
+
+          const response = await fetch('https://api.spotify.com/v1/search?q=' + inputValue + '&type=artist', {
+            method: 'GET',
+            headers: {
+              'Authorization' : 'Bearer ' + accessToken,
+            },
+          });
+    
+    
+          if (response.ok) {
+            const data = await response.json();
+            // artists 객체가 존재하면서 items 속성이 존재하는지 확인
+            if (data.artists && data.artists.items) {
+              // 관련 아티스트 목록 업데이트
+              // setWholeTextArray(data.artists.items.map((artists) => artists.name));
+              setWholeTextArray(data.artists.items.map((artist) => artist.name));
+              
+       
+            } else {
+              // 예상치 못한 데이터 형식이거나 검색 결과가 없는 경우
+              console.error('Unexpected data format or no search results:', data);
+            }
+          } else {
+            // 오류 응답 처리
+            console.error('Error fetching artist data. Status:', response.status);
+          }
+        } catch (error) {
+          console.error('Error fetching artist data:', error);
+        }
+      };
+    
+      // getArtists를 의존성 배열에 추가
+      getArtists();
+    }, [inputValue, accessToken, setWholeTextArray]);
+  
+
+    async function search(){
+      var artistParameters = {
+        method: 'GET',
+        headers: {
+          'Content-Type' : 'application/json',
+          'Authorization' : 'Bearer ' + accessToken
+        }
+      }
+      var artistID = await fetch('https://api.spotify.com/v1/search?q='+ inputValue + '&type=artist',artistParameters)
+      .then(response =>response.json())
+      .then(data => {return data.artists.items[0].id})
+      
+      
+      // const  wholeTextArrayChanger = ()  => { 
+      //  fetch('https://api.spotify.com/v1/search?q='+ inputValue + '&type=artist',artistParameters)
+      // .then(response =>response.json())
+      // .then(data => {setWholeTextArray(data.artists.item.slice(0,100))})}
+      //   wholeTextArrayChanger();
+    }
     const showDropDownList = () =>{
+    
         if(inputValue === ''){
             setIsHaveInputValue(false);
             setDropDownList([]);
         }
         else{
+            console.log("지금실행되는중");
             const choosenTextList = wholeTextArray.filter(textItem=>
                 textItem.includes(inputValue));
                 setDropDownList(choosenTextList);
@@ -161,17 +251,17 @@ const Searching = () => {
             dropDownList.length - 1> dropDownItemIndex)
             {
                 setDropDownItemIndex(dropDownItemIndex + 1);
-                console.log("여기 실행되긴 함1");
+               
             }
             if(event.key === 'ArrowUp' && dropDownItemIndex >= 0){
                 setDropDownItemIndex(dropDownItemIndex-1);
-                console.log("여기 실행되긴 함2");
+                
             }
             if(event.key=== 'Enter' && dropDownItemIndex >= 0){
-                console.log("여기 실행되긴 함3");
+               
                 if(dropDownList[dropDownItemIndex]){
-                console.log("여기 실행되긴 함4");
                 clickDropDownItem(dropDownList[dropDownItemIndex]);
+                search();
                 setDropDownItemIndex(-1);
                 console.log(inputValue);
                 }
@@ -182,7 +272,7 @@ const Searching = () => {
             }
         }
     }
-    useEffect(showDropDownList,[inputValue]);
+  useEffect(showDropDownList,[inputValue,wholeTextArray]);
     return (
         <SearchingPackage>
             <InputBox isHaveInputValue={isHaveInputValue}>
