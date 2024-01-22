@@ -156,9 +156,10 @@ const Searching = () => {
     //   }
     // };
     useEffect(() => {
+      var artistArr;
       const getArtists = async () => {
         try {
-
+          
           const response = await fetch('https://api.spotify.com/v1/search?q=' + inputValue + '&type=artist', {
             method: 'GET',
             headers: {
@@ -173,8 +174,8 @@ const Searching = () => {
             if (data.artists && data.artists.items) {
               // 관련 아티스트 목록 업데이트
               // setWholeTextArray(data.artists.items.map((artists) => artists.name));
-              setWholeTextArray(data.artists.items.map((artist) => artist.name));
-              
+              artistArr = data.artists.items.map((artist) => artist.name);
+              setWholeTextArray(artistArr);
        
             } else {
               // 예상치 못한 데이터 형식이거나 검색 결과가 없는 경우
@@ -189,9 +190,45 @@ const Searching = () => {
         }
       };
     
-      // getArtists를 의존성 배열에 추가
+        //track 부분을 좀 더 다시 봐서 수정하는게 필요할듯 
+      const getTracks = async () => {
+        try {
+
+          const response = await fetch('https://api.spotify.com/v1/search?q=' + inputValue + '&type=track', {
+            method: 'GET',
+            headers: {
+              'Authorization' : 'Bearer ' + accessToken,
+            },
+          });
+    
+    
+          if (response.ok) {
+            const data = await response.json();
+            // artists 객체가 존재하면서 items 속성이 존재하는지 확인
+            if (data.tracks && data.tracks.items) {
+              // 관련 아티스트 목록 업데이트
+              // setWholeTextArray(data.artists.items.map((artists) => artists.name));
+              const tracksArr = data.tracks.items.map((track) => track.name);
+              setWholeTextArray([...artistArr,...tracksArr]);
+              console.log(wholeTextArray);
+       
+            } else {
+              // 예상치 못한 데이터 형식이거나 검색 결과가 없는 경우
+              console.error('Unexpected data format or no search results:', data);
+            }
+          } else {
+            // 오류 응답 처리
+            console.error('Error fetching artist data. Status:', response.status);
+          }
+        } catch (error) {
+          console.error('Error fetching artist data:', error);
+        }
+      };
+   
       getArtists();
-    }, [inputValue, accessToken, setWholeTextArray]);
+      getTracks();
+
+    }, [inputValue, accessToken]);
   
 
     async function search(){
