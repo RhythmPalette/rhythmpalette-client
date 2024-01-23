@@ -5,6 +5,7 @@ import Login from './pages/LoginPage/Login';
 import SignUp_id from './pages/LoginPage/SignUp_id';
 import SignUp_pw from './pages/LoginPage/SignUp_pw';
 import SignUp_email from './pages/LoginPage/SignUp_email';
+import SignUp_check from './pages/LoginPage/SignUp_check';
 
 const App = () => {
   return (
@@ -16,7 +17,7 @@ const App = () => {
         <Route path="/signup_id" element={<SignUp_id />} />
         <Route path="/signup_pw" element={<SignUp_pw />} />
         <Route path="/signup_email" element={<SignUp_email />} />
-
+        <Route path="/signup_check" element={<SignUp_check />} />
       </Routes>
     </>
   );

@@ -44,7 +44,7 @@ const Title = styled.div`
   flex-shrink: 0;
   color: #000;
   text-align: center;
-  font-family: Pretendard Variable;
+  font-family: "Pretendard Variable";
   font-size: 60px;
   font-style: normal;
   font-weight: 600;
@@ -52,6 +52,10 @@ const Title = styled.div`
   margin-top: 70.61px;
 `
 const Pw = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  flex-shrink: 0;
   width: 529.959px;
   color: #000;
   font-family: "Pretendard Variable";
@@ -59,7 +63,7 @@ const Pw = styled.div`
   font-style: normal;
   font-weight: 400;
   line-height: 18px; /* 72% */
-  margin-top: 30.71px;
+  margin-top: 34.2px;
 `
 const Input = styled.input`
   width: 564.305px;
@@ -79,7 +83,21 @@ const Input = styled.input`
   font-weight: 400;
   line-height: 18px; /* 72% */
 `
-
+const Text = styled.div`
+display: flex;
+width: 539.96469px;
+height: 30.391px;
+flex-direction: column;
+justify-content: center;
+flex-shrink: 0;
+color: #666;
+font-family: "Pretendard Variable";
+font-size: 20px;
+font-style: normal;
+font-weight: 400;
+line-height: 18px; /* 90% */
+margin-top: 3.3px;
+`
 
 const Error = styled.div`
 display: flex;
@@ -141,18 +159,18 @@ const SignUp_pw = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
-        <div>영어(대/소문자)</div>
+        <Text>영어(대/소문자),숫자,특수문자를 포함해주세요</Text>
         <Pw>비밀번호 확인</Pw>
         <Input
             type="password"
             value={confirmedPassword}
             onChange={(e) => setConfirmedPassword(e.target.value)}
             style={{
-              borderColor: passwordsMatch ? '' : 'red', // 비밀번호 일치 여부에 따라 테두리 색상 변경
+              borderColor: passwordsMatch ? '' : '#F00', // 비밀번호 일치 여부에 따라 테두리 색상 변경
             }}
         />
         <Error>
-          {passwordError && <div style={{ color: 'red' }}>{passwordError}</div>}
+          {passwordError && <div style={{ color: '#F00' }}>{passwordError}</div>}
         </Error>
         <ArrowBtn type="button" onClick={handleSignUp}>
           <img src={Arrow} alt="arrow" />

@@ -44,7 +44,7 @@ const Title = styled.div`
   flex-shrink: 0;
   color: #000;
   text-align: center;
-  font-family: Pretendard Variable;
+  font-family: "Pretendard Variable";
   font-size: 60px;
   font-style: normal;
   font-weight: 600;
@@ -113,6 +113,13 @@ background: #04DB8F;
 border-top-right-radius: 10px;
 border-bottom-right-radius: 10px;
 border: 1px solid #999;
+color: #000;
+text-align: center;
+font-family: "Pretendard Variable";
+font-size: 20px;
+font-style: normal;
+font-weight: 400;
+line-height: 18px; /* 90% */
 `
 
 const Error = styled.div`
@@ -189,7 +196,7 @@ const SignUp_id = () => {
         </Wrapping>
         <Error>
         {isIdAvailable ? (
-            <div style={{ color: '#0029FF' }}>사용 가능한 아이디입니다.</div>
+            <div style={{ color: '#0029FF' }}>사용가능한 아이디입니다.</div>
           ) : (
             <div style={{ color: '#F00' }}>중복된 아이디입니다.</div>
           )}
