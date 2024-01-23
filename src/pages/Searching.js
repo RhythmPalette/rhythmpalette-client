@@ -12,91 +12,91 @@ const CLIENT_SECRET ="2064724783bd4462b8671a035d864b13";
 const DATA = [
   {
     id :'1',
-    title: 'first',
+    title: 'R&B',
   },
   {
     id : '2',
-    title: 'second',
+    title: 'Mood',
   },
   {
     id : '3',
-    title: 'second',
+    title: 'Latin',
   },
    
   {
-    id:'3',
-    title: 'third',
+    id:'4',
+    title: 'Latin',
   },
   {
-    id : '3',
-    title: 'second',
-  },
-  
-  {
-    id : '3',
-    title: 'second',
+    id : '5',
+    title: 'Chill',
   },
   
   {
-    id : '3',
-    title: 'second',
+    id : '6',
+    title: 'Sleep',
   },
   
   {
-    id : '3',
-    title: 'second',
+    id : '7',
+    title: 'Party',
   },
   
   {
-    id : '3',
-    title: 'second',
+    id : '8',
+    title: 'Party',
   },
   
   {
-    id : '3',
-    title: 'second',
+    id : '9',
+    title: 'Metal',
   },
   
   {
-    id : '3',
-    title: 'second',
+    id : '10',
+    title: 'Jazz',
   },
   
   {
-    id : '3',
-    title: 'second',
+    id : '11',
+    title: 'Trending',
+  },
+  
+  {
+    id : '12',
+    title: 'Trending',
   },
   {
-    id : '3',
-    title: 'second',
+    id : '13',
+    title: 'Soul',
   },
   {
-    id : '3',
-    title: 'second',
+    id : '14',
+    title: 'Kids&Family',
   },
   {
-    id : '3',
-    title: 'second',
+    id : '15',
+    title: 'Gaming',
   },
   {
-    id : '3',
-    title: 'second',
+    id : '16',
+    title: 'Gaming',
   },
   {
-    id : '3',
-    title: 'second',
+    id : '17',
+    title: 'Dance',
   },
   {
-    id : '3',
-    title: 'second',
+    id : '18',
+    title: 'Electronic',
   },
   {
-    id : '3',
-    title: 'second',
+    id : '19',
+    title: 'Chart',
   },
   {
-    id : '3',
-    title: 'second',
+    id : '20',
+    title: 'Chart',
   },
 
 
@@ -260,7 +260,9 @@ const Searching = () => {
             console.log("지금실행되는중");
             const choosenTextList = wholeTextArray.filter(textItem=>
                 textItem.includes(inputValue));
+                console.log(choosenTextList);
                 setDropDownList(choosenTextList);
+                //여기를 통해서 연관단어 보다는 포함하는 단어가 나오게끔 해놓음 -> 유사도를 더 높이기 위해서 이 부분 수정하면 관련도를 더 조절할 수 있음.
         }
     }
     
@@ -312,6 +314,7 @@ const Searching = () => {
   useEffect(showDropDownList,[inputValue,wholeTextArray]);
     return (
         <SearchingPackage>
+          <SearchingBox>
             <InputBox isHaveInputValue={isHaveInputValue}>
          
          
@@ -337,15 +340,15 @@ const Searching = () => {
                   dropDownItemIndex === dropDownIndex ? 'selected' : ''
                 }
               >
-
-                <AlbumImgExample width="40px" height="40px" />
+                <IoSearchSharp />
+                <AlbumImgExample width="40px" height="40px"/>
                 {dropDownItem}
-                <NodeBtn width="20px" height="20px" />
               </DropDownItem>
             )
           })}
         </DropDownBox>
       )}  
+      </SearchingBox>
       <CloudBox>
         <CloudGrid>
          {DATA.map((item)=>{
@@ -369,10 +372,13 @@ export default Searching;
 
 const activeBorderRadius = '20px 20px 0 0';
 const inactiveBorderRadius = '20px 20px 20px 20px';
+const SearchingBox = styled.div`
+
+`;
 
 const CloudBox = styled.div`
-  position: absolute;
-  margin-top: 1000px;
+  position: relative;
+  margin-top: 10px;
 `;
 const CloudGrid = styled.div`
   display: grid;
@@ -393,7 +399,7 @@ const SearchingPackage = styled.div`
 `;
 const DropDownBox = styled.ul`
   display: flex;
-  position: fixed;
+  position: absolute;
   top: 85px;
   flex-direction: column;
   margin: 0 auto;
@@ -412,7 +418,7 @@ const DropDownItem = styled.li`
   font-weight: bold;
   display: flex;
   flex-direction: row;
-  justify-content: space-around;
+  justify-content: space-between;
   align-items: center;
   padding: 15px;
 
