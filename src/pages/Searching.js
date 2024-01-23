@@ -173,7 +173,11 @@ const Searching = () => {
             if (data.artists && data.artists.items) {
               // 관련 아티스트 목록 업데이트
               // setWholeTextArray(data.artists.items.map((artists) => artists.name));
-              artistArr = data.artists.items.map((artist) => artist.name);
+              console.log(data);
+              artistArr = data.artists.items.map((artist) => ({
+              name : artist.name,
+              image : artist.image[0].url,
+            }));
               setWholeTextArray(artistArr);
        
             } else {
@@ -207,7 +211,10 @@ const Searching = () => {
             if (data.tracks && data.tracks.items) {
               // 관련 아티스트 목록 업데이트
               // setWholeTextArray(data.artists.items.map((artists) => artists.name));
-              const tracksArr = data.tracks.items.map((track) => track.name);
+              const tracksArr = data.tracks.items.map((track) => ({
+                name : track.name,
+                image : track.album.images[0].url,
+              }));
               setWholeTextArray([...artistArr,...tracksArr]);
               console.log(wholeTextArray);
        
@@ -257,8 +264,10 @@ const Searching = () => {
         }
         else{
             console.log("지금실행되는중");
+            console.log(wholeTextArray);
+            console.log("여기까찌");
             const choosenTextList = wholeTextArray.filter(textItem=>
-                textItem.includes(inputValue));
+                textItem.name.includes(inputValue));
                 console.log(choosenTextList);
                 setDropDownList(choosenTextList);
                 //여기를 통해서 연관단어 보다는 포함하는 단어가 나오게끔 해놓음 -> 유사도를 더 높이기 위해서 이 부분 수정하면 관련도를 더 조절할 수 있음.
@@ -333,6 +342,7 @@ const Searching = () => {
             <DropDownItem>해당하는 단어가 없습니다</DropDownItem>
           )}
           {dropDownList.map((dropDownItem, dropDownIndex) => {
+            const {name,image} = dropDownItem;
             return (
               <DropDownItem
                 key={dropDownIndex}
@@ -344,9 +354,9 @@ const Searching = () => {
                 }
               >
                 <IoSearchSharp id='Icon'/>
-                <AlbumImgExample id='AlbumImgExample' width="40px" height="40px"/>
+                {image && <img src={image} alt={name} style={{ width: '40px', height: '40px' }} />}
                 <GrabText id='GrabText'>
-                {dropDownItem}
+                {name}
                 </GrabText>
                </DropDownItem>
             )
