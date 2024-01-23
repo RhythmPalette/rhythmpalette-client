@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import Clouds from './Clouds';
 import {useNavigate} from 'react-router-dom'
 import { IoSearchSharp } from "react-icons/io5";
-import {ReactComponent as NodeBtn} from "../assets/NoteBtn.svg";
 import {ReactComponent as AlbumImgExample} from "../assets/AlbumImgExample.svg";
 
 const CLIENT_ID = "d1b1e1bd14254ae2b50f43eb69ba9a87";
@@ -156,7 +155,7 @@ const Searching = () => {
     //   }
     // };
     useEffect(() => {
-      var artistArr;
+      let artistArr;
       const getArtists = async () => {
         try {
           
@@ -242,7 +241,7 @@ const Searching = () => {
       var artistID = await fetch('https://api.spotify.com/v1/search?q='+ inputValue + '&type=artist',artistParameters)
       .then(response =>response.json())
       .then(data => {return data.artists.items[0].id})
-      
+      //이 부분은 아직 사용하지 않았음.
       
       // const  wholeTextArrayChanger = ()  => { 
       //  fetch('https://api.spotify.com/v1/search?q='+ inputValue + '&type=artist',artistParameters)
@@ -284,7 +283,6 @@ const Searching = () => {
 
     const handleDropDownKey = event =>{
         if(isHaveInputValue){
-          
           console.log(inputValue);
           if(event.key === 'ArrowDown' && 
             dropDownList.length - 1> dropDownItemIndex)
@@ -295,6 +293,11 @@ const Searching = () => {
             if(event.key === 'ArrowUp' && dropDownItemIndex >= 0){
                 setDropDownItemIndex(dropDownItemIndex-1);
                 
+            }
+            if(event.keyCode===27){
+              console.log("Esc Pressed");
+              setIsHaveInputValue(false);
+              //여기에 적어놓은 값을 지우는 것도 넣어도 괜찮을 듯
             }
             if(event.key=== 'Enter' && dropDownItemIndex >= 0){
                
@@ -340,10 +343,12 @@ const Searching = () => {
                   dropDownItemIndex === dropDownIndex ? 'selected' : ''
                 }
               >
-                <IoSearchSharp />
-                <AlbumImgExample width="40px" height="40px"/>
+                <IoSearchSharp id='Icon'/>
+                <AlbumImgExample id='AlbumImgExample' width="40px" height="40px"/>
+                <GrabText id='GrabText'>
                 {dropDownItem}
-              </DropDownItem>
+                </GrabText>
+               </DropDownItem>
             )
           })}
         </DropDownBox>
@@ -373,7 +378,7 @@ export default Searching;
 const activeBorderRadius = '20px 20px 0 0';
 const inactiveBorderRadius = '20px 20px 20px 20px';
 const SearchingBox = styled.div`
-
+  max-height: 300px;
 `;
 
 const CloudBox = styled.div`
@@ -391,8 +396,8 @@ const CloudGrid = styled.div`
 `;
 
 const SearchingPackage = styled.div`
-   
     display: flex;
+    max-height: 1000px;
     justify-content: center;
     flex-direction: column;
     align-items: center;
@@ -412,24 +417,32 @@ const DropDownBox = styled.ul`
   box-shadow: 0 10px 10px rgb(0, 0, 0, 0.3);
   list-style-type: none;
   z-index: 10;
+  overflow-y: auto;
+  max-height: 600px;
 `;
 const DropDownItem = styled.li`
   font-size: 20px;
-  font-weight: bold;
+  font-weight: bold;  
+  padding: 15px;
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
   align-items: center;
-  padding: 15px;
-
+  padding-left: 20px;
+  column-gap: 50px;
   &.selected {
     background-color: lightgray;
   }
 `;
+const GrabText = styled.div`
+  width: 90%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+`;
 const InputBox = styled.div`
   display: flex;
   margin-top: 30px;
-  flex-direction: column;
+  flex-direction: row;
   width: 600px;
   padding: 16px;
   border: 1px solid rgba(0, 0, 0, 0.3);
@@ -448,8 +461,7 @@ const InputText = styled.input`
   border: none;
   outline: none;
   font-size: 16px;
-
-    width: 550px;
-    border: none; 
+  width: 550px;
+  border: none; 
  
 `;
