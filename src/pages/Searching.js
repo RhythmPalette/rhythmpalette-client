@@ -173,10 +173,10 @@ const Searching = () => {
             if (data.artists && data.artists.items) {
               // 관련 아티스트 목록 업데이트
               // setWholeTextArray(data.artists.items.map((artists) => artists.name));
-              console.log(data);
+              console.log("그냥 JSon파일 자체를 가져왔을 때"+data);
               artistArr = data.artists.items.map((artist) => ({
               name : artist.name,
-              image : artist.image[0].url,
+              image : artist.images[0].url,
             }));
               setWholeTextArray(artistArr);
        
@@ -216,7 +216,7 @@ const Searching = () => {
                 image : track.album.images[0].url,
               }));
               setWholeTextArray([...artistArr,...tracksArr]);
-              console.log(wholeTextArray);
+              console.log("데이터를 받아왔을 때 "+wholeTextArray);
        
             } else {
               // 예상치 못한 데이터 형식이거나 검색 결과가 없는 경우
@@ -264,7 +264,7 @@ const Searching = () => {
         }
         else{
             console.log("지금실행되는중");
-            console.log(wholeTextArray);
+            console.log("input이 있는경우 :"+ wholeTextArray);
             console.log("여기까찌");
             const choosenTextList = wholeTextArray.filter(textItem=>
                 textItem.name.includes(inputValue));
