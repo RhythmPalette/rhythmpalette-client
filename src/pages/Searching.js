@@ -1,9 +1,9 @@
-import React ,{useEffect, useState} from 'react';
+import React ,{useEffect, useState,useRef} from 'react';
 import styled from 'styled-components';
 import Clouds from './Clouds';
 import {useNavigate} from 'react-router-dom'
 import { IoSearchSharp } from "react-icons/io5";
-import {ReactComponent as AlbumImgExample} from "../assets/AlbumImgExample.svg";
+
 
 const CLIENT_ID = "d1b1e1bd14254ae2b50f43eb69ba9a87";
 const CLIENT_SECRET ="2064724783bd4462b8671a035d864b13";
@@ -109,7 +109,24 @@ const Searching = () => {
     const [dropDownItemIndex, setDropDownItemIndex] = useState(-1);
     const [accessToken, setAccessToken] = useState("");
     const [wholeTextArray,setWholeTextArray] = useState([]);
-   
+    const dropDownRef = useRef(null); 
+
+    useEffect(()=>{
+      if(dropDownRef.current && dropDownItemIndex>=0){
+        const selectedElement = dropDownRef.current.children[dropDownItemIndex]
+     
+      if (selectedElement) {
+        selectedElement.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
+      }
+    }
+  }, [dropDownItemIndex]);
+  
+
+
+
+
+
+
     useEffect(()=>{   
      var authParameters = {
        method : 'POST',
@@ -237,25 +254,25 @@ const Searching = () => {
     }, [inputValue, accessToken]);
   
 
-    async function search(){
-      var artistParameters = {
-        method: 'GET',
-        headers: {
-          'Content-Type' : 'application/json',
-          'Authorization' : 'Bearer ' + accessToken
-        }
-      }
-      var artistID = await fetch('https://api.spotify.com/v1/search?q='+ inputValue + '&type=artist',artistParameters)
-      .then(response =>response.json())
-      .then(data => {return data.artists.items[0].id})
-      //이 부분은 아직 사용하지 않았음.
+    // async function search(){
+    //   var artistParameters = {
+    //     method: 'GET',
+    //     headers: {
+    //       'Content-Type' : 'application/json',
+    //       'Authorization' : 'Bearer ' + accessToken
+    //     }
+    //   }
+    //   var artistID = await fetch('https://api.spotify.com/v1/search?q='+ inputValue + '&type=artist',artistParameters)
+    //   .then(response =>response.json())
+    //   .then(data => {return data.artists.items[0].id})
+    //   //이 부분은 아직 사용하지 않았음.
       
-      // const  wholeTextArrayChanger = ()  => { 
-      //  fetch('https://api.spotify.com/v1/search?q='+ inputValue + '&type=artist',artistParameters)
-      // .then(response =>response.json())
-      // .then(data => {setWholeTextArray(data.artists.item.slice(0,100))})}
-      //   wholeTextArrayChanger();
-    }
+    //   // const  wholeTextArrayChanger = ()  => { 
+    //   //  fetch('https://api.spotify.com/v1/search?q='+ inputValue + '&type=artist',artistParameters)
+    //   // .then(response =>response.json())
+    //   // .then(data => {setWholeTextArray(data.artists.item.slice(0,100))})}
+    //   //   wholeTextArrayChanger();
+    // }
     const showDropDownList = () =>{
     
         if(inputValue === ''){
@@ -282,11 +299,11 @@ const Searching = () => {
     const clickDropDownItem = clickedItem =>{
       
       setIsHaveInputValue(false);
-      navigate(`/post/${clickedItem}`); 
+      navigate(`/post/${clickedItem.name}`); 
        
     }
     const clickListItem = clickedItem =>{
-      navigate(`/post/${clickedItem}`);
+      navigate(`/post/${clickedItem.name}`);
 
     }
 
@@ -312,7 +329,7 @@ const Searching = () => {
                
                 if(dropDownList[dropDownItemIndex]){
                 clickDropDownItem(dropDownList[dropDownItemIndex]);
-                search();
+                // search();
                 setDropDownItemIndex(-1);
                 console.log(inputValue);
                 }
@@ -337,7 +354,7 @@ const Searching = () => {
            
             </InputBox>
           {isHaveInputValue && (
-            <DropDownBox>
+            <DropDownBox ref={dropDownRef}>
           {dropDownList.length === 0 && (
             <DropDownItem>해당하는 단어가 없습니다</DropDownItem>
           )}
