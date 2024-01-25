@@ -314,11 +314,9 @@ const Searching = () => {
             dropDownList.length - 1> dropDownItemIndex)
             {
                 setDropDownItemIndex(dropDownItemIndex + 1);
-               
             }
             if(event.key === 'ArrowUp' && dropDownItemIndex >= 0){
                 setDropDownItemIndex(dropDownItemIndex-1);
-                
             }
             if(event.keyCode===27){
               console.log("Esc Pressed");
@@ -354,7 +352,7 @@ const Searching = () => {
            
             </InputBox>
           {isHaveInputValue && (
-            <DropDownBox ref={dropDownRef}>
+            <DropDownBox ref={dropDownRef} >
           {dropDownList.length === 0 && (
             <DropDownItem>해당하는 단어가 없습니다</DropDownItem>
           )}
@@ -370,7 +368,7 @@ const Searching = () => {
                   dropDownItemIndex === dropDownIndex ? 'selected' : ''
                 }
               >
-                <IoSearchSharp id='Icon'/>
+                <IoSearchSharp />
                 {image && <img src={image} alt={name} style={{ width: '40px', height: '40px' }} />}
                 <GrabText id='GrabText'>
                 {name}
@@ -444,9 +442,15 @@ const DropDownBox = styled.ul`
   box-shadow: 0 10px 10px rgb(0, 0, 0, 0.3);
   list-style-type: none;
   z-index: 10;
-  overflow-y: auto;
-  max-height: 600px;
+  overflow: scroll;
+  max-height: 600px; 
+  -ms-overflow-style:none; /* IE and Edge */
+  scrollbar-width : none; /* Firefox */
+  &::-webkit-scrollbar{
+    display: none;
+  }
 `;
+
 const DropDownItem = styled.li`
   font-size: 20px;
   font-weight: bold;  
@@ -468,6 +472,7 @@ const GrabText = styled.div`
 `;
 const InputBox = styled.div`
   display: flex;
+  background-color: #E3E3E3;
   margin-top: 30px;
   flex-direction: row;
   width: 600px;
