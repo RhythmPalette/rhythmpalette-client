@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import {Link} from 'react-router-dom';
 import dayjs from 'dayjs';
 import styled from 'styled-components';
-import dummyStory from '../store/dummyStory';
+import post_id from '../store/dummyStory';
 import {ReactComponent as SvgImage} from '../assets/Image1.svg'
 
 
@@ -85,7 +85,7 @@ const Calendar = () => {
           ));
         
             const days = Array.from({ length: daysInMonth }, (_, i) => {
-            const imageData = dummyStory.find(item => item.day === i+1);
+            const imageData = post_id.find(item => item.day === i+1);
 
 
             return(
