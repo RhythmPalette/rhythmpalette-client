@@ -6,6 +6,8 @@ import SignUp_id from './pages/LoginPage/SignUp_id';
 import SignUp_pw from './pages/LoginPage/SignUp_pw';
 import SignUp_email from './pages/LoginPage/SignUp_email';
 import SignUp_check from './pages/LoginPage/SignUp_check';
+import Register_profile from './pages/RegisterProfilePage/Register_profile';
+import Favorite_categories from './pages/RegisterProfilePage/Favorite_categories';
 
 const App = () => {
   return (
@@ -18,6 +20,8 @@ const App = () => {
         <Route path="/signup_pw" element={<SignUp_pw />} />
         <Route path="/signup_email" element={<SignUp_email />} />
         <Route path="/signup_check" element={<SignUp_check />} />
+        <Route path="/register_profile" element={<Register_profile />} />
+        <Route path="/Favorite_categories" element={<Favorite_categories />} />
       </Routes>
     </>
   );

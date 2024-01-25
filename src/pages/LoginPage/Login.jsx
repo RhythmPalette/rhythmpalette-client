@@ -133,34 +133,43 @@ const LoginBtn =styled.button`
   margin-top: 19.969px;
 `
 const Find = styled.div`
+  width: 564.305px;
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
-  width: 400px;
   height: 30.391px;
   color: #666;
   margin-top: 23.65px;
 `
 const FindId = styled.a`
-  color: #000;
+  color: #666;
   font-family: "Pretendard Variable";
   font-size: 25px;
   font-style: normal;
   font-weight: 400;
   line-height: 18px; /* 72% */
-  margin-right: 44.2px;
   text-decoration-line: none;
 `
 const FindPw = styled.a`
-  color: #000;
+  color: #666;
   font-family: "Pretendard Variable";
   font-size: 25px;
   font-style: normal;
   font-weight: 400;
   line-height: 18px; /* 72% */
-  margin-left: 36.18px;
   text-decoration-line: none;
 `
+const SignUp = styled.a`
+  color: #666;
+  text-align: center;
+  font-family: "Pretendard Variable";
+  font-size: 25px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 18px; /* 72% */
+  text-decoration-line: none;
+`
+
 const Separation = styled.div`
   font-size: 25px;
 `
@@ -248,6 +257,8 @@ const Login = () => {
           <FindId href="#">아이디 찾기</FindId>
           <Separation>|</Separation>
           <FindPw href="#">비밀번호 찾기</FindPw>
+          <Separation>|</Separation>
+          <SignUp href="/Signup_id">회원가입하기</SignUp>
         </Find>
       </SignIn>
     </Background>

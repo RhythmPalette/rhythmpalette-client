@@ -139,6 +139,8 @@ const SignUp_pw = () => {
       setPasswordError('비밀번호를 입력해주세요.');
     } else if (!match) {
       setPasswordError('비밀번호가 일치하지 않습니다.');
+    } else if (!isValidPassword(password)) {
+      setPasswordError('영어(대/소문자), 숫자, 특수문자를 포함해주세요.');
     } else {
       setPasswordError(''); // 에러가 없을 경우 에러 메시지 초기화
       navigate('/signup_email');
@@ -146,6 +148,10 @@ const SignUp_pw = () => {
 
     // 비밀번호가 일치하지 않으면 상태 업데이트하여 빨간 문구와 테두리 색상 변경
     setPasswordsMatch(match);
+  };
+  const isValidPassword = (passord) => {
+    const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/;
+    return regex.test(password);
   };
 
   return (
