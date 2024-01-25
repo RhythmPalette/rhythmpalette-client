@@ -8,6 +8,8 @@ import IconLikeWhite from "../assets/IconLikeWhite.svg";
 import IconCommentWhite from "../assets/IconCommentWhite.svg";
 import IconSaveWhite from "../assets/IconSaveWhite.svg";
 import IconSeeMoreWhite from "../assets/IconSeeMoreWhite.svg";
+import IconEdit from "../assets/IconEdit.svg";
+import IconEmotion from "../assets/IconEmotion.svg";
 import Modal from "../components/ShortsModal";
 
 const PageLayout = styled.div`
@@ -92,19 +94,24 @@ const SaveIcon = styled.img`
     left: 421.48px; 
 `;
 
+const EmotionIcon = styled.img`
+    position: absolute;  
+    bottom: 669.89px;
+    left: 26.26px;
+`
+
+const EditIcon = styled.img`
+    position: absolute;  
+    bottom: 729.18px;
+    left: 392.7px;
+`
+
 const SeeMoreIcon = styled.img`
-    position: absolute;
+    position: absolute;  
     bottom: 729.18px;
     left: 444.77px;
 `;
 
-const ContentWrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  height: 100%;
-`;
 
 
 
@@ -172,6 +179,8 @@ function Shortform() {
                                 <LikeIcon src={IconLikeWhite} alt="Like" />
                                 <CommentIcon src={IconCommentWhite} alt="Comment" onClick={openCommentModal}/>
                                 <SaveIcon src={IconSaveWhite} alt="Save"/>
+                                <EmotionIcon src={IconEmotion} alt="Emotion"/>
+                                <EditIcon src={IconEdit} alt="EditButton" />
                                 <SeeMoreIcon src={IconSeeMoreWhite} alt="SeeMore"/>
                             </OverlayIcons>
                         </ImageWrapper>

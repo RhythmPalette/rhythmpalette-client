@@ -1,6 +1,6 @@
 import { useState,  useRef, useCallback, Fragment } from "react";
+import { useNavigate } from 'react-router-dom'; 
 import styled from "styled-components";
-import dummyFeeds from "../store/dummyFeeds";
 import { useFeedView } from "../hooks/useFeedView";
 import NavBar from "../components/NavBar";
 import SearchBarContainer from "../components/SearchBarContainer";
@@ -32,6 +32,12 @@ const Content = styled.div`
     padding: 20px;
     overflow-y: auto;
     margin-left: 402px;
+
+    ::-webkit-scrollbar {
+        display: none;
+      }
+    -ms-overflow-style: none; 
+     scrollbar-width: none;  
 `;
 
 
@@ -111,6 +117,12 @@ function Home() {
         setPageNumber(1);
       };
 
+    const navigate = useNavigate();
+
+    const goToShortForm = () => {
+        navigate('/shortform');
+    };
+
     return (
         <PageLayout>
             <NavBar />
@@ -126,20 +138,22 @@ function Home() {
                             <div>{feed.username}</div>
                             <div>{feed.trackInfo}</div>
                         </FeedHeader>
-                        <ImageComponent />
-                        <FeedContainer>
-                            <ContainerIcon>
-                                <IconConatiner>
-                                    <Icon src={IconLike} alt="Like" />
-                                    <Icon src={IconComment} alt="Comment"/>
-                                </IconConatiner>
-                                <IconConatiner>
-                                    <Icon src={IconSave} alt="Save" />
-                                    <Icon src={IconSeeMore} alt="See more"/>
-                                </IconConatiner>
-                            </ContainerIcon>
-                            <Description>{feed.description}</Description>
-                        </FeedContainer>
+                        <div onClick={goToShortForm}>
+                            <ImageComponent />
+                            <FeedContainer>
+                                <ContainerIcon>
+                                    <IconConatiner>
+                                        <Icon src={IconLike} alt="Like" />
+                                        <Icon src={IconComment} alt="Comment"/>
+                                    </IconConatiner>
+                                    <IconConatiner>
+                                        <Icon src={IconSave} alt="Save" />
+                                        <Icon src={IconSeeMore} alt="See more"/>
+                                    </IconConatiner>
+                                </ContainerIcon>
+                                <Description>{feed.description}</Description>
+                            </FeedContainer>
+                        </div>
 
                     </Fragment>
                 );
