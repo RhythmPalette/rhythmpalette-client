@@ -12,8 +12,8 @@ const CLIENT_SECRET ="2064724783bd4462b8671a035d864b13";
 
 const UploadPost = () => {
 
-
-const navigate = useNavigate();
+const [selectedData, setSelectedData] = useState("");
+const [haveClicked, setHaveClicked] = useState(false);
 const [inputValue, setInputValue] = useState("");
 const [isHaveInputValue, setIsHaveInputValue] = useState(false);
 const [dropDownList, setDropDownList] = useState([]);
@@ -65,7 +65,7 @@ useEffect(()=>{
           if (data.artists && data.artists.items) {
             // 관련 아티스트 목록 업데이트
             // setWholeTextArray(data.artists.items.map((artists) => artists.name));
-            console.log("그냥 JSon파일 자체를 가져왔을 때"+data);
+            // console.log("그냥 JSon파일 자체를 가져왔을 때"+data);
             artistArr = data.artists.items.map((artist) => ({
             name : artist.name,
             image : artist.images[0].url,
@@ -88,7 +88,6 @@ useEffect(()=>{
       //track 부분을 좀 더 다시 봐서 수정하는게 필요할듯 
     const getTracks = async () => {
       try {
-
         const response = await fetch('https://api.spotify.com/v1/search?q=' + inputValue + '&type=track', {
           method: 'GET',
           headers: {
@@ -108,7 +107,7 @@ useEffect(()=>{
               image : track.album.images[0].url,
             }));
             setWholeTextArray([...artistArr,...tracksArr]);
-            console.log("데이터를 받아왔을 때 "+wholeTextArray);
+            // console.log("데이터를 받아왔을 때 "+wholeTextArray);
      
           } else {
             // 예상치 못한 데이터 형식이거나 검색 결과가 없는 경우
@@ -136,12 +135,12 @@ useEffect(()=>{
         setDropDownList([]);
     }
     else{
-        console.log("지금실행되는중");
-        console.log("input이 있는경우 :"+ wholeTextArray);
-        console.log("여기까찌");
+        // console.log("지금실행되는중");
+        // console.log("input이 있는경우 :"+ wholeTextArray);
+        // console.log("여기까찌");
         const choosenTextList = wholeTextArray.filter(textItem=>
             textItem.name.includes(inputValue));
-            console.log(choosenTextList);
+            // console.log(choosenTextList);
             setDropDownList(choosenTextList);
             //여기를 통해서 연관단어 보다는 포함하는 단어가 나오게끔 해놓음 -> 유사도를 더 높이기 위해서 이 부분 수정하면 관련도를 더 조절할 수 있음.
     }
@@ -153,13 +152,24 @@ const changeInputValue = event => {
 } 
 
 const clickDropDownItem = clickedItem =>{
+  console.log("노래를선택하였습니다.");
+  setSelectedData(clickedItem);
+  console.log(selectedData);
   setIsHaveInputValue(false);
-  navigate(`/post/${clickedItem.name}`); 
-   
+  setHaveClicked(true);
 }
 const clickListItem = clickedItem =>{
-  navigate(`/post/${clickedItem.name}`);
+    console.log("노래를선택하였습니다.");
+    setSelectedData(clickedItem);
+    console.log(selectedData);
+    setIsHaveInputValue(false);
+    setHaveClicked(true);
+}
 
+const retrySelectSong=() =>{
+    console.log("재선택버튼이 클릭되었습니다.")
+    setIsHaveInputValue(false);
+    setHaveClicked(false);
 }
 
 const handleDropDownKey = event =>{
@@ -182,22 +192,22 @@ const handleDropDownKey = event =>{
            
             if(dropDownList[dropDownItemIndex]){
             clickDropDownItem(dropDownList[dropDownItemIndex]);
-            // search();
             setDropDownItemIndex(-1);
-            console.log(inputValue);
+            // console.log(inputValue);
             }
             else{
-              console.log(inputValue);
-              clickListItem(inputValue);
+            //   console.log(inputValue);
+              clickListItem(dropDownList[dropDownItemIndex]);
             }
         }
     }
 }
     useEffect(showDropDownList,[inputValue,wholeTextArray]);
-
+    
 
     return (
         <UploadPostPackage>
+
             <SearchingBox>
                 <TextBox>
                  {"어떤 음악을 공유하고 싶으신가요?"}
@@ -205,9 +215,7 @@ const handleDropDownKey = event =>{
             <InputBox isHaveInputValue={isHaveInputValue}> 
                 <InputText type='text' placeholder='검색어를 입력해주세요' value = {inputValue} onChange={changeInputValue} onKeyUp={handleDropDownKey}/>
                 <Scope width={"25px"} height={"25px"}/>   
-            </InputBox>
-        
-                         
+            </InputBox>      
           {isHaveInputValue && (
             <DropDownBox ref={dropDownRef} >
           {dropDownList.length === 0 && (
@@ -224,7 +232,6 @@ const handleDropDownKey = event =>{
                   dropDownItemIndex === dropDownIndex ? 'selected' : ''
                 }
               >
-                
                 {image && <img src={image} alt={name} style={{ width: '65px', height: '65px' }} />}
                 <GrabText>
                 {name}
@@ -236,11 +243,67 @@ const handleDropDownKey = event =>{
         </DropDownBox>
       )}  
          </SearchingBox>
+         <BottonBox>
+            {haveClicked &&
+                (
+                <RetryBtn disabled={haveClicked ? false : true} onClick={retrySelectSong} >
+                    {"노래 다시 고르기"}
+                </RetryBtn>
+            )
+            }
+            <ImgCreateBtn disabled={haveClicked ? false : true}>
+                {"이미지 생성하기"}
+            </ImgCreateBtn>
+
+         </BottonBox>
         </UploadPostPackage>
     );
 };
 
 export default UploadPost;
+const RetryBtn = styled.button`
+    border: 1px solid #04DB8F;
+    display: ${props=>props.disabled? 'none': 'block' };
+    position: relative;
+    margin-top: 200px;
+    width: 645.04px;
+    height: 90.24px;
+    color: #04DB8F;
+    background-color: #FFFFFF;
+    border-radius: 45.12px;
+    font-family: Pretendard Variable;
+    font-size: 35px;
+    font-weight: 400;
+    line-height: 42px;
+    letter-spacing: 0.01em;
+    text-align: center;
+    z-index: 0;
+`;
+
+const ImgCreateBtn = styled.button`
+    position: relative;
+    width: 645.04px;
+    height: 90.24px;
+    border: 0;
+    border-radius: 45.12px;
+    background-color: ${props=>props.disabled? '#D2D2D2': '#04DB8F' };
+    margin-top: ${props=>props.disabled? '300px': '20px' };
+    font-family: Pretendard Variable;
+    font-size: 35px;
+    font-weight: 400;
+    line-height: 42px;
+    letter-spacing: 0.01em;
+    text-align: center;
+    z-index: 0;
+   
+`;
+
+const BottonBox = styled.div`
+    display: flex;
+    flex-direction: column;
+
+`;
+
 
 const GrabText = styled.div`
 width: 90%;
@@ -268,7 +331,6 @@ const InputBox = styled.div`
   border-radius: ${props => props.isHaveInputValue ? "15px 15px 0 0" : " 0 0 0 0 "};
   background-color: ${props => props.isHaveInputValue ? "#F9F9F9" : "#0000" };
   box-shadow: ${props => props.isHaveInputValue ?  "2px 4px 6px 0px #00000033" : "0 0 0 0" };
-
   border-width: 0 0 1px;
   border-style: solid;
 `;
@@ -300,12 +362,12 @@ const InputText = styled.input`
   border: 0px;
 `;
 
-
 const UploadPostPackage = styled.div`
     display: flex;
-    justify-content: center;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
+    max-height: 1000px;
 `;
 const TextBox = styled.div`
     font-size: 40px;    
@@ -315,14 +377,17 @@ const TextBox = styled.div`
 
 `;
 const SearchingBox = styled.div`
-    margin-top: 291.87px;
+    margin-top: 100px;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
+    z-index: 3;
 `;
 const DropDownBox = styled.ul`
   display: flex;
+  position: absolute;
+  top: 334px;
   flex-direction: column;
   margin: 0 auto;
   padding: 8px 0;

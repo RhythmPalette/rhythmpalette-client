@@ -1,9 +1,18 @@
 import React from 'react';
 import styled from 'styled-components';
+import {useNavigate} from 'react-router-dom'
 import {ReactComponent as PaintImg} from "../assets/PaintImg.svg";
 const Clouds = (props) => {
+    const navigate = useNavigate();
+
+    const onClickCloudItem = () => {
+        navigate(`/posts/${props.title}`,{
+            state : props
+        })
+    }
+
     return (
-        <GetTotal>
+        <GetTotal onClick={onClickCloudItem}>
            <GetImg>
            <PaintImg/>
             </GetImg>

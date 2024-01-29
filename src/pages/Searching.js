@@ -383,7 +383,6 @@ const Searching = () => {
                 )
             }
             )
-
           }
         </CloudGrid>
         </CloudBox>
@@ -396,7 +395,7 @@ export default Searching;
 
  const activeBorderRadius = '50px 50px 50px 50px';
  const inactiveBorderRadius = '50px 50px 50px 50px';
-export const SearchingBox = styled.div`
+const SearchingBox = styled.div`
   max-height: 300px;
 `;
 
