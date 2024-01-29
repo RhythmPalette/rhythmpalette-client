@@ -121,12 +121,6 @@ const Searching = () => {
     }
   }, [dropDownItemIndex]);
   
-
-
-
-
-
-
     useEffect(()=>{   
      var authParameters = {
        method : 'POST',
@@ -400,9 +394,9 @@ const Searching = () => {
 
 export default Searching;
 
-const activeBorderRadius = '20px 20px 0 0';
-const inactiveBorderRadius = '20px 20px 20px 20px';
-const SearchingBox = styled.div`
+ const activeBorderRadius = '50px 50px 50px 50px';
+ const inactiveBorderRadius = '50px 50px 50px 50px';
+export const SearchingBox = styled.div`
   max-height: 300px;
 `;
 
@@ -420,17 +414,17 @@ const CloudGrid = styled.div`
   grid-template-columns: 100px 100px 100px 100px ;
 `;
 
-const SearchingPackage = styled.div`
+export const SearchingPackage = styled.div`
     display: flex;
     max-height: 1000px;
     justify-content: center;
     flex-direction: column;
     align-items: center;
 `;
-const DropDownBox = styled.ul`
+export const DropDownBox = styled.ul`
   display: flex;
   position: absolute;
-  top: 85px;
+  top: 88px;
   flex-direction: column;
   margin: 0 auto;
   padding: 8px 0;
@@ -438,7 +432,7 @@ const DropDownBox = styled.ul`
   border: 1px solid rgba(0, 0, 0, 0.3);
   border-top: none;
   width: 600px;
-  border-radius: 0 0 16px 16px;
+  border-radius: 35px 35px 35px 35px;
   box-shadow: 0 10px 10px rgb(0, 0, 0, 0.3);
   list-style-type: none;
   z-index: 10;
@@ -451,7 +445,7 @@ const DropDownBox = styled.ul`
   }
 `;
 
-const DropDownItem = styled.li`
+export const DropDownItem = styled.li`
   font-size: 20px;
   font-weight: bold;  
   padding: 15px;
@@ -464,13 +458,13 @@ const DropDownItem = styled.li`
     background-color: lightgray;
   }
 `;
-const GrabText = styled.div`
+export const GrabText = styled.div`
   width: 90%;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 `;
-const InputBox = styled.div`
+export const InputBox = styled.div`
   display: flex;
   background-color: #E3E3E3;
   margin-top: 30px;
@@ -485,7 +479,7 @@ const InputBox = styled.div`
   }
 `;
 
-const InputText = styled.input`
+export const InputText = styled.input`
   flex: 1 0 0;
   margin: 0;
   padding: 0;
