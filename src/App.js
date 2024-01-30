@@ -4,6 +4,7 @@ import Searching from './pages/Searching';
 import Posts from './pages/Posts';
 import GlobalStyles from './styles/GlobalStyles';
 import UploadPost from './pages/UploadPost';
+import MakeImages from './pages/MakeImages';
 
 
 const App = () => {
@@ -15,6 +16,7 @@ const App = () => {
         <Route path="/searching" element={<Searching/>}/>
         <Route path="/post/:inputValue" element={<Posts/>}/>
         <Route path="/uploadpost" element={<UploadPost/>}/>
+        <Route path="/makeimage" element={<MakeImages/>}/>
       </Routes>
     </>
   );

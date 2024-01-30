@@ -21,6 +21,13 @@ const [dropDownItemIndex, setDropDownItemIndex] = useState(-1);
 const [accessToken, setAccessToken] = useState("");
 const [wholeTextArray,setWholeTextArray] = useState([]);
 const dropDownRef = useRef(null); 
+const navaigate = useNavigate();
+
+
+
+
+
+
 
 useEffect(()=>{
   if(dropDownRef.current && dropDownItemIndex>=0){
@@ -50,14 +57,12 @@ useEffect(()=>{
     let artistArr;
     const getArtists = async () => {
       try {
-        
         const response = await fetch('https://api.spotify.com/v1/search?q=' + inputValue + '&type=artist', {
           method: 'GET',
           headers: {
             'Authorization' : 'Bearer ' + accessToken,
           },
         });
-  
   
         if (response.ok) {
           const data = await response.json();
@@ -69,6 +74,7 @@ useEffect(()=>{
             artistArr = data.artists.items.map((artist) => ({
             name : artist.name,
             image : artist.images[0].url,
+            genre : artist.genres,
           }));
             setWholeTextArray(artistArr);
      
@@ -105,6 +111,7 @@ useEffect(()=>{
             const tracksArr = data.tracks.items.map((track) => ({
               name : track.name,
               image : track.album.images[0].url,
+              //추가로 받아서 넣을 정보는 여기에 넣어주면 됨
             }));
             setWholeTextArray([...artistArr,...tracksArr]);
             // console.log("데이터를 받아왔을 때 "+wholeTextArray);
@@ -162,6 +169,7 @@ const clickListItem = clickedItem =>{
     console.log("노래를선택하였습니다.");
     setSelectedData(clickedItem);
     console.log(selectedData);
+    console.log(selectedData.image);
     setIsHaveInputValue(false);
     setHaveClicked(true);
 }
@@ -246,9 +254,23 @@ const handleDropDownKey = event =>{
          <BottonBox>
             {haveClicked &&
                 (
-                <RetryBtn disabled={haveClicked ? false : true} onClick={retrySelectSong} >
+                <ClickedBox disabled={haveClicked ? false : true}> 
+                  
+                  <SongDetail>
+                    <SongBox>
+                    <ImgandName>
+                    <img  src={selectedData.image} alt={"이미지"} width={"62px"} height={"62px"}/>
+                    {selectedData.name}
+                    </ImgandName>
+                    <Note/>
+                    </SongBox>
+                  </SongDetail>
+               
+               
+                <RetryBtn  onClick={retrySelectSong} >
                     {"노래 다시 고르기"}
                 </RetryBtn>
+                </ClickedBox>
             )
             }
             <ImgCreateBtn disabled={haveClicked ? false : true}>
@@ -261,11 +283,58 @@ const handleDropDownKey = event =>{
 };
 
 export default UploadPost;
+const ImgandName = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  column-gap: 33px;
+  font-family: Pretendard Variable;
+  font-size: 26px;
+  font-weight: 400;
+  line-height: 31px;
+  letter-spacing: 0.01em;
+  text-align: center;
+  margin-right: 20px;
+  width: 90%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+`;
+
+const SongBox = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  column-gap: 50px;
+  padding-top: 10px;
+  padding-left: 90px;
+  padding-right: 90px;
+ 
+
+`;
+
+const ClickedBox = styled.div`
+
+`;
+
+const SongDetail = styled.div`
+
+  
+  width: 600px;
+  height: 82px;
+  background-color: #F7F7F7;
+  box-shadow: 5px 4px 5px 0px #00000033;
+  display: ${props=>props.disabled? 'none': 'block' };
+  position: relative;
+  margin-top: 80px;
+`;
+
 const RetryBtn = styled.button`
     border: 1px solid #04DB8F;
     display: ${props=>props.disabled? 'none': 'block' };
     position: relative;
-    margin-top: 200px;
+    margin-top: 130px;
     width: 645.04px;
     height: 90.24px;
     color: #04DB8F;
