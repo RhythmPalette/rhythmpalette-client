@@ -2,10 +2,11 @@
 
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
 
 const Background = styled.div`
-  width: 1910.395px;
-  height: 1080px;
+  width: 100vw;
+  height: 100vh;
   flex-shrink: 0;
   background: radial-gradient(140.12% 112.97% at -1.52% -17.47%, rgba(0, 201, 130, 0.50) 1.59%, rgba(241, 241, 241, 0.50) 100%);
   display: flex;
@@ -191,6 +192,8 @@ const Login = () => {
   const [identifierError, setIdentifierError] = useState('');
   const [passwordError, setPasswordError] = useState('');
 
+  const navigate = useNavigate();
+
   const handleLogin = () => {
     // 예제에서는 간단히 이메일이나 아이디가 'test@test.com'이고, 비밀번호가 'password'일 때를 로그인 성공으로 가정
     const correctIdentifier = 'test@test.com'; 
@@ -212,6 +215,7 @@ const Login = () => {
 
     // 이메일 또는 아이디와 비밀번호가 일치하면 로그인 성공
     if (identifier === correctIdentifier && password === correctPassword) {
+      navigate('/register_profile');
       console.log('로그인 성공');
     }
   };

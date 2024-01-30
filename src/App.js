@@ -8,6 +8,7 @@ import SignUp_email from './pages/LoginPage/SignUp_email';
 import SignUp_check from './pages/LoginPage/SignUp_check';
 import Register_profile from './pages/RegisterProfilePage/Register_profile';
 import Favorite_categories from './pages/RegisterProfilePage/Favorite_categories';
+import Profile_music from './pages/RegisterProfilePage/Profile_music';
 
 const App = () => {
   return (
@@ -22,6 +23,7 @@ const App = () => {
         <Route path="/signup_check" element={<SignUp_check />} />
         <Route path="/register_profile" element={<Register_profile />} />
         <Route path="/Favorite_categories" element={<Favorite_categories />} />
+        <Route path="/Profile_music" element={<Profile_music />} />
       </Routes>
     </>
   );

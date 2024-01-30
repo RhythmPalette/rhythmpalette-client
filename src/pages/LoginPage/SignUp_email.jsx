@@ -6,8 +6,8 @@ import styled from 'styled-components';
 import Arrow from "./Img/화살표.svg";
 
 const Background = styled.div`
-  width: 1910.395px;
-  height: 1080px;
+  width: 100vw;
+  height: 100vh;
   flex-shrink: 0;
   background: radial-gradient(140.12% 112.97% at -1.52% -17.47%, rgba(0, 201, 130, 0.50) 1.59%, rgba(241, 241, 241, 0.50) 100%);
   display: flex;

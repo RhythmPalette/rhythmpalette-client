@@ -4,8 +4,8 @@ import Arrow from "./Img/화살표.svg";
 import { useNavigate } from 'react-router-dom';
 
 const Background = styled.div`
-  width: 1910.395px;
-  height: 1080px;
+  width: 100vw;
+  height: 100vh;
   flex-shrink: 0;
   background: radial-gradient(140.12% 112.97% at -1.52% -17.47%, rgba(0, 201, 130, 0.50) 1.59%, rgba(241, 241, 241, 0.50) 100%);
   display: flex;
@@ -69,17 +69,17 @@ const Box = styled.label`
 `
 
 const Text = styled.div`
-display: flex;
-height: 31.27px;
-flex-direction: column;
-justify-content: center;
-flex-shrink: 0;
-color: #000;
-font-family: "Pretendard Variable";
-font-size: 25px;
-font-style: normal;
-font-weight: 400;
-line-height: 18px; /* 72% */
+  display: flex;
+  height: 31.27px;
+  flex-direction: column;
+  justify-content: center;
+  flex-shrink: 0;
+  color: #000;
+  font-family: "Pretendard Variable";
+  font-size: 25px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 18px; /* 72% */
 `
 const Wrapping = styled.div`
   width: 31.271px;
