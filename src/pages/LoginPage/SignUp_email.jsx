@@ -90,8 +90,8 @@ const Input = styled.input`
   font-size: 25px;
   font-style: normal;
   font-weight: 400;
-  line-height: 18px; /* 
-  72% */
+  line-height: 18px; /* 72% */
+  outline: none; /* 강조 효과 없애기 */
 `
 const Send = styled.button`
 width: 152.953px;

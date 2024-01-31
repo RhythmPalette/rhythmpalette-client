@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
 import Arrow from "./Img/화살표.svg";
+import checkbox1 from "./Img/Group 411.png";
+import checkbox2 from "./Img/Group 410.png"
 import { useNavigate } from 'react-router-dom';
 
 const Background = styled.div`
@@ -89,18 +91,20 @@ const Wrapping = styled.div`
 
 `
 
-const Input = styled.input`
+const CustomCheckbox = styled.div`
   width: 31.27px;
   height: 31.27px;
   margin: 0;
   border-radius: 50%;
-  background: #D9D9D9;
   cursor: pointer;
   transition: background 0.2s;
-  &:checked {
-    background: #04DB8F;
-  }
-`
+  background: url(${({ checked }) => (checked ? checkbox2 : checkbox1)}) no-repeat center center;
+  background-size: cover;
+`;
+
+const Input = styled.input`
+  display: none; /* 기존 체크박스를 감춥니다. */
+`;
 
 const ArrowBtn = styled.button`
   background: white;
@@ -149,6 +153,7 @@ const SignUp_check = () => {
               checked={isCheckedTerms}
               onChange={handleTermsCheckboxChange}
             />
+            <CustomCheckbox checked={isCheckedTerms} />
           </Wrapping>
         </Box>
         <Box>
@@ -159,6 +164,7 @@ const SignUp_check = () => {
               checked={isCheckedPrivacy}
               onChange={handlePrivacyCheckboxChange}
             />
+            <CustomCheckbox checked={isCheckedPrivacy} />
           </Wrapping>
         </Box>
         <ArrowBtn type="button" onClick={handleProceedButtonClick}>

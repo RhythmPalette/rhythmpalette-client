@@ -82,6 +82,7 @@ const Input = styled.input`
   font-style: normal;
   font-weight: 400;
   line-height: 18px; /* 72% */
+  outline: none; /* 강조 효과 없애기 */
 `
 const Wrapping = styled.div`
   display: flex;
@@ -108,6 +109,7 @@ const InputHalf = styled.input`
   font-style: normal;
   font-weight: 400;
   line-height: 18px; /* 72% */
+  outline: none; /* 강조 효과 없애기 */
 `
 
 const Check = styled.button`

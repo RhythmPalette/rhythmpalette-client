@@ -105,6 +105,7 @@ const Input = styled.input`
   font-style: normal;
   font-weight: 400;
   line-height: 18px; /* 72% */
+  outline: none; /* 강조 효과 없애기 */
 `
 const Password = styled.div`
   width: 529.959px;
