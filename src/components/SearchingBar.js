@@ -27,7 +27,10 @@ const SearchingInput = styled.input`
     margin-left : 221.64px;
     &::placeholder{
         font-size : 26px;
-        color : #9A9A9A;
+        color : #9A9A9A;}
+    &:focus {
+            outline: none; // 포커스일 때 outline 효과 제거
+        
     }
 `
 const SearchButton = styled.button`

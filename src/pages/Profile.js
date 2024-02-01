@@ -8,6 +8,8 @@ import IconMusic from '../assets/IconMusic.svg'
 
 const Layout = styled.div`
     display : flex;
+    justify-content : center;
+    
     width: 1892.951px;
     height: 1092.061px;
     background: #FFF;
@@ -25,7 +27,6 @@ width: 1544.525px;
 height: 399.668px;
 flex-shrink: 0;
 background: #F9F9F9;
-
 
 `
 const ProfileImg = styled.img`
@@ -134,6 +135,7 @@ background-color: ${({ selected }) => (selected ? '#D9D9D9' : '#FFF')};
   &:hover {
     background-color: #D9D9D9;
   }
+  border : none;
 `;
 
 const Playlist = styled.button`
@@ -147,6 +149,8 @@ background-color: ${({ selected }) => (selected ? '#D9D9D9' : '#FFF')};
   &:hover {
     background-color: #D9D9D9;
   }
+  border : none;
+
 `;
 
 
@@ -160,8 +164,10 @@ text-align : center;
 background-color: ${({ selected }) => (selected ? '#D9D9D9' : '#FFF')};
   cursor: pointer;
   &:hover {
-    background-color: #D9D9D9;
-  }
+    background-color: #D9D9D9;}
+  border : none;
+
+  
 `;
 
 const Profile = () => {
