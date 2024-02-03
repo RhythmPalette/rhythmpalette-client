@@ -4,6 +4,8 @@ import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { ReactComponent as Scope } from './Img/ScopeImg.svg';
 import { ReactComponent as Note } from './Img/NoteImg.svg';
+import checkbox1 from './Img/체크 버튼 전.png';
+import checkbox2 from './Img/체크 버튼 후.png';
 
 // Spotify API 인증 정보
 const CLIENT_ID = "d1b1e1bd14254ae2b50f43eb69ba9a87";
@@ -22,6 +24,7 @@ const UploadPost = () => {
   const [wholeTextArray, setWholeTextArray] = useState([]); // 전체 텍스트 배열 상태
   const dropDownRef = useRef(null); // 드롭다운 참조를 위한 useRef
   const navigate = useNavigate(); // React Router의 useNavigate 훅 사용
+  const isPlaceholderVisible = !isHaveInputValue && !selectedData;
 
   // 드롭다운 아이템 스크롤 효과
   useEffect(() => {
@@ -148,6 +151,7 @@ const UploadPost = () => {
     setSelectedData(clickedItem);
     setIsHaveInputValue(false);
     setHaveClicked(true);
+    setInputValue('');
   };
 
   // 노래 재선택 시
@@ -192,7 +196,7 @@ const UploadPost = () => {
             <InputBox isHaveInputValue={isHaveInputValue}>
               <InputText
                 type='text'
-                placeholder='Search'
+                placeholder={isPlaceholderVisible ? 'Search' : 'Search'}
                 value={inputValue}
                 onChange={changeInputValue}
                 onKeyUp={handleDropDownKey}
@@ -202,7 +206,7 @@ const UploadPost = () => {
             {isHaveInputValue && (
               <DropDownBox ref={dropDownRef}>
                 {dropDownList.length === 0 && (
-                  <div>해당하는 단어가 없습니다</div>
+                  <DropDownItem1>해당하는 단어가 없습니다</DropDownItem1>
                 )}
                 {dropDownList.map((dropDownItem, dropDownIndex) => {
                   const { name, image } = dropDownItem;
@@ -213,7 +217,7 @@ const UploadPost = () => {
                       onMouseOver={() => setDropDownItemIndex(dropDownIndex)}
                       className={dropDownItemIndex === dropDownIndex ? 'selected' : ''}
                     >
-                      {image && <img src={image} alt={name} style={{ width: '65px', height: '65px' }} />}
+                      {image && <img src={image} alt={name} style={{ width: '65px', height: '64px' }} />}
                       <GrabText>
                         {name}
                       </GrabText>
@@ -230,24 +234,22 @@ const UploadPost = () => {
                 <SongDetail>
                   <SongBox>
                     <ImgandName>
-                      <img src={selectedData.image} alt={"이미지"} width={"62px"} height={"62px"} />
+                      <img src={selectedData.image} alt={"이미지"} width={"65px"} height={"64px"} />
                       {selectedData.name}
                     </ImgandName>
                     <Note />
                   </SongBox>
                 </SongDetail>
                 <RetryBtn onClick={retrySelectSong}>
-                  {"노래 다시 고르기"}
+                  {"다시 고르기"}
                 </RetryBtn>
               </ClickedBox>
             )}
-            <ImgCreateBtn disabled={haveClicked ? false : true}>
-              {"이미지 생성하기"}
-            </ImgCreateBtn>
           </BottonBox>
         </UploadPostPackage>
+        <ImgCreateBtn disabled={haveClicked ? false : true}></ImgCreateBtn>
+        <CompleteText>완료</CompleteText>
       </Wrap>
-      
     </Background>
   );
 };
@@ -274,6 +276,38 @@ const Wrap = styled.form`
   position: relative;
 `;
 
+const CompleteText = styled.div`
+  width: 118.296px;
+  height: 32px;
+  flex-shrink: 0;
+  color: #000;
+  text-align: center;
+  font-family: "Pretendard Variable";
+  font-size: 26px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  letter-spacing: 0.26px;
+  position: absolute;
+  right: 759.14px;
+  top: 790.42px;
+`
+
+const DropDownItem1 = styled.li`
+  font-size: 20px;
+  font-weight: bold;  
+  padding: 15px;
+  padding-left: 40px;
+  padding-right: 50px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  column-gap: 50px;
+  &.selected {
+    background-color: lightgray;
+  }
+`;
+
 const ImgandName = styled.div`
   display: flex;
   flex-direction: row;
@@ -285,7 +319,6 @@ const ImgandName = styled.div`
   line-height: 31px;
   letter-spacing: 0.01em;
   text-align: center;
-  margin-right: 20px;
   width: 90%;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -297,70 +330,62 @@ const SongBox = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  column-gap: 50px;
-  padding-top: 10px;
-  padding-left: 90px;
-  padding-right: 90px;
- 
+  padding-top: 9.22px;
+  padding-left: 40px;
+  padding-right: 50px;
 
 `;
 
 const ClickedBox = styled.div`
-
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 `;
 
 const SongDetail = styled.div`
-
-  
-  width: 600px;
-  height: 82px;
+  width: 770.373px;
+  height: 82.421px;
   background-color: #F7F7F7;
+  border-radius: 10px;
   box-shadow: 5px 4px 5px 0px #00000033;
   display: ${props=>props.disabled? 'none': 'block' };
   position: relative;
-  margin-top: 80px;
+  margin-top: 71.97px;
 `;
 
 const RetryBtn = styled.button`
-    border: 1px solid #04DB8F;
-    display: ${props=>props.disabled? 'none': 'block' };
-    position: relative;
-    margin-top: 130px;
-    width: 645.04px;
-    height: 90.24px;
-    color: #04DB8F;
-    background-color: #FFFFFF;
-    border-radius: 45.12px;
-    font-family: Pretendard Variable;
-    font-size: 35px;
-    font-weight: 400;
-    line-height: 42px;
-    letter-spacing: 0.01em;
-    text-align: center;
-    z-index: 0;
+  border: 0;
+  display: ${props=>props.disabled? 'none': 'block' };
+  padding: 0;
+  margin-top: 48.27px;
+  width: 130px;
+  height: 32px;
+  flex-shrink: 0;
+  color: #00C982;
+  font-family: "Pretendard Variable";
+  font-size: 26px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  letter-spacing: 0.26px;
+  background-color: white;
 `;
 
-const ImgCreateBtn = styled.button`
-    position: relative;
-    width: 645.04px;
-    height: 90.24px;
-    border: 0;
-    border-radius: 45.12px;
-    background-color: ${props=>props.disabled? '#D2D2D2': '#04DB8F' };
-    margin-top: ${props=>props.disabled? '300px': '20px' };
-    font-family: Pretendard Variable;
-    font-size: 35px;
-    font-weight: 400;
-    line-height: 42px;
-    letter-spacing: 0.01em;
-    text-align: center;
-    z-index: 0;
+const ImgCreateBtn = styled.div`
+    position: absolute;
+    left: 768.984px;
+    top: 687.97px;
+    width: 114.61px;
+    height: 92.513px;
+    background: url(${props => props.disabled ? checkbox1 : checkbox2 });
 `;
 
 const BottonBox = styled.div`
     display: flex;
     flex-direction: column;
-
+    justify-content: center;
+    align-items: center;
 `;
 
 
@@ -380,18 +405,20 @@ text-align: left;
 
 const InputBox = styled.div`
   display: flex;
-  height: 42px;
+  justify-content: center;
+  align-items: center;
   padding-top: 5px;
-  flex-direction: row;
-  padding-right: 20px;
-  margin-top: 140px;
-  width: 800px;
+  padding-right: 50px;
+  padding-left: 40px;
+  margin-top: 111.75px;
+  width: 770.373px;
+  height: 82.354px;
   z-index: 3;
-  border-radius: ${props => props.isHaveInputValue ? "15px 15px 0 0" : " 0 0 0 0 "};
-  background-color: ${props => props.isHaveInputValue ? "#F9F9F9" : "#0000" };
-  box-shadow: ${props => props.isHaveInputValue ?  "2px 4px 6px 0px #00000033" : "0 0 0 0" };
+  border-radius: ${props => props.isHaveInputValue ? "15px 15px 0 0" : " 50px 50px 50px 50px "};
+  background-color: #F9F9F9;
+  box-shadow: ${props => props.isHaveInputValue ?  "2px 4px 6px 0px #00000033" : "3px 4px 4px 0px rgba(0,0,0,0.25)" };
   border-width: 0 0 1px;
-  border-style: solid;
+  border: 0;
 `;
 const DropDownItem = styled.li`
   font-size: 20px;
@@ -400,8 +427,8 @@ const DropDownItem = styled.li`
   display: flex;
   flex-direction: row;
   align-items: center;
-  padding-left: 80px;
-  padding-right: 80px;
+  padding-left: 40px;
+  padding-right: 50px;
   column-gap: 60px;
   &.selected {
     background-color: lightgray;
@@ -416,9 +443,10 @@ const InputText = styled.input`
   font-size: 25px;
   font-weight: 400;
   width: 550px;
-  padding-left: 15px;
-  padding-bottom: 5px;
   border: 0px;
+  &::placeholder {
+    color: #B5B5B5; /* 원하는 placeholder 색상으로 변경 */
+  }
 `;
 
 const UploadPostPackage = styled.div`
@@ -429,11 +457,19 @@ const UploadPostPackage = styled.div`
     max-height: 1000px;
 `;
 const TextBox = styled.div`
-    font-size: 40px;    
-    font-weight: 400;
-    width: 650px;
-    height: 51.01px;
-
+  display: flex;
+  width: 657.865px;
+  height: 30.391px;
+  flex-direction: column;
+  justify-content: center;
+  flex-shrink: 0;
+  color: #000;
+  text-align: center;
+  font-family: "Pretendard Variable";
+  font-size: 45px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 18px; /* 40% */
 `;
 const SearchingBox = styled.div`
     margin-top: 100px;
@@ -453,7 +489,7 @@ const DropDownBox = styled.ul`
   background-color: #F9F9F9;
   border: 1px solid rgba(0, 0, 0, 0.3);
   border-top: none;
-  width: 800px;
+  width: 770.373px;
   border-radius: 0 0  15px 15px;
   box-shadow: 2px 4px 6px 0px #00000033;
   list-style-type: none;
