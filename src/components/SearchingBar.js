@@ -9,8 +9,9 @@ const SearchingContainer = styled.div`
     width: 1544.525px;
     height: 161.334px;
     background: #F9F9F9;
-    box-shadow: 3px 3px 10px 3px rgba(0, 0, 0, 0.10);
     margin-top : 0;
+    box-shadow: 3px 3px 10px 3px rgba(0, 0, 0, 0.10);
+    
     `
 const SearchBar =styled.div`
     display : flex;
@@ -25,11 +26,12 @@ const SearchingInput = styled.input`
     margin-top : 49.85px;
     margin-bottom : 49.49px;
     margin-left : 221.64px;
+    border: #262626;
     &::placeholder{
-        font-size : 26px;
+        font-size : 15px;
         color : #9A9A9A;}
     &:focus {
-            outline: none; // 포커스일 때 outline 효과 제거
+            outline: none; 
         
     }
 `
