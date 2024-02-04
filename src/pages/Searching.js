@@ -1,105 +1,15 @@
 import React ,{useEffect, useState,useRef} from 'react';
 import styled from 'styled-components';
-import Clouds from './Clouds';
+import Clouds from '../components/Clouds';
 import {useNavigate} from 'react-router-dom'
 import { IoSearchSharp } from "react-icons/io5";
+import {DATA} from "../store/classificationData"
 
 
 const CLIENT_ID = "d1b1e1bd14254ae2b50f43eb69ba9a87";
 const CLIENT_SECRET ="2064724783bd4462b8671a035d864b13";
 
-const DATA = [
-  {
-    id :'1',
-    title: 'R&B',
-  },
-  {
-    id : '2',
-    title: 'Mood',
-  },
-  {
-    id : '3',
-    title: 'Latin',
-  },
-   
-  {
-    id:'4',
-    title: 'Latin',
-  },
-  {
-    id : '5',
-    title: 'Chill',
-  },
-  
-  {
-    id : '6',
-    title: 'Sleep',
-  },
-  
-  {
-    id : '7',
-    title: 'Party',
-  },
-  
-  {
-    id : '8',
-    title: 'Party',
-  },
-  
-  {
-    id : '9',
-    title: 'Metal',
-  },
-  
-  {
-    id : '10',
-    title: 'Jazz',
-  },
-  
-  {
-    id : '11',
-    title: 'Trending',
-  },
-  
-  {
-    id : '12',
-    title: 'Trending',
-  },
-  {
-    id : '13',
-    title: 'Soul',
-  },
-  {
-    id : '14',
-    title: 'Kids&Family',
-  },
-  {
-    id : '15',
-    title: 'Gaming',
-  },
-  {
-    id : '16',
-    title: 'Gaming',
-  },
-  {
-    id : '17',
-    title: 'Dance',
-  },
-  {
-    id : '18',
-    title: 'Electronic',
-  },
-  {
-    id : '19',
-    title: 'Chart',
-  },
-  {
-    id : '20',
-    title: 'Chart',
-  },
 
-
-]
 
 const Searching = () => {
     const navigate = useNavigate();
@@ -136,35 +46,6 @@ const Searching = () => {
      },[])
      //이건 이렇게 함으로써 처음 업데이트 될 때만 accesstoken을 가져오는 것이고.
 
-
-    //  const getArtists = async () => {
-    //   try {
-    //     const response = await fetch('https://api.spotify.com/v1/search?q=' + inputValue + '&type=artist', {
-    //       method: 'GET',
-    //       headers: {
-    //         Authorization: 'Bearer ' + accessToken,
-    //       },
-    //     });
-    
-    //     if (response.ok) {
-    //       const data =  await response.json();
-    //       // artists 객체가 존재하면서 items 속성이 존재하는지 확인
-    //       if (data.artists && data.artists.items) {
-    //         // 관련 아티스트 목록 업데이트
-    //         console.log(data.artists.items);
-    //         setWholeTextArray(data.artists.items.map((artist) => artist.name));
-    //       } else {
-    //         // 예상치 못한 데이터 형식이거나 검색 결과가 없는 경우
-    //         console.error('Unexpected data format or no search results:', data);
-    //       }
-    //     } else {
-    //       // 오류 응답 처리
-    //       console.error('Error fetching artist data. Status:', response.status);
-    //     }
-    //   } catch (error) {
-    //     console.error('Error fetching artist data:', error);
-    //   }
-    // };
     useEffect(() => {
       let artistArr;
       const getArtists = async () => {
@@ -247,26 +128,6 @@ const Searching = () => {
 
     }, [inputValue, accessToken]);
   
-
-    // async function search(){
-    //   var artistParameters = {
-    //     method: 'GET',
-    //     headers: {
-    //       'Content-Type' : 'application/json',
-    //       'Authorization' : 'Bearer ' + accessToken
-    //     }
-    //   }
-    //   var artistID = await fetch('https://api.spotify.com/v1/search?q='+ inputValue + '&type=artist',artistParameters)
-    //   .then(response =>response.json())
-    //   .then(data => {return data.artists.items[0].id})
-    //   //이 부분은 아직 사용하지 않았음.
-      
-    //   // const  wholeTextArrayChanger = ()  => { 
-    //   //  fetch('https://api.spotify.com/v1/search?q='+ inputValue + '&type=artist',artistParameters)
-    //   // .then(response =>response.json())
-    //   // .then(data => {setWholeTextArray(data.artists.item.slice(0,100))})}
-    //   //   wholeTextArrayChanger();
-    // }
     const showDropDownList = () =>{
     
         if(inputValue === ''){

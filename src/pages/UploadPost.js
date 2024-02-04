@@ -25,10 +25,6 @@ const navaigate = useNavigate();
 
 
 
-
-
-
-
 useEffect(()=>{
   if(dropDownRef.current && dropDownItemIndex>=0){
     const selectedElement = dropDownRef.current.children[dropDownItemIndex]
