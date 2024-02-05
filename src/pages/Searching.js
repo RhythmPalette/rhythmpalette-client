@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import Clouds from '../components/Clouds';
 import {useNavigate} from 'react-router-dom'
 import { IoSearchSharp } from "react-icons/io5";
-import {DATA} from "../store/classificationData"
+import {classificationData} from "../store/classificationData";
 
 
 const CLIENT_ID = "d1b1e1bd14254ae2b50f43eb69ba9a87";
@@ -236,7 +236,7 @@ const Searching = () => {
       </SearchingBox>
       <CloudBox>
         <CloudGrid>
-         {DATA.map((item)=>{
+         {classificationData.map((item)=>{
                 return (
                     <Clouds
                     title = {item.title}

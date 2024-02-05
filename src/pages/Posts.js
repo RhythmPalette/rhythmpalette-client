@@ -1,7 +1,7 @@
 import React from 'react';
 import styled  from 'styled-components';
 import { dummy } from '../store/postExampleDummyData';
-import Post from './Post';
+import Post from '../components/Post';
 const Posts = () => {
     return (
         <BigBox>

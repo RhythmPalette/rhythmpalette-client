@@ -7,9 +7,9 @@ const MakeImages = () => {
 
     const [imageData, setImageData] = useState("");
     //서버에서 이미지 데이터를 받아와서 사용함.
+    setImageData()
 
 
-    
     return (
         <MakegImagesPackage>
             <ImageGrid>
