@@ -15,7 +15,6 @@ const Landing = () => {
 }
 
 export default Landing
-
 const PageBody = styled.div`
   width: 100vw;  
   height: 100vh;
