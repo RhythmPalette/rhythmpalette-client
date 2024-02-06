@@ -1,6 +1,5 @@
 import React ,{useEffect, useState,useRef} from 'react';
 import styled from 'styled-components';
-import * as fromSearching from './Searching';
 import {useNavigate} from 'react-router-dom';
 import {ReactComponent as Scope} from '../assets/ScopeImg.svg';
 import {ReactComponent as Note} from '../assets/NoteImg.svg';
@@ -20,8 +19,9 @@ const [dropDownList, setDropDownList] = useState([]);
 const [dropDownItemIndex, setDropDownItemIndex] = useState(-1);
 const [accessToken, setAccessToken] = useState("");
 const [wholeTextArray,setWholeTextArray] = useState([]);
+const [play, setPlay] = useState(false);
 const dropDownRef = useRef(null); 
-const navaigate = useNavigate();
+const navigate = useNavigate();
 
 
 
@@ -71,6 +71,7 @@ useEffect(()=>{
             name : artist.name,
             image : artist.images[0].url,
             genre : artist.genres,
+            issong : false,
           }));
             setWholeTextArray(artistArr);
      
@@ -107,8 +108,11 @@ useEffect(()=>{
             const tracksArr = data.tracks.items.map((track) => ({
               name : track.name,
               image : track.album.images[0].url,
+              gerne :"",
+              issong : true,
               //추가로 받아서 넣을 정보는 여기에 넣어주면 됨
             }));
+          
             setWholeTextArray([...artistArr,...tracksArr]);
             // console.log("데이터를 받아왔을 때 "+wholeTextArray);
      
@@ -118,10 +122,10 @@ useEffect(()=>{
           }
         } else {
           // 오류 응답 처리
-          console.error('Error fetching artist data. Status:', response.status);
+          console.error('Error fetching track data. Status:', response.status);
         }
       } catch (error) {
-        console.error('Error fetching artist data:', error);
+        console.error('Error fetching track data:', error);
       }
     };
  
@@ -141,10 +145,12 @@ useEffect(()=>{
         // console.log("지금실행되는중");
         // console.log("input이 있는경우 :"+ wholeTextArray);
         // console.log("여기까찌");
+        console.log(wholeTextArray);
         const choosenTextList = wholeTextArray.filter(textItem=>
             textItem.name.includes(inputValue));
             // console.log(choosenTextList);
             setDropDownList(choosenTextList);
+            
             //여기를 통해서 연관단어 보다는 포함하는 단어가 나오게끔 해놓음 -> 유사도를 더 높이기 위해서 이 부분 수정하면 관련도를 더 조절할 수 있음.
     }
 }
@@ -174,6 +180,13 @@ const retrySelectSong=() =>{
     console.log("재선택버튼이 클릭되었습니다.")
     setIsHaveInputValue(false);
     setHaveClicked(false);
+}
+const goToMakeImagePage = ()=>{
+  navigate(`/makeimages`);
+}
+
+const playOn = ()=>{
+  setPlay(!play);
 }
 
 const handleDropDownKey = event =>{
@@ -208,6 +221,9 @@ const handleDropDownKey = event =>{
 }
     useEffect(showDropDownList,[inputValue,wholeTextArray]);
     
+    useEffect(()=>{
+
+  },[play])
 
     return (
         <UploadPostPackage>
@@ -223,10 +239,10 @@ const handleDropDownKey = event =>{
           {isHaveInputValue && (
             <DropDownBox ref={dropDownRef} >
           {dropDownList.length === 0 && (
-            <fromSearching.DropDownItem>해당하는 단어가 없습니다</fromSearching.DropDownItem>
+            <FirstDropDownItem>{"가수 이름, 노래 제목으로 음악을 검색하세요."}</FirstDropDownItem>
           )}
           {dropDownList.map((dropDownItem, dropDownIndex) => {
-            const {name,image} = dropDownItem;
+            const {name,image,issong} = dropDownItem;
             return (
               <DropDownItem
                 key={dropDownIndex}
@@ -240,7 +256,8 @@ const handleDropDownKey = event =>{
                 <GrabText>
                 {name}
                 </GrabText>
-                <Note />
+                {issong && <Note  />} 
+                {/* 노트에 클릭을 했을 때는 선택이 안되도록 구현해야한다. */}
                </DropDownItem>
             )
           })}
@@ -258,18 +275,16 @@ const handleDropDownKey = event =>{
                     <img  src={selectedData.image} alt={"이미지"} width={"62px"} height={"62px"}/>
                     {selectedData.name}
                     </ImgandName>
-                    <Note/>
+                    <Note onClick={playOn}/>
                     </SongBox>
                   </SongDetail>
-               
-               
                 <RetryBtn  onClick={retrySelectSong} >
                     {"노래 다시 고르기"}
                 </RetryBtn>
                 </ClickedBox>
             )
             }
-            <ImgCreateBtn disabled={haveClicked ? false : true}>
+            <ImgCreateBtn disabled={haveClicked ? false : true} onClick={goToMakeImagePage}>
                 {"이미지 생성하기"}
             </ImgCreateBtn>
 
@@ -279,6 +294,17 @@ const handleDropDownKey = event =>{
 };
 
 export default UploadPost;
+
+const FirstDropDownItem =styled.div`
+  font-size: 20px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-top: 20px;
+  margin-left: 170px;
+  opacity: 0.4;
+`;
+
 const ImgandName = styled.div`
   display: flex;
   flex-direction: row;
@@ -465,6 +491,7 @@ const DropDownBox = styled.ul`
   list-style-type: none;
   z-index: 10;
   overflow: scroll;
+  min-height: 400px;
   max-height: 400px; 
   -ms-overflow-style:none; /* IE and Edge */
   scrollbar-width : none; /* Firefox */

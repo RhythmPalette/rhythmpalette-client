@@ -5,11 +5,15 @@ import Images from '../components/Images';
 //아마 여기서 서버에서 이미지를 받아서 사용할 예정 전 페이지에서 서버에 데이터를 요청함
 const MakeImages = () => {
 
-    const [imageData, setImageData] = useState("");
-    //서버에서 이미지 데이터를 받아와서 사용함.
-    setImageData()
-
-
+    // const [imageData, setImageData] = useState("");
+    // //서버에서 이미지 데이터를 받아와서 사용함.
+    // // setImageData()
+    // setImageData();
+    const imageData = [
+        {
+            url : "example",
+        }
+    ]
     return (
         <MakegImagesPackage>
             <ImageGrid>
