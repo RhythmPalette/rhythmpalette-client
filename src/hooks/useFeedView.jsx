@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import axios from "axios";
 import dummyFeeds from "../store/dummyFeeds";
 
 export const useFeedView = (query, pageNumber) => {

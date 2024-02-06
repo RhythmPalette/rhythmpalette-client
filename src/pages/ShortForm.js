@@ -10,16 +10,17 @@ import IconSaveWhite from "../assets/IconSaveWhite.svg";
 import IconSeeMoreWhite from "../assets/IconSeeMoreWhite.svg";
 import IconEdit from "../assets/IconEdit.svg";
 import IconEmotion from "../assets/IconEmotion.svg";
-import Modal from "../components/ShortsModal";
+import Modal from "../components/CommentModal";
+import EditModal from "../components/EditModal";
 
 const PageLayout = styled.div`
     display: flex; 
     justify-content: center;
     align-items: center;
     height: 1080px; 
-    max-width: 1910.81px;
+    max-width: 1920px;
     margin: auto;
-    background-color: #EEEEEE;
+    background-color: #EEEEEE; 
 `;
 
 const PageContainer = styled.div`
@@ -35,6 +36,12 @@ const Content = styled.div`
     padding: 20px;
     overflow-y: auto;
     margin-left: 402px;
+    scrollbar-width: none; 
+    -ms-overflow-style: none; 
+
+    &::-webkit-scrollbar {
+        display: none; 
+    }
 `;
 
 
@@ -114,18 +121,21 @@ const SeeMoreIcon = styled.img`
 
 
 
-
-
 function Shortform() {
     const [query, setQuery] = useState(''); 
     const [pageNumber, setPageNumber] = useState(1);
-    const [isCommentModalOpen, setIsCommentModalOpen] =useState(false);
-
+    // const [isCommentModalOpen, setIsCommentModalOpen] =useState(false);
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    const [currentEditId, setCurrentEditId] = useState(null);
+    const [currentTrackInfo, setCurrentTrackInfo] = useState('');
+    const [currentTrackImage, setCurrentTrackImage] = useState('');
+    
     const { shorts, hasMore, loading, error } = useShortView(query, pageNumber);
+
 
     const observer = useRef();
     
-    const lastFeedElementRef = useCallback(
+    const lastShortElementRef = useCallback(
         (node) => {
             if (loading) return;
             if (observer.current) observer.current.disconnect();
@@ -148,56 +158,75 @@ function Shortform() {
         setPageNumber(1);
       };
 
-      const openCommentModal = () => {
-        setIsCommentModalOpen(true);
-      };
+      //const openCommentModal = () => {
+      //  setIsCommentModalOpen(true);
+      //};
     
-      const closeCommentModal = () => {
-        setIsCommentModalOpen(false);
-      };
+      //const closeCommentModal = () => {
+      //  setIsCommentModalOpen(false);
+      //};
+
+      const openEditModal = (id, trackInfo, trackImage) => {
+        setCurrentEditId(id);
+        setCurrentTrackInfo(trackInfo);
+        setCurrentTrackImage(trackImage);
+        setIsEditModalOpen(true);
+      }; 
+
+      const closeEditModal = () => {
+        setIsEditModalOpen(false);
+        setCurrentEditId(null);
+    };
 
     return (
         <PageLayout>
             <NavBar />
             <PageContainer>
-            <SearchBarContainer query={query} handleSearch={handleSearch} />
-            <Content>
-            {shorts.map((feed, index) => {
-                const ImageComponent = feed.ImageComponent;
-                const isLastFeed = shorts.length === index + 1;
-                const feedContent = (
-                    <Fragment key={feed.id}>
-                        <FeedHeader>
-                            {/* <div>{short.username}</div> */}
-                    
-                        </FeedHeader>
-                        <ImageWrapper>
-                            <ImageComponent />
-                            <TrackInfoOverlay>{feed.trackInfo}</TrackInfoOverlay>
-                            <OverlayIcons>
-                                <PlayIcon src={IconPlayWhite} alt="Play" />
-                                <LikeIcon src={IconLikeWhite} alt="Like" />
-                                <CommentIcon src={IconCommentWhite} alt="Comment" onClick={openCommentModal}/>
-                                <SaveIcon src={IconSaveWhite} alt="Save"/>
-                                <EmotionIcon src={IconEmotion} alt="Emotion"/>
-                                <EditIcon src={IconEdit} alt="EditButton" />
-                                <SeeMoreIcon src={IconSeeMoreWhite} alt="SeeMore"/>
-                            </OverlayIcons>
-                        </ImageWrapper>
-                        <Modal isOpen={isCommentModalOpen} close={closeCommentModal} />
-                    </Fragment>
-                );
-            
-                return isLastFeed 
-                    ? <div ref={lastFeedElementRef}>{feedContent}</div> 
-                    : feedContent;
-            })}
-            {loading && '...loading'}
-            <div>{error && 'Error'}</div>
-            </Content>
+                <SearchBarContainer query={query} handleSearch={handleSearch} />
+                <Content>
+                {shorts.map((short, index) => {
+                    const ImageComponent = short.ImageComponent;
+                    const isLastShort = shorts.length === index + 1;
+                    const ShortContent = (
+                        <Fragment key={short.id}>
+                            <FeedHeader>
+                                {/* <div>{short.username}</div> */}
+                            </FeedHeader>
+                            <ImageWrapper>
+                                <ImageComponent />
+                                <TrackInfoOverlay>{short.trackInfo}</TrackInfoOverlay>
+                                <OverlayIcons>
+                                    <PlayIcon src={IconPlayWhite} alt="Play" />
+                                    <LikeIcon src={IconLikeWhite} alt="Like" />
+                                    <CommentIcon src={IconCommentWhite} alt="Comment" /*onClick={openCommentModal}*/ />
+                                    <SaveIcon src={IconSaveWhite} alt="Save"/>
+                                    <EmotionIcon src={IconEmotion} alt="Emotion"/>
+                                    <EditIcon src={IconEdit} alt="EditButton" onClick={() => openEditModal(short.id, short.trackInfo, short.trackImage)} />
+                                    <SeeMoreIcon src={IconSeeMoreWhite} alt="SeeMore"/>
+                                </OverlayIcons>
+                            </ImageWrapper>
+                           {/* <Modal isOpen={isCommentModalOpen} close={closeCommentModal} /> */}
+                        </Fragment>
+                    );
+                
+                    return isLastShort 
+                        ? <div ref={lastShortElementRef}>{ShortContent}</div> 
+                        : ShortContent;
+                })}
+                {loading && '...loading'}
+                <div>{error && 'Error'}</div>
+                </Content>
+                {isEditModalOpen && currentEditId !== null && (
+                    <EditModal
+                        isOpen={isEditModalOpen}
+                        onRequestClose={closeEditModal}
+                        trackInfo={currentTrackInfo}
+                        trackImage={currentTrackImage}
+                    />
+                )}
             </PageContainer>
         </PageLayout>
-    )
+    );
 }
 
 export default Shortform;

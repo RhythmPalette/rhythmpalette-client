@@ -15,7 +15,7 @@ const PageLayout = styled.div`
     justify-content: center;
     align-items: center;
     height: 1080px; 
-    max-width: 1910.81px;
+    max-width: 1920px;
     margin: auto;
 `;
 
@@ -31,13 +31,13 @@ const Content = styled.div`
     flex-grow: 1;
     padding: 20px;
     overflow-y: auto;
-    margin-left: 402px;
-
-    ::-webkit-scrollbar {
-        display: none;
-      }
+    margin-left: 402.42px;
+    scrollbar-width: none; 
     -ms-overflow-style: none; 
-     scrollbar-width: none;  
+
+    &::-webkit-scrollbar {
+        display: none; 
+    }
 `;
 
 
