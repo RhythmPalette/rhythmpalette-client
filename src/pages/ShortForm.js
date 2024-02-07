@@ -1,4 +1,4 @@
-import { useState,  useRef, useCallback, Fragment } from "react";
+import { useState,  useRef, useCallback, Fragment, useEffect } from "react";
 import styled from "styled-components";
 import { useShortView } from "../hooks/useShortView";
 import NavBar from "../components/NavBar";
@@ -121,6 +121,7 @@ const SeeMoreIcon = styled.img`
 
 
 
+
 function Shortform() {
     const [query, setQuery] = useState(''); 
     const [pageNumber, setPageNumber] = useState(1);
@@ -129,6 +130,8 @@ function Shortform() {
     const [currentEditId, setCurrentEditId] = useState(null);
     const [currentTrackInfo, setCurrentTrackInfo] = useState('');
     const [currentTrackImage, setCurrentTrackImage] = useState('');
+    const [likes, setLikes] = useState({});
+    const [postLikeList, setPostLikeList] = useState([]);
     
     const { shorts, hasMore, loading, error } = useShortView(query, pageNumber);
 
@@ -157,6 +160,46 @@ function Shortform() {
         setQuery(e.target.value);
         setPageNumber(1);
       };
+
+    const toggleLike = async (shortId) => {
+        try {
+            const response = await fetch('posts/{postId}/like', {
+                method: likes[shortId] ? 'DELETE' : 'POST',
+                headers: {
+                    'Content-Type' : 'application/json'
+                },
+                body: JSON.stringify({ message: "Toggle like"}),
+            });
+            if (!response.ok) {
+                throw new Error('Failed to toggle like');
+            }
+            setLikes(prevLikes => ({
+                ...prevLikes,
+                [shortId]: !prevLikes[shortId],
+            }));
+            const data = await response.json();
+            console.log(data);
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    };
+
+    const fetchPostLikeList = async () => {
+        try {
+            const response = await fetch("/posts/{postId}/like");
+            if (!response.ok) {
+                throw new Error("Failed to fetch post like list");
+            }
+            const data = await response.json();
+            setPostLikeList(data.postLikeList);
+        }   catch (error) {
+            console.error("Error:", error);
+        }
+    };
+
+    useEffect(() => {
+        fetchPostLikeList();
+    }, []);
 
       //const openCommentModal = () => {
       //  setIsCommentModalOpen(true);
@@ -197,11 +240,19 @@ function Shortform() {
                                 <TrackInfoOverlay>{short.trackInfo}</TrackInfoOverlay>
                                 <OverlayIcons>
                                     <PlayIcon src={IconPlayWhite} alt="Play" />
-                                    <LikeIcon src={IconLikeWhite} alt="Like" />
+                                    <LikeIcon 
+                                        src={IconLikeWhite}
+                                        alt="Like" 
+                                        onClick={() => toggleLike(short.id)}
+                                        style={{cursor:"pointer", color:likes[short.id] ? "red" : "black"}}
+                                    />
                                     <CommentIcon src={IconCommentWhite} alt="Comment" /*onClick={openCommentModal}*/ />
                                     <SaveIcon src={IconSaveWhite} alt="Save"/>
                                     <EmotionIcon src={IconEmotion} alt="Emotion"/>
-                                    <EditIcon src={IconEdit} alt="EditButton" onClick={() => openEditModal(short.id, short.trackInfo, short.trackImage)} />
+                                    <EditIcon 
+                                        src={IconEdit} 
+                                        alt="EditButton" 
+                                        onClick={() => openEditModal(short.id, short.trackInfo, short.trackImage)} />
                                     <SeeMoreIcon src={IconSeeMoreWhite} alt="SeeMore"/>
                                 </OverlayIcons>
                             </ImageWrapper>
