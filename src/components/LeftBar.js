@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import {Link} from 'react-router-dom';
 import MenuBar from '../assets/MenuBar.svg';
 import IconHome from '../assets/IconHome.svg';
-import IconMypage from '../assets/IconMyPage.svg';
+import IconMypage from '../assets/IconMypage.svg';
 import IconUpload from '../assets/IconUpload.svg';
 import FriendsAdd from '../assets/FriendsAdd.svg';
 import Help from '../assets/Help.svg';

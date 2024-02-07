@@ -1,5 +1,7 @@
 import { Route, Routes } from 'react-router-dom';
 import Landing from './pages/Landing';
+import Searching from './pages/Searching';
+import Posts from './pages/Posts';
 import GlobalStyles from './styles/GlobalStyles';
 import UploadPost from './pages/UploadPost';
 import MakeImages from './pages/MakeImages';
