@@ -9,20 +9,26 @@ import IconMusic from '../assets/IconMusic.svg'
 const Layout = styled.div`
     display : flex;
     justify-content : center;
-    width: 1892.951px;
-    height: 1092.061px;
+    align-items : center;
+    width: 1920px;
+    height: 1080px;
     background: #FFF;
+    margin : auto;
+   
     box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
 `
 
 const PageContainer= styled.div`
     display : flex;
     flex-direction : column;
+    width : 100%;
+    height : 1080px;
     `
 
 const ProfileBar = styled.div`
 display : flex;
-width: 1544.525px;
+width: 1562.377px;
+width : 100%;
 height: 399.668px;
 flex-shrink: 0;
 background: #F9F9F9;
@@ -115,7 +121,8 @@ font-size : 25px;
 margin-top : 17.27px;
 `
 const Divider = styled.div`
-width: 1544.526px;
+
+width: 1562.377px;
 height: 1px;
 
 background: #C3C3C3;

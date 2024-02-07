@@ -13,7 +13,7 @@ const LeftContainer = styled.div`
     display : flex;
     flex-direction : column;
     width: 348.426px;
-    height: 1092.061px;
+    height: 1080px;
     background: #F9F9F9;
     box-shadow: 0px 3px 10px 3px rgba(0, 0, 0, 0.10);
 `
@@ -101,12 +101,12 @@ const LeftBar = () => {
         <Divider />
         <MenuContainer>
                 <MenuIcon src = {IconUpload} alt = 'Upload' /> 
-                <StyledLink to = '/Upload'> 마이페이지 </StyledLink>
+                <StyledLink to = '/Upload'> 업로드 </StyledLink>
         </MenuContainer>
         <Divider />
         <MenuContainer>
                 <MenuIcon src = {IconMypage} alt = 'MyPage' /> 
-                <StyledLink to = '/Mypage'> 업로드 </StyledLink>
+                <StyledLink to = '/profile'> 마이페이지 </StyledLink>
         </MenuContainer>
         <Divider />
         <FriendList>친구 목록</FriendList>

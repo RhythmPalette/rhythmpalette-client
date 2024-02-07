@@ -11,16 +11,22 @@ import SearchingBar from '../components/SearchingBar';
 const Layout = styled.div`
 display : flex;
 justify-content : center;
-width: 1892.951px;
-height: 1092.061px;
+align-items : center;
+width: 1920px;
+height: 1080px;
 background: #FFF;
+margin : auto;
 box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+
 `
 const PageContainer= styled.div`
     display : flex;
     flex-direction : column;
-    `
-
+    width: 100%;
+    
+    height : 1080px;
+    
+`
 const YearContainer = styled.div`
 display : flex;
 `
@@ -73,13 +79,17 @@ const CalendarWrapper = styled.div`
     display: grid;
     justify-content : center;
     align-items : center;
-    grid-template-columns: repeat(7, 1fr);
-    gap: 20px;
-    font-size : 30px;
+    text-align : center;
+    grid-template-columns: repeat(7, 150px);
+    grid-template-rows: repeat(6, 92px);
+    gap : 27px;
+    
+
     margin-left : 152.57px;
+    margin-right : 152.57px;
     margin-top : 31px;
     color: #000;
-    text-align: center;
+    font-size : 30px;
     font-family: "Pretendard Variable";
     font-size: 30px;
     font-style: normal;
@@ -90,43 +100,49 @@ const CalendarWrapper = styled.div`
 
 
 const Day = styled.div`
-    text-align: center;
-    padding : 10px;
-    background-color: ${props => props.isHeader ? '#f0f0f0' : 'white'};
-    width: 92px; /* 고정된 가로 크기 */
-    height: 100px; /* 고정된 세로 크기 */
     display: flex;
     flex-direction: row; 
-    align-items: center;
+    align-items : center;
     justify-content: center;
+    text-align: center;
+    background-color: ${props => props.isHeader ? '#f0f0f0' : 'white'};
+    width: 92px; /* 고정된 가로 크기 */
+    height: 92px; /* 고정된 세로 크기 */
+    left : 50px;
+    
     // 이미지와 텍스트를 감싸는 컨테이너에 대한 스타일
     .content-container {
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
+        width: 92px;
+        height: 92px;
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
+        text-align : center;
         position : relative;
+        
+
     }
     // 텍스트에 대한 스타일
     span {
+        display : flex;
+        align-items : center;
+        justify-content : center;
+        text-align : center;
         position : absolute;
-        z-index: 2; // 이미지 위에 텍스트를 표시하도록 z-index 조절
+        width : 100%;
+        z-index: 2; 
     }
-
-
 `;
-const ImageContainer = styled.div`
 
-width : 100%;
-height : 100%;
-z-index: 1; // 이미지는 텍스트 위에 표시되도록 z-index 조절
- 
-svg{
-    border-radius: 15px;}
+const ImageContainer = styled.div`
+width : 92px;
+height : 92px;
+z-index: 1; 
+overflow : hidden;
+svg {
+    border-radius: 15px;
+ }
 
 `;    
     
