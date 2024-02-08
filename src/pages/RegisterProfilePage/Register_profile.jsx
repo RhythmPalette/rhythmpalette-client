@@ -163,7 +163,7 @@ const Text3 = styled.div`
   margin-right: 7.5px;
 `
 const Select = styled.select`
-width: 78.619px;
+width: 90px;
 height: 30.451px;
 flex-shrink: 0;
 border: 0;
@@ -228,11 +228,11 @@ const ArrowBtn = styled.button`
 `
 
 const Register_profile = () => {
-  const Year_List = Array.from( { length: 100 }, (_, i) => `${2024-i}년`,);
+  const Year_List = Array.from( { length: 100 }, (_, i) => `${2024-i}`,);
   Year_List.unshift("년도");
-  const Month_List = Array.from( {length: 12}, (_, i) => `${i+1}월`);
+  const Month_List = Array.from( {length: 12}, (_, i) => `${i+1}`);
   Month_List.unshift("월");
-  const Day_List = Array.from( {length: 31}, (_, i) => `${i+1}일`);
+  const Day_List = Array.from( {length: 31}, (_, i) => `${i+1}`);
   Day_List.unshift("일");
   
   const [profileImage, setProfileImage] = useState(null);

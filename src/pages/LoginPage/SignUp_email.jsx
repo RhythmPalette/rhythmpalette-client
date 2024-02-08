@@ -81,6 +81,7 @@ const Input = styled.input`
   border-top-left-radius: 10px;
   border-bottom-left-radius: 10px;
   border: 1px solid #999999;
+  border-right: 0;
   background: #FFF;
   padding-top: 14.17px;
   padding-bottom: 14.17px;
