@@ -6,6 +6,7 @@ import IconHome from '../assets/IconHome.svg';
 import IconMypage from '../assets/IconMyPage.svg';
 import IconUpload from '../assets/IconUpload.svg';
 import FriendsAdd from '../assets/FriendsAdd.svg';
+import IconLogo from '../assets/IconLogo.svg';
 import Help from '../assets/Help.svg';
 
 
@@ -26,16 +27,14 @@ const MenuBarImg = styled.img`
     height: 19.492px;
     margin-top : 71.8px;
     margin-left : 39px;
-    margin-right : 75.24px;
+   
 `
-const Logo = styled.div`
-    width: 164.209px;
-    height: 62px;
-    background: #04DB8F;
-    margin-top : 50.18px;
-    text-align : center;
-    font-size : 30px;
-    margin-right : 38.57px;
+const LogoImg = styled.img`
+width: 110.276px;
+height: 86.901px;
+flex-shrink: 0;
+margin-left : 96.95px;
+margin-top : 41.23px;
 `
 
 const Divider = styled.div`
@@ -68,30 +67,88 @@ height: 27px;
 margin-right: 20px;
 
 `
-const Friend = styled.div`
+const FriendList = styled.div`
+display: flex;
+width: 120px;
+height: 32px;
+justify-content: center;
+align-items: center;
+flex-shrink: 0;
+color: #000;
+text-align: center;
+font-family: "Pretendard Variable";
+font-size: 27px;
+font-style: normal;
+font-weight: 400;
+line-height: normal;
+letter-spacing: 0.27px;
+margin-left : 47.04px;
 `
 
-const FriendList = styled.div`
+
+const StyledUl = styled.ul`
+padding : 0;
 `
+const Friend = styled.div`
+width: 90px;
+height: 28.306px;
+flex-shrink: 0;
+color: #000;
+font-family: "Pretendard Variable";
+font-size: 24px;
+font-style: normal;
+font-weight: 400;
+line-height: normal;
+letter-spacing: 0.24px;
+margin-left : 74.09px;
+
+`
+
+
 const AddImg = styled.img`
 width: 28.391px;
 height: 27px;
-margin-right: 20px;
+margin-left : 157.49px;
 
 `
+const HelpContainer = styled.div`
+display : inline-block;
+  position: relative;
+`;
+
 const HelpImg = styled.img`
 width: 28.391px;
 height: 27px;
 margin-right: 20px;
+z-index : 2;
 `
-const TopContainer = styled.div`
-`
+
+const QuestionMark = styled.div`
+color: #FFF;
+text-align: center;
+font-family: "Pretendard Variable";
+font-size: 25px;
+font-style: normal;
+font-weight: 700;
+line-height: 17px; /* 68% */
+letter-spacing: -0.5px;
+font-size: 18px;
+  display: flex;
+width: 21.805px;
+height: 38.881px;
+flex-direction: column;
+justify-content: center;
+flex-shrink: 0;
+position : absolute;
+z-index : 1;
+`;
+
 const LeftBar = () => {
   return (
     <LeftContainer>
         <LogoContainer>
             <MenuBarImg src = {MenuBar} alt = 'MenuBar' />
-            <Logo>logo</Logo>
+            <LogoImg src = {IconLogo} alt = 'Logo' />
         </LogoContainer>
         <Divider />
         <MenuContainer>
@@ -110,7 +167,7 @@ const LeftBar = () => {
         </MenuContainer>
         <Divider />
         <FriendList>친구 목록</FriendList>
-            <ul>
+            <StyledUl>
                 <Friend>리듬 1</Friend>
                 <Friend>리듬 2</Friend>
                 <Friend>리듬 3</Friend>
@@ -121,9 +178,13 @@ const LeftBar = () => {
                 <Friend>리듬 8</Friend>
                 <Friend>리듬 9</Friend>
                 <Friend>리듬 10</Friend>
-            </ul>
+            </StyledUl>
             <AddImg src = {FriendsAdd} alt = '추가' />
-            <HelpImg src = {Help} alt = '도움말' />  
+            <HelpContainer>
+               <HelpImg src = {Help} alt = '도움말' /> 
+                <QuestionMark>?</QuestionMark>  
+            </HelpContainer>
+            
     </LeftContainer>
  
    
