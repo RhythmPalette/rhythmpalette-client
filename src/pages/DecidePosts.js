@@ -1,7 +1,16 @@
-import React from 'react';
+import React ,{useEffect, useState} from 'react';
 import styled from 'styled-components';
 import { ReactComponent as ExampleSquareImg } from '../assets/ExampleSquareImg.svg';
 const DecidePosts = () => {
+    const [hashClicked,setHashClicked] = useState(false);
+    
+    
+    const HashTagBtnClicked = () => {
+        setHashClicked(!hashClicked);
+
+    }
+    //여기에 클릭되었을 때 hashtag넣을 수 있는 div만들어두고 
+    useEffect(()=>{},[hashClicked]);
     return (
         <DecidePostsPackage>
             <ImgBox>
@@ -12,14 +21,123 @@ const DecidePosts = () => {
             {"Track"}
             </TrackName>
             <InPutPost type = "text" placeholder='게시글 내용을 입력해주세요'>
-            
-            
             </InPutPost>
+            <HashDiv>
+            <HashTagButton onClick={HashTagBtnClicked} display={hashClicked ? "none" : "block"} >
+            {"#해시태그 추가"}
+            </HashTagButton>
+            {hashClicked&&(
+                <WriteHash>
+                    <MentDiv>
+                        {"3개까지 추가할 수 있어요"}
+                    </MentDiv>
+                    <FirstHash>
+                    </FirstHash>
+                    <SecondHash>
+                    </SecondHash>
+                    <ThirdHash>
+                    </ThirdHash>
+                    <CompleteBtn>
+                        {"완료"}
+                    </CompleteBtn>
+                </WriteHash>
+            )}
+            </HashDiv>
+            <UploadButton>
+            {"업로드"}
+            </UploadButton>
         </DecidePostsPackage>
     );
 };
 
 export default DecidePosts;
+
+const CompleteBtn = styled.button`
+
+`;
+
+const MentDiv = styled.div`
+font-family: Pretendard Variable;
+font-size: 20px;
+font-weight: 400;
+line-height: 40px;
+letter-spacing: 0em;
+text-align: left;
+
+
+
+`;
+
+const FirstHash = styled.input`
+
+`;
+const SecondHash = styled.input`
+
+`;
+const ThirdHash = styled.input`
+
+`;
+
+
+const WriteHash = styled.div`
+    display: flex;
+    flex-direction: column ;
+    width: 349.81px;
+    height: 252.26px;
+    top: 528.53px;
+    left: 1480.05px;
+    border-radius: 15px;
+    position: absolute;
+    border: 1px solid #000000;
+
+`;
+
+const HashDiv = styled.div`
+
+`;
+
+const HashTagDiv = styled.div`
+
+`;
+
+const UploadButton = styled.button`
+background: #04DB8F;
+width: 306.16px;
+height: 90.24px;
+top: 907.77px;
+left: 980.92px;
+border-radius: 45.12px;
+position: absolute;
+font-family: Pretendard Variable;
+font-size: 35px;
+font-weight: 400;
+line-height: 42px;
+letter-spacing: 0.01em;
+text-align: center;
+color: #ffff;
+`;
+
+
+const HashTagButton = styled.button`
+width: 162px;
+height: 40px;
+top: 528.53px;
+left: 1479.27px;
+border-radius: 15px;
+border: 1px;
+position: absolute;
+/* background: linear-gradient(0deg, #000000, #000000),
+linear-gradient(0deg, #FFFFFF, #FFFFFF); */
+border: 1px solid #000000;
+font-family: Pretendard Variable;
+font-size: 20px;
+font-weight: 400;
+line-height: 40px;
+letter-spacing: 0em;
+text-align: center;
+background-color :#9999;
+`;
+
 
 const DecidePostsPackage = styled.div`
 

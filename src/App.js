@@ -17,6 +17,7 @@ import Profile_music from './pages/RegisterProfilePage/Profile_music';
 import Home from './pages/home';
 import Shortform from './pages/ShortForm';
 import Profile from './pages/Profile';
+import DecidePosts from './pages/DecidePosts';
 
 const App = () => {
   return (
@@ -40,6 +41,7 @@ const App = () => {
         <Route path="/shortform" element={<Shortform />} />
         <Route path="/calendar" element={<Calendar />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/decideposts" element={<DecidePosts/>}/>
       </Routes>
     </>
   );
