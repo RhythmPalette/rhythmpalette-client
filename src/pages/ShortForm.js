@@ -154,60 +154,57 @@ function Shortform() {
         },
         [loading, hasMore]
     );
-    console.log('observer.current : ', observer.current);
+
 
     const handleSearch = (e) => {
         setQuery(e.target.value);
         setPageNumber(1);
       };
 
-    const toggleLike = async (shortId) => {
-        try {
-            const response = await fetch('posts/{postId}/like', {
-                method: likes[shortId] ? 'DELETE' : 'POST',
-                headers: {
-                    'Content-Type' : 'application/json'
-                },
-                body: JSON.stringify({ message: "Toggle like"}),
-            });
-            if (!response.ok) {
-                throw new Error('Failed to toggle like');
-            }
-            setLikes(prevLikes => ({
-                ...prevLikes,
-                [shortId]: !prevLikes[shortId],
-            }));
-            const data = await response.json();
-            console.log(data);
-        } catch (error) {
-            console.error('Error:', error);
-        }
-    };
-
-    const fetchPostLikeList = async () => {
-        try {
-            const response = await fetch("/posts/{postId}/like");
-            if (!response.ok) {
-                throw new Error("Failed to fetch post like list");
-            }
-            const data = await response.json();
-            setPostLikeList(data.postLikeList);
-        }   catch (error) {
-            console.error("Error:", error);
-        }
-    };
 
     useEffect(() => {
+        const fetchPostLikeList = async () => {
+            try {
+                const postId = "";
+                const response = await fetch(`/posts/${postId}/like`, {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                });
+                if (!response.ok) {
+                    throw new Error("Failed to fetch post like list");
+                }
+                const data = await response.json();
+                setPostLikeList(data.postLikeList);
+            } catch (error) {
+                console.error("Error:", error);
+            }
+        };
+
         fetchPostLikeList();
     }, []);
 
-      //const openCommentModal = () => {
-      //  setIsCommentModalOpen(true);
-      //};
-    
-      //const closeCommentModal = () => {
-      //  setIsCommentModalOpen(false);
-      //};
+    const toggleLike = async (shortId) => {
+        try {
+            const method = likes[shortId] ? "DELETE" : "POST";
+            const response = await fetch(`/posts/${shortId}/like`, {
+                method: method,
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ message: "Toggle like" }),
+            });
+            if (!response.ok) {
+                throw new Error("Failed to toggle like");
+            }
+            const data = await response.json();
+
+            console.log("Success:", data);
+        } catch (error) {
+            console.error("Error:", error);
+        }
+    };
 
       const openEditModal = (id, trackInfo, trackImage) => {
         setCurrentEditId(id);
@@ -221,6 +218,7 @@ function Shortform() {
         setCurrentEditId(null);
     };
 
+
     return (
         <PageLayout>
             <NavBar />
@@ -228,15 +226,15 @@ function Shortform() {
                 <SearchBarContainer query={query} handleSearch={handleSearch} />
                 <Content>
                 {shorts.map((short, index) => {
-                    const ImageComponent = short.ImageComponent;
                     const isLastShort = shorts.length === index + 1;
-                    const ShortContent = (
-                        <Fragment key={short.id}>
+                   
+
+                    return (
+                        <div key={short.id} ref={isLastShort ? lastShortElementRef : null}>
                             <FeedHeader>
-                                {/* <div>{short.username}</div> */}
                             </FeedHeader>
                             <ImageWrapper>
-                                <ImageComponent />
+                                <short.ImageComponent />
                                 <TrackInfoOverlay>{short.trackInfo}</TrackInfoOverlay>
                                 <OverlayIcons>
                                     <PlayIcon src={IconPlayWhite} alt="Play" />
@@ -244,9 +242,9 @@ function Shortform() {
                                         src={IconLikeWhite}
                                         alt="Like" 
                                         onClick={() => toggleLike(short.id)}
-                                        style={{cursor:"pointer", color:likes[short.id] ? "red" : "black"}}
+                                        style={{cursor:"pointer"}}
                                     />
-                                    <CommentIcon src={IconCommentWhite} alt="Comment" /*onClick={openCommentModal}*/ />
+                                    <CommentIcon src={IconCommentWhite} alt="Comment" />
                                     <SaveIcon src={IconSaveWhite} alt="Save"/>
                                     <EmotionIcon src={IconEmotion} alt="Emotion"/>
                                     <EditIcon 
@@ -256,16 +254,11 @@ function Shortform() {
                                     <SeeMoreIcon src={IconSeeMoreWhite} alt="SeeMore"/>
                                 </OverlayIcons>
                             </ImageWrapper>
-                           {/* <Modal isOpen={isCommentModalOpen} close={closeCommentModal} /> */}
-                        </Fragment>
+                        </div>
                     );
-                
-                    return isLastShort 
-                        ? <div ref={lastShortElementRef}>{ShortContent}</div> 
-                        : ShortContent;
                 })}
                 {loading && '...loading'}
-                <div>{error && 'Error'}</div>
+                {error && 'Error'}
                 </Content>
                 {isEditModalOpen && currentEditId !== null && (
                     <EditModal

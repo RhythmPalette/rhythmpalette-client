@@ -130,16 +130,15 @@ function Home() {
             <SearchBarContainer query={query} handleSearch={handleSearch} />
             <Content>
             {feeds.map((feed, index) => {
-                const ImageComponent = feed.ImageComponent;
                 const isLastFeed = feeds.length === index + 1;
-                const feedContent = (
-                    <Fragment key={feed.id}>
+                return (
+                    <div key={feed.id} ref={isLastFeed ? lastFeedElementRef : null}>
                         <FeedHeader>
                             <div>{feed.username}</div>
                             <div>{feed.trackInfo}</div>
                         </FeedHeader>
                         <div onClick={goToShortForm}>
-                            <ImageComponent />
+                            <feed.ImageComponent />
                             <FeedContainer>
                                 <ContainerIcon>
                                     <IconConatiner>
@@ -154,16 +153,11 @@ function Home() {
                                 <Description>{feed.description}</Description>
                             </FeedContainer>
                         </div>
-
-                    </Fragment>
+                    </div>
                 );
-            
-                return isLastFeed 
-                    ? <div ref={lastFeedElementRef}>{feedContent}</div> 
-                    : feedContent;
             })}
             {loading && '...loading'}
-            <div>{error && 'Error'}</div>
+            {error && 'Error'}
             </Content>
             </PageContainer>
         </PageLayout>
