@@ -6,7 +6,6 @@ import GlobalStyles from './styles/GlobalStyles';
 import UploadPost from './pages/UploadPost';
 import MakeImages from './pages/MakeImages';
 import Calendar from './pages/Calendar';
-import GlobalStyles from './styles/GlobalStyles';
 import Login from './pages/LoginPage/Login';
 import SignUp_id from './pages/LoginPage/SignUp_id';
 import SignUp_pw from './pages/LoginPage/SignUp_pw';
