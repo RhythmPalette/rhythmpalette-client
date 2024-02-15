@@ -5,6 +5,7 @@ import SearchingBar from '../components/SearchingBar'
 import images from '../store/dummyPlaylist';
 import checkboxUnchecked from '../assets/UnCheckedBox.svg'
 import checkboxChecked from '../assets/CheckedBox.svg'
+import Checkbox from '../components/Checkbox';
 
 const Layout = styled.div`
     display : flex;
@@ -40,7 +41,8 @@ margin-top : 68px;
 
 const PlaylistName=styled.div`
 display : flex;
-flex-direction : row;`
+flex-direction : row;
+`
 
 const Name = styled.div`
 width: 180px;
@@ -56,13 +58,21 @@ letter-spacing: -1px;
 margin-left : 471px;
 margin-top : 41px;
 `
-const Line = styled.div`
-width: 428px;
-height: 2.5px;
-background: #D9D9D9;
-margin-top : 82px;
-margin-left : 6px;
+
+const PlistInput = styled.input`
+  width: 428px; 
+  height: 41px;
+  margin-top : 41px;
+  margin-left : 6px;
+  border : none;
+  border-bottom : 2.5px solid black;
+  outline : none;
+  font-size : 28px;
+  text-align : center;
+
+
 `
+
 const ImageContainer = styled.div`
 display : flex;
 flex-wrap: wrap;
@@ -88,18 +98,6 @@ width: 243px;
 height: 243px;
 `;
 
-const Checkbox = styled.img`
-  width: 26px;
-  height: 26px;
-  position: absolute;
-  top: 14px;
-  left: 15px;
-  background-image: url(${(props) => (props.checked ? checkboxChecked : checkboxUnchecked)});
-  visibility: ${(props) => (props.checked ? 'visible' : 'visible')}
-  border : none;
-  outline: none;
-  box-shadow : none;
-`; 
 
 const ButtonContainer = styled.div`
 display : flex;
@@ -121,6 +119,7 @@ font-weight: 400;
 line-height: normal;
 letter-spacing: 0.35px;
 cursor : pointer;
+border : none;
 `
 
 const Skip = styled.button`
@@ -140,6 +139,7 @@ letter-spacing: 0.35px;
 margin-left : 40px; 
 margin-top : 50px;
 cursor : pointer;
+border : 1px solid #04DB8F;
 `
 
 
@@ -159,7 +159,8 @@ const Playlist = () => {
             <MakePlaylist>나만의 재생목록을 만들어보세요</MakePlaylist>
             <PlaylistName>
               <Name>재생목록 이름: </Name>  
-              <Line />
+              <PlistInput type = 'text' />
+            
             </PlaylistName>
             <ImageContainer>
             {images.map((imageData, index) => (
