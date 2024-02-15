@@ -7,7 +7,7 @@ import ProfileImage from '../assets/ProfileImage.svg';
 const SearchingContainer = styled.div`
     display : flex;
     width: 1562.377pxpx;
-    height: 161.334px;
+    height: 162px;
     background: #F9F9F9;
 
     
