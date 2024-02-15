@@ -1,6 +1,17 @@
 import React ,{useEffect, useState} from 'react';
 import styled from 'styled-components';
 import { ReactComponent as ExampleSquareImg } from '../assets/ExampleSquareImg.svg';
+import { ReactComponent as NothingImg} from '../assets/Emoticons/Nothing.svg';
+import { ReactComponent as ComplexImg} from '../assets/Emoticons/Complex.svg';
+import { ReactComponent as DepressImg} from '../assets/Emoticons/Depressed.svg';
+import { ReactComponent as GoodImg} from '../assets/Emoticons/Good.svg';
+import { ReactComponent as HappyImg} from '../assets/Emoticons/Happy.svg';
+import { ReactComponent as NoExpressImg} from '../assets/Emoticons/NoExpression.svg';
+import { ReactComponent as SadImg} from '../assets/Emoticons/Sad.svg';
+import { ReactComponent as ShyImg} from '../assets/Emoticons/Shy.svg';
+import { ReactComponent as SickImg} from '../assets/Emoticons/Sick.svg';
+import { ReactComponent as SquerkImg} from '../assets/Emoticons/Squerk.svg';
+
 const DecidePosts = () => {
     const [hashClicked,setHashClicked] = useState(false);
     
@@ -22,6 +33,21 @@ const DecidePosts = () => {
             </TrackName>
             <InPutPost type = "text" placeholder='게시글 내용을 입력해주세요'>
             </InPutPost>
+            <EmotionDiv>
+                <NothingImg/>
+                <ComplexImg/>
+                <DepressImg/>
+                <GoodImg/>
+                <HappyImg/>
+                <NoExpressImg/>
+                <NothingImg/>
+                <SadImg/>
+                <ShyImg/>
+                <SickImg/>
+                <SquerkImg/>
+            </EmotionDiv>
+
+
             <HashDiv>
             <HashTagButton onClick={HashTagBtnClicked} display={hashClicked ? "none" : "block"} >
             {"#해시태그 추가"}
@@ -51,6 +77,10 @@ const DecidePosts = () => {
 };
 
 export default DecidePosts;
+
+const EmotionDiv = styled.div`
+
+`;
 
 const CompleteBtn = styled.button`
 
