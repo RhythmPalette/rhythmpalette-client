@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import {useNavigate} from 'react-router-dom';
 import {ReactComponent as Scope} from '../assets/ScopeImg.svg';
 import {ReactComponent as Note} from '../assets/NoteImg.svg';
+import GifImg from '../assets/Pulse.gif';
 
 
 const CLIENT_ID = "d1b1e1bd14254ae2b50f43eb69ba9a87";
@@ -20,6 +21,8 @@ const [dropDownItemIndex, setDropDownItemIndex] = useState(-1);
 const [accessToken, setAccessToken] = useState("");
 const [wholeTextArray,setWholeTextArray] = useState([]);
 const [play, setPlay] = useState(false);
+const [currentMouseMusic , setCurrentMouseMusic] = useState();
+const audioRef = useRef(null);
 const dropDownRef = useRef(null); 
 const navigate = useNavigate();
 
@@ -109,8 +112,9 @@ useEffect(()=>{
               name : track.name,
               image : track.album.images[0].url,
               gerne :"",
-              issong : true,
-              //추가로 받아서 넣을 정보는 여기에 넣어주면 됨
+              preview_url : track.preview_url,
+              artist_name : track.album.artists[0].name,
+              album_name : track.album.name,        //추가로 받아서 넣을 정보는 여기에 넣어주면 됨
             }));
           
             setWholeTextArray(tracksArr);
@@ -186,10 +190,19 @@ const goToMakeImagePage = ()=>{
   // 여기서 장르도 같이 넘겨줘야 한다.
 }
 
-const playOn = (event)=>{
+const playOn = (dropDownItem,event)=>{
   event.stopPropagation();
   setPlay(!play);
+  if(play){
+    console.log(dropDownItem);
+  audioRef.current.play();
+  }
+  else{
+    audioRef.current.pause();
+  }
 }
+
+
 
 const handleDropDownKey = event =>{
     if(isHaveInputValue){
@@ -221,15 +234,21 @@ const handleDropDownKey = event =>{
         }
     }
 }
+
+const CurrentMusic = (dropDownItem,dropDownIndex)=>{
+  console.log(dropDownItem);
+  setCurrentMouseMusic(dropDownItem);
+  setDropDownItemIndex(dropDownIndex);
+}
+
     useEffect(showDropDownList,[inputValue,wholeTextArray]);
     
     useEffect(()=>{
-
+      
   },[play])
 
     return (
         <UploadPostPackage>
-
             <SearchingBox>
                 <TextBox>
                  {"어떤 음악을 공유하고 싶으신가요?"}
@@ -244,22 +263,40 @@ const handleDropDownKey = event =>{
             <FirstDropDownItem>{"노래 제목으로 음악을 검색하세요."}</FirstDropDownItem>
           )}
           {dropDownList.map((dropDownItem, dropDownIndex) => {
-            const {name,image,issong} = dropDownItem;
+            const {name,image} = dropDownItem;
+            const isSelected = dropDownItemIndex === dropDownIndex;
             return (
               <DropDownItem
                 key={dropDownIndex}
                 onClick={() => clickListItem(dropDownItem)}
-                onMouseOver={() => setDropDownItemIndex(dropDownIndex)}
+                onMouseOver={() => 
+                  CurrentMusic(dropDownItem,dropDownIndex)
+                }
                 className={
                   dropDownItemIndex === dropDownIndex ? 'selected' : ''
                 }
               >
+             
                 {image && <img src={image} alt={name} style={{ width: '65px', height: '65px' }} />}
                 <GrabText>
                 {name}
                 </GrabText>
-                {issong && <Note  onClick={playOn}/>} 
-                {/* 노트에 클릭을 했을 때는 선택이 안되도록 구현해야한다. */}
+                <AudioDiv>
+                <audio ref = {audioRef}>
+                 {play&&(  
+                    <source src={currentMouseMusic.preview_url} />
+                   )}
+                </audio>
+                {!play&&(
+                    <Note  onClick={(event)=>playOn(dropDownItem,event)}/>
+                )
+                }
+                {play&&isSelected&&(
+                  <PulseImg src={GifImg} alt="Pulse" onClick={(event)=>playOn(dropDownItem,event)}/>
+                )}
+  
+                </AudioDiv>
+            
                </DropDownItem>
             )
           })}
@@ -277,7 +314,13 @@ const handleDropDownKey = event =>{
                     <img  src={selectedData.image} alt={"이미지"} width={"62px"} height={"62px"}/>
                     {selectedData.name}
                     </ImgandName>
-                    <Note onClick={playOn}/>
+                  
+                    <Note onClick={(event)=>playOn(selectedData,event)}/>
+                    <audio ref = {audioRef}>
+                   {play&&(  
+                    <source src={selectedData.preview_url} />
+                   )}
+                   </audio>
                     </SongBox>
                   </SongDetail>
                 <RetryBtn  onClick={retrySelectSong} >
@@ -289,14 +332,23 @@ const handleDropDownKey = event =>{
             <ImgCreateBtn disabled={haveClicked ? false : true} onClick={goToMakeImagePage}>
                 {"이미지 생성하기"}
             </ImgCreateBtn>
-
+        
          </BottonBox>
+   
         </UploadPostPackage>
     );
 };
 
 export default UploadPost;
 
+const PulseImg = styled.img`
+  width: 28.25px;
+  height: 29.6px;
+`;
+
+const AudioDiv = styled.div`
+
+`;
 
 
 const FirstDropDownItem =styled.div`
