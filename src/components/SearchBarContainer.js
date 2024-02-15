@@ -6,8 +6,8 @@ import IconProfile from '../assets/IconProfile.svg';
 
 const SearchBarContainerstyled = styled.div`
     display: flex;
-    width: 1560.78px;
-    height: 161.33px;
+    width: 1572px;
+    height: 162px;
     background-color: #F9F9F9;
 `;
 

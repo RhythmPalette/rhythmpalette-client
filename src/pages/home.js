@@ -14,7 +14,8 @@ const PageLayout = styled.div`
     display: flex; 
     justify-content: center;
     align-items: center;
-    height: 1080px; 
+    height: auto;
+    min-height: 1080px; 
     max-width: 1920px;
     margin: auto;
 `;
