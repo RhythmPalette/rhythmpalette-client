@@ -22,6 +22,7 @@ const [accessToken, setAccessToken] = useState("");
 const [wholeTextArray,setWholeTextArray] = useState([]);
 const [play, setPlay] = useState(false);
 const [currentMouseMusic , setCurrentMouseMusic] = useState();
+const [selectedMusic , setSelectedMusic] = useState();
 const audioRef = useRef(null);
 const dropDownRef = useRef(null); 
 const navigate = useNavigate();
@@ -192,17 +193,25 @@ const goToMakeImagePage = ()=>{
 
 const playOn = (dropDownItem,event)=>{
   event.stopPropagation();
+  console.log(play);
   setPlay(!play);
+  if(audioRef.current){
+
+  
   if(play){
     console.log(dropDownItem);
-  audioRef.current.play();
+    audioRef.current.play();
+    setSelectedMusic(dropDownItem);
   }
   else{
     audioRef.current.pause();
+    setSelectedMusic("");
   }
 }
-
-
+else{
+  console.log("error caused");
+}
+}
 
 const handleDropDownKey = event =>{
     if(isHaveInputValue){
@@ -236,16 +245,12 @@ const handleDropDownKey = event =>{
 }
 
 const CurrentMusic = (dropDownItem,dropDownIndex)=>{
-  console.log(dropDownItem);
   setCurrentMouseMusic(dropDownItem);
   setDropDownItemIndex(dropDownIndex);
 }
 
     useEffect(showDropDownList,[inputValue,wholeTextArray]);
-    
-    useEffect(()=>{
-      
-  },[play])
+
 
     return (
         <UploadPostPackage>
@@ -264,7 +269,7 @@ const CurrentMusic = (dropDownItem,dropDownIndex)=>{
           )}
           {dropDownList.map((dropDownItem, dropDownIndex) => {
             const {name,image} = dropDownItem;
-            const isSelected = dropDownItemIndex === dropDownIndex;
+            const isSelected = selectedMusic ===dropDownItem;
             return (
               <DropDownItem
                 key={dropDownIndex}
@@ -287,13 +292,10 @@ const CurrentMusic = (dropDownItem,dropDownIndex)=>{
                     <source src={currentMouseMusic.preview_url} />
                    )}
                 </audio>
-                {!play&&(
-                    <Note  onClick={(event)=>playOn(dropDownItem,event)}/>
-                )
-                }
-                {play&&isSelected&&(
-                  <PulseImg src={GifImg} alt="Pulse" onClick={(event)=>playOn(dropDownItem,event)}/>
-                )}
+                
+               {play && isSelected ? (
+               <PulseImg src={GifImg} alt="Pulse" onClick={(event) => playOn(dropDownItem, event)} />
+                  ) :<Note  onClick={(event)=>playOn(dropDownItem,event)}/>}
   
                 </AudioDiv>
             
@@ -314,13 +316,14 @@ const CurrentMusic = (dropDownItem,dropDownIndex)=>{
                     <img  src={selectedData.image} alt={"이미지"} width={"62px"} height={"62px"}/>
                     {selectedData.name}
                     </ImgandName>
-                  
-                    <Note onClick={(event)=>playOn(selectedData,event)}/>
+                    <AudioDiv>
+
                     <audio ref = {audioRef}>
-                   {play&&(  
                     <source src={selectedData.preview_url} />
-                   )}
                    </audio>
+                  {play ? 
+                  (<PulseImg src={GifImg} alt="Pulse" onClick={(event) => playOn(selectedData, event)} />) : <Note onClick={(event)=>playOn(selectedData,event)}/>}  
+                   </AudioDiv>
                     </SongBox>
                   </SongDetail>
                 <RetryBtn  onClick={retrySelectSong} >
