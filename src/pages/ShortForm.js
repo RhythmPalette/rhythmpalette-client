@@ -341,8 +341,8 @@ function Shortform() {
                                         alt={isPlaying ? "Pause" : "Play"}
                                         onClick={togglePlay}
                                         style={{cursor: "pointer",
-                                                width: isPlaying ? '41.3px' : '41.36px',
-                                                height: isPlaying ? '37.19px' :'41.36px',
+                                                width: isPlaying ? '41.36px' : '41.3px',
+                                                height: isPlaying ? '41.36px' :'37.19px',
                                                 }} />
                                     <LikeIcon 
                                         src={IconLikeWhite}
