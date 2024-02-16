@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import Arrow from "./Img/화살표.svg";
+import Logo from "./Img/Logo.svg"
 
 const Background = styled.div`
   width: 100vw;
@@ -25,15 +26,8 @@ const SignUp = styled.form`
   justify-content: center;
   align-items: center;
 `
-const Logo = styled.div`
-  color: #000;
-  text-align: center;
-  font-family: "Segoe UI";
-  font-size: 50px;
-  font-style: normal;
-  font-weight: 300;
-  line-height: 18px; /* 36% */
-  margin-top: 105.88px;
+const LogoImg = styled.div`
+  margin-top: 68px;
 `
 const Title = styled.div`
   display: flex;
@@ -49,9 +43,9 @@ const Title = styled.div`
   font-style: normal;
   font-weight: 600;
   line-height: 30%;
-  margin-top: 70.61px;
+  margin-top: 32.7px;
 `
-const Email = styled.div`
+const Email1 = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -63,7 +57,21 @@ const Email = styled.div`
   font-style: normal;
   font-weight: 400;
   line-height: 18px; /* 72% */
-  margin-top: 31.13px;
+  margin-top: 38px;
+`
+const Email2 = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 539.965px;
+  color: #000;
+  font-family: "Pretendard Variable";
+  font-size: 25px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 18px; /* 72% */
+  margin-top: 51px;
 `
 const Wrapping = styled.div`
   display: flex;
@@ -72,7 +80,7 @@ const Wrapping = styled.div`
   width: 564.305px;
   height: 58.451px;
   flex-shrink: 0;
-  margin-top: 13.72px;
+  margin-top: 13px;
 `
 const Input = styled.input`
   width: 411.35px;
@@ -80,7 +88,7 @@ const Input = styled.input`
   flex-shrink: 0;
   border-top-left-radius: 10px;
   border-bottom-left-radius: 10px;
-  border: 1px solid #999999;
+  border: 1px solid rgba(153, 153, 153, 1);
   border-right: 0;
   background: #FFF;
   padding-top: 14.17px;
@@ -95,35 +103,35 @@ const Input = styled.input`
   outline: none; /* 강조 효과 없애기 */
 `
 const Send = styled.button`
-width: 152.953px;
-height: 58.451px;
-flex-shrink: 0;
-background: #04DB8F;
-border-top-right-radius: 10px;
-border-bottom-right-radius: 10px;
-border: 1px solid #999999;
-color: #000;
-text-align: center;
-font-family: "Pretendard Variable";
-font-size: 20px;
-font-style: normal;
-font-weight: 400;
-line-height: 18px; /* 90% */
+  width: 152.953px;
+  height: 58.451px;
+  flex-shrink: 0;
+  background: #04DB8F;
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+  border: 0;
+  color: #000;
+  text-align: center;
+  font-family: "Pretendard Variable";
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 18px; /* 90% */
 `
 const Timer = styled.div`
-display: flex;
-flex-direction: column;
-justify-content: center;
-width: 531.28469px;
-height: 30.391px;
-flex-shrink: 0;
-color: #F00;
-font-family: "Pretendard Variable";
-font-size: 20px;
-font-style: normal;
-font-weight: 400;
-line-height: 18px; /* 90% */
-margin-top: 2.08px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 531.28469px;
+  height: 30.391px;
+  flex-shrink: 0;
+  color: #F00;
+  font-family: "Pretendard Variable";
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 18px; /* 90% */
+  margin-top: 2px;
 `
 const ArrowBtn = styled.button`
   background: white;
@@ -200,9 +208,11 @@ const SignUp_email = () => {
   return (
     <Background>
       <SignUp>
-        <Logo>logo</Logo>
+        <LogoImg>
+          <img src={Logo} alt='logo' />
+        </LogoImg>
         <Title>회원가입</Title>
-        <Email>이메일 주소</Email>
+        <Email1>이메일 주소</Email1>
         <Wrapping>
           <div>
             <Input
@@ -217,7 +227,7 @@ const SignUp_email = () => {
             </Send>
           </div>
         </Wrapping>
-        <Email>인증번호 확인</Email>
+        <Email2>이메일 인증</Email2>
         <Wrapping>
           <div>
             <Input

@@ -2,6 +2,9 @@
 
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import Logo from './Img/Logo.svg';
+import KakaoLogo from './Img/Vector.svg';
+import KakaoText from './Img/TALK.svg';
 import { useNavigate } from 'react-router-dom';
 
 const Background = styled.div`
@@ -24,15 +27,8 @@ const SignIn = styled.form`
   justify-content: center;
   align-items: center;
 `
-const Logo = styled.div`
-  color: #000;
-  text-align: center;
-  font-family: "Segoe UI";
-  font-size: 50px;
-  font-style: normal;
-  font-weight: 300;
-  line-height: 18px; /* 36% */
-  margin-top: 75.88px;
+const LogoImg = styled.div`
+  margin-top: 45.87px;
 `
 
 const Title = styled.div`
@@ -49,11 +45,29 @@ const Title = styled.div`
   font-style: normal;
   font-weight: 600;
   line-height: 30%;
-  margin-top: 48.78px;
+  margin-top: 7.9px;
 `
 const KakaoWrab = styled.div`
-  width: 564.305px;
-  height: 58.451px;
+  width: 564px;
+  height: 58px;
+  margin-top: 19.35px;
+  position: relative;
+`
+const Img_kakaologo = styled.img`
+  position: absolute;
+  left: 46px;
+  top: 13px;
+  z-index: 1;
+`
+const Img_kakaoText = styled.img`
+  position: absolute;
+  left: 50.73px;
+  top: 23.67px;
+  z-index: 2;
+`
+const KakaoTALK = styled.div`
+  width: 564px;
+  height: 58px;
   flex-shrink: 0;
   border-radius: 20px;
   background: #FFEB3B;
@@ -69,36 +83,36 @@ const KakaoWrab = styled.div`
   font-style: normal;
   font-weight: 400;
   line-height: 18px; /* 72% */
-  margin-top: 20.65px;
+  z-index: 0;
 `
 const Line = styled.hr`
   width: 529.959px;
   height: 1px;
   transform: scaleY(0.5);
-  margin-top: 44.82px;
+  margin-top: 35px;
   background: #A9A9A9;
 `
 const Email = styled.div`
-  width: 529.959px;
+  width: 540px;
   color: #000;
   font-family: "Pretendard Variable";
   font-size: 25px;
   font-style: normal;
   font-weight: 400;
   line-height: 18px; /* 72% */
-  margin-top:31.68px;
+  margin-top: 26px;
 `
 const Input = styled.input`
-  width: 564.305px;
-  height: 58.451px;
+  width: 564px;
+  height: 58px;
   flex-shrink: 0;
   border-radius: 10px;
-  border: 1px solid #999;
+  border: 1px solid rgba(153, 153, 153, 1);
   background: #FFF;
-  margin-top: 13.25px;
-  padding-top: 14.17px;
-  padding-bottom: 14.17px;
-  padding-left: 17.17px;
+  margin-top: 13px;
+  padding-top: 13.8px;
+  padding-bottom: 13.8px;
+  padding-left: 22px;
   color: #000;
   font-family: "Pretendard Variable";
   font-size: 25px;
@@ -108,17 +122,17 @@ const Input = styled.input`
   outline: none; /* 강조 효과 없애기 */
 `
 const Password = styled.div`
-  width: 529.959px;
+  width: 540px;
   color: #000;
   font-family: "Pretendard Variable";
   font-size: 25px;
   font-style: normal;
   font-weight: 400;
   line-height: 18px; /* 72% */
-  margin-top: 10.549px;
+  margin-top: 10.61px;
 `
 const LoginBtn =styled.button`
-  width: 564.305px;
+  width: 564px;
   height: 73.758px;
   flex-shrink: 0;
   border-radius: 5px;
@@ -132,7 +146,7 @@ const LoginBtn =styled.button`
   font-style: normal;
   font-weight: 400;
   line-height: 18px; /* 72% */
-  margin-top: 19.969px;
+  margin-top: 28.61px;
 `
 const Find = styled.div`
   width: 564.305px;
@@ -141,7 +155,7 @@ const Find = styled.div`
   align-items: center;
   height: 30.391px;
   color: #666;
-  margin-top: 23.65px;
+  margin-top: 22.82px;
 `
 const FindId = styled.a`
   color: #666;
@@ -176,7 +190,7 @@ const Separation = styled.div`
   font-size: 25px;
 `
 const Error = styled.div`
-  width: 529.959px;
+  width: 520px;
   height: 30.391px;
   color: #F00;
   font-family: "Pretendard Variable";
@@ -184,7 +198,7 @@ const Error = styled.div`
   font-style: normal;
   font-weight: 400;
   line-height: 18px; /* 90% */
-  margin-top: 4.18px;
+  margin-top: 2px;
 `
 
 const Login = () => {
@@ -233,9 +247,15 @@ const Login = () => {
   return (
     <Background>
       <SignIn>
-        <Logo>logo</Logo>
+        <LogoImg>
+          <img src={Logo} alt='logo' />
+        </LogoImg>
         <Title>로그인</Title>
-        <KakaoWrab onClick={kakaoLogin}>카카오톡으로 로그인하기</KakaoWrab>
+        <KakaoWrab onClick={kakaoLogin}>
+          <Img_kakaologo src={KakaoLogo} alt='KakaoLogo' />
+          <Img_kakaoText src={KakaoText} alt='KakaoText' />
+          <KakaoTALK>카카오톡으로 로그인하기</KakaoTALK> 
+        </KakaoWrab>
         <Line />
         <Email>
           이메일 주소 또는 아이디

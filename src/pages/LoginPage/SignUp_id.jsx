@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import Arrow from "./Img/화살표.svg";
+import Logo from "./Img/Logo.svg";
 import { useNavigate } from 'react-router-dom';
 
 const Background = styled.div`
@@ -25,15 +26,8 @@ const SignUp = styled.form`
   justify-content: center;
   align-items: center;
 `
-const Logo = styled.div`
-  color: #000;
-  text-align: center;
-  font-family: "Segoe UI";
-  font-size: 50px;
-  font-style: normal;
-  font-weight: 300;
-  line-height: 18px; /* 36% */
-  margin-top: 105.88px;
+const LogoImg = styled.div`
+  margin-top: 68px;
 `
 const Title = styled.div`
   display: flex;
@@ -49,33 +43,47 @@ const Title = styled.div`
   font-style: normal;
   font-weight: 600;
   line-height: 30%;
-  margin-top: 70.61px;
+  margin-top: 32.78px;
 `
 const Name = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
   flex-shrink: 0;
-  width: 529.959px;
+  width: 540px;
   color: #000;
   font-family: "Pretendard Variable";
   font-size: 25px;
   font-style: normal;
   font-weight: 400;
   line-height: 18px; /* 72% */
-  margin-top: 31.18px;
+  margin-top: 37.86px;
+`
+const Id = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 540px;
+  color: #000;
+  font-family: "Pretendard Variable";
+  font-size: 25px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 18px; /* 72% */
+  margin-top: 51.04px;  
 `
 const Input = styled.input`
-  width: 564.305px;
-  height: 58.451px;
+  width: 564px;
+  height: 58px;
   flex-shrink: 0;
   border-radius: 10px;
-  border: 1px solid #999999;
+  border: 1px solid rgba(153, 153, 153, 1);
   background: #FFF;
-  margin-top: 13.25px;
-  padding-top: 14.17px;
-  padding-bottom: 14.17px;
-  padding-left: 17.17px;
+  margin-top: 13px;
+  padding-top: 13.8px;
+  padding-bottom: 13.8px;
+  padding-left: 22px;
   color: #000;
   font-family: "Pretendard Variable";
   font-size: 25px;
@@ -93,12 +101,13 @@ const Wrapping = styled.div`
   margin-top: 13.25px;
 `
 const InputHalf = styled.input`
-  width: 410.99px;
-  height: 58.451px;
+  width: 411.21px;
+  height: 58px;
   border-top-left-radius: 10px;
   border-bottom-left-radius: 10px;
   flex-shrink: 0;
-  border: 1px solid #999999;
+  border: 1px solid rgba(153, 153, 153, 1);
+  border-right: 0;
   background: #FFF;
   padding-top: 14.17px;
   padding-bottom: 14.17px;
@@ -113,12 +122,12 @@ const InputHalf = styled.input`
 `
 
 const Check = styled.button`
-width: 153.008px;
-height: 58.451px;
+width: 152.789px;
+height: 58px;
 background: #04DB8F;
 border-top-right-radius: 10px;
 border-bottom-right-radius: 10px;
-border: 1px solid #999;
+border: 0;
 color: #000;
 text-align: center;
 font-family: "Pretendard Variable";
@@ -132,7 +141,7 @@ const Error = styled.div`
 display: flex;
 flex-direction: column;
 justify-content: center;
-width: 536.83719px;
+width: 520px;
 height: 30.391px;
 flex-shrink: 0;
 color: #F00;
@@ -141,13 +150,14 @@ font-size: 20px;
 font-style: normal;
 font-weight: 400;
 line-height: 18px; /* 90% */
-margin-top: 2.08px;
+margin-top: 2px;
 `
 
 const ArrowBtn = styled.button`
   background: white;
   border: 0;
-  margin-top: 157.01px;
+  margin-top: 152.8px;
+  margin-bottom: 76.24px;
 `
 
 
@@ -177,7 +187,9 @@ const SignUp_id = () => {
   return (
     <Background>
       <SignUp>
-        <Logo>logo</Logo>
+        <LogoImg>
+          <img src={Logo} alt='logo'/>
+        </LogoImg>
         <Title>회원가입</Title>
         <Name>이름</Name>
         <Input
@@ -185,7 +197,7 @@ const SignUp_id = () => {
             value={name}
             onChange={(e) => setName(e.target.value)}
         />
-        <Name>아이디</Name>
+        <Id>아이디</Id>
         <Wrapping>
           <div>
             <InputHalf

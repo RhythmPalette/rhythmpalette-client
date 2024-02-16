@@ -2,7 +2,8 @@
 
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import Arrow from './Img/화살표.svg'
+import Arrow from './Img/화살표.svg';
+import Logo from './Img/Logo.svg'
 import { useNavigate } from 'react-router-dom';
 
 const Background = styled.div`
@@ -25,15 +26,8 @@ const SignUp = styled.form`
   justify-content: center;
   align-items: center;
 `
-const Logo = styled.div`
-  color: #000;
-  text-align: center;
-  font-family: "Segoe UI";
-  font-size: 50px;
-  font-style: normal;
-  font-weight: 300;
-  line-height: 18px; /* 36% */
-  margin-top: 105.88px;
+const LogoImg = styled.div`
+  margin-top: 68px;
 `
 const Title = styled.div`
   display: flex;
@@ -49,7 +43,7 @@ const Title = styled.div`
   font-style: normal;
   font-weight: 600;
   line-height: 30%;
-  margin-top: 70.61px;
+  margin-top: 32.7px;
 `
 const Pw = styled.div`
   display: flex;
@@ -63,19 +57,19 @@ const Pw = styled.div`
   font-style: normal;
   font-weight: 400;
   line-height: 18px; /* 72% */
-  margin-top: 34.2px;
+  margin-top: 33.25px;
 `
 const Input = styled.input`
   width: 564.305px;
   height: 58.451px;
   flex-shrink: 0;
   border-radius: 10px;
-  border: 1px solid #999999;
+  border: 1px solid rgba(153, 153, 153, 1);
   background: #FFF;
-  margin-top: 13.72px;
+  margin-top: 13px;
   padding-top: 14.17px;
   padding-bottom: 14.17px;
-  padding-left: 17.17px;
+  padding-left: 22px;
   color: #000;
   font-family: "Pretendard Variable";
   font-size: 25px;
@@ -86,7 +80,7 @@ const Input = styled.input`
 `
 const Text = styled.div`
 display: flex;
-width: 539.96469px;
+width: 520px;
 height: 30.391px;
 flex-direction: column;
 justify-content: center;
@@ -97,14 +91,14 @@ font-size: 20px;
 font-style: normal;
 font-weight: 400;
 line-height: 18px; /* 90% */
-margin-top: 3.3px;
+margin-top: 2px;
 `
 
 const Error = styled.div`
 display: flex;
 flex-direction: column;
 justify-content: center;
-width: 536.83719px;
+width: 520px;
 height: 30.391px;
 flex-shrink: 0;
 color: #F00;
@@ -113,13 +107,14 @@ font-size: 20px;
 font-style: normal;
 font-weight: 400;
 line-height: 18px; /* 90% */
-margin-top: 2.08px;
+margin-top: 2px;
 `
 
 const ArrowBtn = styled.button`
   background: white;
   border: 0;
-  margin-top: 152.95px;
+  margin-top: 142.8px;
+  margin-bottom: 76.24px;
 `
 
 
@@ -158,7 +153,9 @@ const SignUp_pw = () => {
   return (
     <Background>
       <SignUp>
-        <Logo>logo</Logo>
+        <LogoImg>
+          <img src={Logo} alt='logo' />
+        </LogoImg>
         <Title>회원가입</Title>
         <Pw>비밀번호</Pw>
         <Input
