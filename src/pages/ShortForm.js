@@ -1,11 +1,11 @@
-import { useState,  useRef, useCallback, Fragment, useEffect } from "react";
+import { useState,  useRef, useCallback, useEffect } from "react";
 import styled from "styled-components";
 import { useShortView } from "../hooks/useShortView";
 import NavBar from "../components/NavBar";
 import SearchBarContainer from "../components/SearchBarContainer";
 import IconPlayWhite from "../assets/IconPlayWhite.svg";
 import IconLikeWhite from "../assets/IconLikeWhite.svg";
-
+import IconLikeRed from "../assets/IconLikeRed.svg";
 import IconCommentWhite from "../assets/IconCommentWhite.svg";
 import IconSaveWhite from "../assets/IconSaveWhite.svg";
 import IconSeeMoreWhite from "../assets/IconSeeMoreWhite.svg";
@@ -169,7 +169,6 @@ function Shortform() {
     const [currentTrackInfo, setCurrentTrackInfo] = useState('');
     const [currentTrackImage, setCurrentTrackImage] = useState('');
     const [likes, setLikes] = useState({});
-    const [postLikeList, setPostLikeList] = useState([]);
     const [isPlaying, setIsPlaying] = useState(false); 
     const audioRef = useRef(null); 
     
@@ -201,50 +200,6 @@ function Shortform() {
         setPageNumber(1);
       };
 
-
-    useEffect(() => {
-        const fetchPostLikeList = async () => {
-            try {
-                const postId = "";
-                const response = await fetch(`/posts/${postId}/like`, {
-                    method: "GET",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                });
-                if (!response.ok) {
-                    throw new Error("Failed to fetch post like list");
-                }
-                const data = await response.json();
-                setPostLikeList(data.postLikeList);
-            } catch (error) {
-                console.error("Error:", error);
-            }
-        };
-
-        fetchPostLikeList();
-    }, []);
-
-    const toggleLike = async (shortId) => {
-        try {
-            const method = likes[shortId] ? "DELETE" : "POST";
-            const response = await fetch(`/posts/${shortId}/like`, {
-                method: method,
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ message: "Toggle like" }),
-            });
-            if (!response.ok) {
-                throw new Error("Failed to toggle like");
-            }
-            const data = await response.json();
-
-            console.log("Success:", data);
-        } catch (error) {
-            console.error("Error:", error);
-        }
-    };
 
     const item = {
         "preview_url": "https://p.scdn.co/mp3-preview/7339548839a263fd721d01eb3364a848cad16fa7?cid=613834041d6342f8b26d78e730c2c746", // 미리듣기 URL
@@ -288,6 +243,60 @@ function Shortform() {
             }
         };
     }, []);
+
+
+
+    const currentUserId = "d1b1e1bd14254ae2b50f43eb69ba9a87";
+
+    useEffect(() => {
+        const fetchLikes = async () => {
+            const response = await fetch('posts/{postId}');
+            if (response.ok) {
+                const { postLikeList } = await response.json();
+                const likedPosts = postLikeList.reduce((acc, like) => {
+                    if (like.userId === currentUserId) {
+                        acc[like.postId] = true; 
+                    }
+                    return acc;
+                }, {});
+                setLikes(likedPosts); 
+            }
+        };
+
+        fetchLikes();
+    }, []);
+
+
+    const toggleLike = async (shortId) => {
+        const isLiked = !!likes[shortId]; 
+        try {
+            const method = isLiked ? "DELETE" : "POST";
+            const response = await fetch(`posts/{postId}/like`, {
+                method: method,
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                ...(method === "POST" && { body: JSON.stringify({ message: "Like added" }) }),
+            });
+    
+            if (response.ok) {
+                setLikes(prev => ({
+                    ...prev,
+                    [shortId]: !isLiked
+                }));
+    
+            
+                console.log(await response.json());
+            } else {
+                console.error("Failed to toggle like");
+            }
+        } catch (error) {
+            console.error("Error toggling like", error);
+        }
+    };
+    
+
+
 
 
     const openEditModal = (id, trackInfo, trackImage) => {
@@ -345,7 +354,7 @@ function Shortform() {
                                                 height: isPlaying ? '41.36px' :'37.19px',
                                                 }} />
                                     <LikeIcon 
-                                        src={IconLikeWhite}
+                                        src={likes[short.id] ? IconLikeRed : IconLikeWhite}
                                         alt="Like" 
                                         onClick={() => toggleLike(short.id)}
                                         style={{cursor:"pointer"}}
