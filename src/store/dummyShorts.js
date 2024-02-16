@@ -15,7 +15,7 @@ const dummyShorts = [
       ImageComponent: StyledShortDummyImage1,
       likes: 20,
       comments: 5,
-      description: "기분 좋은 하루"
+      hastags: "#분홍신 #이노래너무좋아요 #아이유너무좋아사랑해"
     },
     {
       id: 2,
@@ -24,7 +24,7 @@ const dummyShorts = [
       ImageComponent: StyledShortDummyImage1,
       likes: 15,
       comments: 3,
-      description: "따뜻한 겨울"
+      hastags: "#뉴진스 #겨울감성 #오노추"
     },
   ];
   

@@ -10,6 +10,8 @@ import IconSaveWhite from "../assets/IconSaveWhite.svg";
 import IconSeeMoreWhite from "../assets/IconSeeMoreWhite.svg";
 import IconEdit from "../assets/IconEdit.svg";
 import IconEmotion from "../assets/IconEmotion.svg";
+import IconProfile from "../assets/IconProfile.svg";
+import IconPause from "../assets/IconPause.svg";
 import Modal from "../components/CommentModal";
 import EditModal from "../components/EditModal";
 
@@ -59,7 +61,7 @@ const ImageWrapper = styled.div`
     height: 786.43px;
 `;
 
-const TrackInfoOverlay = styled.div`
+const InfoOverlay = styled.div`
     position: absolute;
     top: 18.51px;  
     left: 26.02px;
@@ -67,8 +69,17 @@ const TrackInfoOverlay = styled.div`
     font-size: 25px;
 `;
 
+const ProfileOverlay = styled.div`
+    display: flex;
+    align-items: center;
+    gap: 21.2px;
+    margin-top: 10.49px;
+`
 
-const OverlayIcons = styled.div`
+const ProfileImg = styled.img`
+`
+
+const TopIcons = styled.div`
     position: absolute;
     top: 0;
     left: 0;
@@ -77,47 +88,79 @@ const OverlayIcons = styled.div`
     
 `;
 
-const PlayIcon = styled.img`
+const EditIcon = styled.img`
     position: absolute;
-    bottom: 19.68px; 
-    left: 17.72px; 
-`;
-
-const LikeIcon = styled.img`
-    position: absolute;
-    bottom: 21.52px;
-    left: 83.61px; 
-`;
-
-const CommentIcon = styled.img`
-    position: absolute;
-    bottom: 21.52px;
-    left: 149.33px;
-`;
+    width: 16.94px;
+    height: 31.49px;
+    top: 21.49px;
+    left: 342.7px;
+`
 
 const SaveIcon = styled.img`
     position: absolute;
-    bottom: 19.56px;
-    left: 421.48px; 
+    width: 30.66px;
+    height: 35.74px;
+    top: 21.49px;
+    left: 386.93px; 
 `;
-
-const EmotionIcon = styled.img`
-    position: absolute;  
-    bottom: 669.89px;
-    left: 26.26px;
-`
-
-const EditIcon = styled.img`
-    position: absolute;  
-    bottom: 729.18px;
-    left: 392.7px;
-`
 
 const SeeMoreIcon = styled.img`
     position: absolute;  
-    bottom: 729.18px;
-    left: 444.77px;
+    width: 5.99px;
+    height: 31.96px;
+    top: 21.49px;
+    left: 444.11px;
 `;
+
+
+const OverlayIcons = styled.div`
+    position: absolute;
+    top: 538.19px;
+    left: 417.79px;
+    display: flex;
+    flex-direction: column;
+    gap: 20.03px;
+    
+`;
+
+const EmotionIcon = styled.img`
+    width: 45px;
+    height: 45px;
+`;
+
+const PlayIcon = styled.img`
+    width: 41.3px;
+    height: 37.19px;
+
+`;
+
+const LikeIcon = styled.img`
+    width: 41.1px;
+    height: 37.86px;
+  
+`;
+
+const CommentIcon = styled.img`
+    width: 39.02px;
+    height: 38.91px;
+ 
+`;
+
+const HashTags = styled.div`
+    position: absolute;
+    top: 704px; 
+    left: 26.26px; 
+    color: #FFFFFF;
+    font-size: 20px;
+    margin-top: 8.4px;
+    white-space: normal; 
+    width: 300px;
+    overflow-wrap: normal;
+`;
+
+
+
+
 
 
 
@@ -227,16 +270,31 @@ function Shortform() {
                 <Content>
                 {shorts.map((short, index) => {
                     const isLastShort = shorts.length === index + 1;
-                   
-
+        
                     return (
                         <div key={short.id} ref={isLastShort ? lastShortElementRef : null}>
                             <FeedHeader>
                             </FeedHeader>
                             <ImageWrapper>
                                 <short.ImageComponent />
-                                <TrackInfoOverlay>{short.trackInfo}</TrackInfoOverlay>
+                                <InfoOverlay>
+                                    <div>{short.trackInfo}</div>
+                                    <ProfileOverlay>
+                                        <ProfileImg src={IconProfile} alt="프로필사진"/>
+                                        <div>{short.username}</div>
+                                    </ProfileOverlay>
+                                </InfoOverlay>
+                                <TopIcons>
+                                    <EditIcon 
+                                        src={IconEdit} 
+                                        alt="EditButton" 
+                                        onClick={() => openEditModal(short.id, short.trackInfo, short.trackImage)} />
+                                    <SaveIcon src={IconSaveWhite} alt="Save"/>
+                                    <SeeMoreIcon src={IconSeeMoreWhite} alt="SeeMore"/>
+                                </TopIcons>
+                                <HashTags>{short.hastags}</HashTags>
                                 <OverlayIcons>
+                                    <EmotionIcon src={IconEmotion} alt="Emotion"/>
                                     <PlayIcon src={IconPlayWhite} alt="Play" />
                                     <LikeIcon 
                                         src={IconLikeWhite}
@@ -245,13 +303,9 @@ function Shortform() {
                                         style={{cursor:"pointer"}}
                                     />
                                     <CommentIcon src={IconCommentWhite} alt="Comment" />
-                                    <SaveIcon src={IconSaveWhite} alt="Save"/>
-                                    <EmotionIcon src={IconEmotion} alt="Emotion"/>
-                                    <EditIcon 
-                                        src={IconEdit} 
-                                        alt="EditButton" 
-                                        onClick={() => openEditModal(short.id, short.trackInfo, short.trackImage)} />
-                                    <SeeMoreIcon src={IconSeeMoreWhite} alt="SeeMore"/>
+        
+                
+                                
                                 </OverlayIcons>
                             </ImageWrapper>
                         </div>
@@ -273,4 +327,4 @@ function Shortform() {
     );
 }
 
-export default Shortform;
+export default Shortform; 
