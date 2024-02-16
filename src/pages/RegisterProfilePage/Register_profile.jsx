@@ -88,6 +88,9 @@ const Text2 = styled.div`
   line-height: 18px; /* 72% */
   margin-top: 20px;
 `;
+const InputWrapper = styled.div`
+  position: relative;
+`;
 
 const Input = styled.input`
   display: flex;
@@ -240,6 +243,18 @@ const ArrowBtn = styled.button`
   right: 154.43px;
   bottom: 65.59px;
 `;
+const CharacterCount = styled.div`
+  color: #BFBFBF;
+  text-align: center;
+  font-family: "Pretendard Variable";
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 18px; /* 138.462% */
+  position: absolute;
+  bottom: 9px;
+  right: 9.5px;
+`;
 
 const RegisterProfile = () => {
   const Year_List = Array.from( { length: 100 }, (_, i) => `${2024-i}`);
@@ -293,6 +308,8 @@ const RegisterProfile = () => {
     }
   };
 
+  const maxIntroLength = 20;
+
   return (
     <Background>
       <Wrap1>
@@ -320,11 +337,20 @@ const RegisterProfile = () => {
           onChange={(e) => setNickname(e.target.value)}
         />
         <Text2>자기소개</Text2>
-        <Input
-          placeholder='한줄 자기소개를 입력하세요'
-          value={intro}
-          onChange={(e) => setIntro(e.target.value)}
-        />
+        <InputWrapper>
+          <Input
+            placeholder='한줄 자기소개를 입력하세요'
+            value={intro}
+            onChange={(e) => {
+              if (e.target.value.length <= maxIntroLength) {
+                setIntro(e.target.value);
+              }
+            }}
+          />
+          <CharacterCount isOverLimit={intro.length > maxIntroLength}>
+            {intro.length}/{maxIntroLength}
+          </CharacterCount>
+        </InputWrapper>
         <Text2>생년월일</Text2>
         <Wrap2>
           <Text3>*선택</Text3>
