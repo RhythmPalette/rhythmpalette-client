@@ -273,7 +273,7 @@ font-style: normal;
 font-weight: 400;
 line-height: 18px; /* 51.429% */
 top : 706px;
-left : 545px;
+left : 582px;
 border : none;
 cursor : pointer;
 position : absolute;
@@ -291,7 +291,7 @@ font-style: normal;
 font-weight: 400;
 line-height: 40px; /* 200% */
 top : 803px;
-left : 498px;
+left : 520px;
 position : absolute;
 
 ` 

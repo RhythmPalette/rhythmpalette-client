@@ -63,6 +63,12 @@ height: 31.492px;
 margin-left : 18.9px;
 margin-top : 68.29px
 `
+const StyledLink = styled(Link)`
+text-decoration: none;
+color: #333; 
+margin: 5px 0; 
+`
+
 const Info = styled.div`
 diplay : flex;
 flex-direction : column;
@@ -295,7 +301,9 @@ const playlists = [
                 <Info>
                     <Name>
                         <UserName> user name </UserName>
+                        <Link to ='/ProfileChange1'>
                         <ChangeImg src = {IconChange} alt = '수정' />
+                        </Link>
                     </Name>
                     <MyInfo>
                         <Post> 게시물 15 </Post>
