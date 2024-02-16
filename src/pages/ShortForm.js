@@ -177,23 +177,20 @@ function Shortform() {
 
     const observer = useRef();
     
-    const lastShortElementRef = useCallback(
-        (node) => {
-            if (loading) return;
-            if (observer.current) observer.current.disconnect();
+    const lastShortElementRef = useCallback(node => {
+        console.log(node); 
+        if (loading) return;
+        if (observer.current) observer.current.disconnect();
 
-            observer.current = new IntersectionObserver((entries) => {
-                console.log('entries[0].isInteresting : ', entries[0].isIntersecting);
-                if (entries[0].isIntersecting && hasMore) {
-                    setPageNumber((prevPageNumber) => prevPageNumber + 1);
-                }
-            });
+        observer.current = new IntersectionObserver(entries => {
+            console.log(entries[0].isIntersecting); 
+            if (entries[0].isIntersecting && hasMore) {
+                setPageNumber(prevPageNumber => prevPageNumber + 1);
+            }
+        }, { root: null, rootMargin: "0px", threshold: 0.1});
 
-            if (node) observer.current.observe(node);
-        },
-        [loading, hasMore]
-    );
-
+        if (node) observer.current.observe(node);
+    }, [loading, hasMore]);
 
     const handleSearch = (e) => {
         setQuery(e.target.value);

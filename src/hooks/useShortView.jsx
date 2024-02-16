@@ -14,7 +14,7 @@ export const useShortView = (query, pageNumber) => {
     useEffect(() => {
         setLoading(true);
         setError(false);
-
+        
         const loadMoreShorts = () => {
             const newShorts = dummyShorts
                 .filter(short => short.hastags.toLowerCase().includes(query.toLowerCase()))
@@ -29,9 +29,10 @@ export const useShortView = (query, pageNumber) => {
         };
 
 
-        const timer = setTimeout(loadMoreShorts, 1000);
+        const timer = setTimeout(loadMoreShorts, 0);
 
         return () => clearTimeout(timer); 
+        
     }, [query, pageNumber]);
 
         return { loading, error, shorts, hasMore };
