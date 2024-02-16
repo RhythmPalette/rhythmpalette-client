@@ -5,11 +5,12 @@ import NavBar from "../components/NavBar";
 import SearchBarContainer from "../components/SearchBarContainer";
 import IconPlayWhite from "../assets/IconPlayWhite.svg";
 import IconLikeWhite from "../assets/IconLikeWhite.svg";
+
 import IconCommentWhite from "../assets/IconCommentWhite.svg";
 import IconSaveWhite from "../assets/IconSaveWhite.svg";
 import IconSeeMoreWhite from "../assets/IconSeeMoreWhite.svg";
 import IconEdit from "../assets/IconEdit.svg";
-import IconEmotion from "../assets/IconEmotion.svg";
+import IconEmotion from "../assets/IconEmotionGood.svg";
 import IconProfile from "../assets/IconProfile.svg";
 import IconPause from "../assets/IconPause.svg";
 import Modal from "../components/CommentModal";
@@ -128,11 +129,6 @@ const EmotionIcon = styled.img`
     height: 45px;
 `;
 
-const PlayIcon = styled.img`
-    width: 41.3px;
-    height: 37.19px;
-
-`;
 
 const LikeIcon = styled.img`
     width: 41.1px;
@@ -143,7 +139,6 @@ const LikeIcon = styled.img`
 const CommentIcon = styled.img`
     width: 39.02px;
     height: 38.91px;
- 
 `;
 
 const HashTags = styled.div`
@@ -175,6 +170,8 @@ function Shortform() {
     const [currentTrackImage, setCurrentTrackImage] = useState('');
     const [likes, setLikes] = useState({});
     const [postLikeList, setPostLikeList] = useState([]);
+    const [isPlaying, setIsPlaying] = useState(false); 
+    const audioRef = useRef(null); 
     
     const { shorts, hasMore, loading, error } = useShortView(query, pageNumber);
 
@@ -249,14 +246,58 @@ function Shortform() {
         }
     };
 
-      const openEditModal = (id, trackInfo, trackImage) => {
+    const item = {
+        "preview_url": "https://p.scdn.co/mp3-preview/7339548839a263fd721d01eb3364a848cad16fa7?cid=613834041d6342f8b26d78e730c2c746", // 미리듣기 URL
+        "external_urls": {
+            "spotify": "https://open.spotify.com/artist/6eUKZXaKkcviH0Ku9w2n3V" 
+        }
+    };
+
+    const playPreview = (previewUrl) => {
+        if (!audioRef.current) {
+            audioRef.current = new Audio(previewUrl);
+        } else {
+            audioRef.current.src = previewUrl;
+        }
+        audioRef.current.play().catch(err => console.error("Audio play failed:", err));
+        setIsPlaying(true);
+    };
+
+    const redirectToSpotify = (externalUrl) => {
+        window.open(externalUrl, "_blank");
+    };
+
+    const togglePlay = () => {
+        if (item.preview_url) {
+            if (isPlaying && audioRef.current) {
+                audioRef.current.pause();
+                setIsPlaying(false);
+            } else {
+                playPreview(item.preview_url);
+            }
+        } else if (item.external_urls.spotify) {
+            redirectToSpotify(item.external_urls.spotify);
+        }
+    };
+    
+    useEffect(() => {
+        return () => {
+            if (audioRef.current) {
+                audioRef.current.pause();
+                audioRef.current = null;
+            }
+        };
+    }, []);
+
+
+    const openEditModal = (id, trackInfo, trackImage) => {
         setCurrentEditId(id);
         setCurrentTrackInfo(trackInfo);
         setCurrentTrackImage(trackImage);
         setIsEditModalOpen(true);
       }; 
 
-      const closeEditModal = () => {
+    const closeEditModal = () => {
         setIsEditModalOpen(false);
         setCurrentEditId(null);
     };
@@ -295,7 +336,14 @@ function Shortform() {
                                 <HashTags>{short.hastags}</HashTags>
                                 <OverlayIcons>
                                     <EmotionIcon src={IconEmotion} alt="Emotion"/>
-                                    <PlayIcon src={IconPlayWhite} alt="Play" />
+                                    <img 
+                                        src={isPlaying ? IconPause : IconPlayWhite}
+                                        alt={isPlaying ? "Pause" : "Play"}
+                                        onClick={togglePlay}
+                                        style={{cursor: "pointer",
+                                                width: isPlaying ? '41.3px' : '41.36px',
+                                                height: isPlaying ? '37.19px' :'41.36px',
+                                                }} />
                                     <LikeIcon 
                                         src={IconLikeWhite}
                                         alt="Like" 
