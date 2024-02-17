@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import styled from 'styled-components'
 import { useNavigate } from 'react-router-dom';
 import LeftBar from '../components/LeftBar'
@@ -107,6 +107,17 @@ margin-top : 783px;
 
 const ProfileChange2 = () => {
     const [selectedBoxes, setSelectedBoxes] = useState(Array(11).fill(false));
+
+    useEffect(() => {
+    setSelectedBoxes((prevSelectedBoxes) => {
+      const initialSelectedBoxes = [...prevSelectedBoxes];
+      initialSelectedBoxes[0] = true;
+      initialSelectedBoxes[3] = true;
+      initialSelectedBoxes[8] = true;
+      return initialSelectedBoxes;
+    });
+  }, []);
+    
 
   const handleBoxClick = (index) => {
     const newSelectedBoxes = [...selectedBoxes];

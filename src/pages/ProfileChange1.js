@@ -50,11 +50,6 @@ const Wrap1 = styled.form`
   display: flex;
   flex-direction : row;
 
- 
-
- 
-
-
   `
   
 const Wrap0 = styled.div`
@@ -273,8 +268,16 @@ const ProfileChange = () => {
   const Day_List = Array.from( {length: 31}, (_, i) => `${i+1}`);
   Day_List.unshift("일");
   
-  const [profileImage, setProfileImage] = useState(null);
-  const [selectedGender, setSelectedGender] = useState(null);
+
+
+  const [profileImage, setProfileImage] = useState(profile); // 기본 이미지 설정
+  const [nickname, setNickname] = useState('RythmPallete'); // 기본 닉네임 설정
+  const [introduction, setIntroduction] = useState('안녕하세요!'); // 기본 자기소개 설정
+  const [selectedYear, setSelectedYear] = useState('2000'); // 초기 선택값
+  const [selectedMonth, setSelectedMonth] = useState('2'); // 초기 선택값
+  const [selectedDay, setSelectedDay] = useState('18'); // 초기 선택값
+  const [selectedGender, setSelectedGender] = useState('female');
+
 
   // 파일 선택 시 이벤트 처리 함수
   const handleFileChange = (e) => {
@@ -322,29 +325,37 @@ const ProfileChange = () => {
             />
           </PictureWrapper>
           <Text2>닉네임</Text2>
-          <Input placeholder='닉네임을 입력하세요'></Input>
+          <Input 
+          placeholder='닉네임을 입력하세요'
+          value ={nickname}
+          onChange = {(e) => setNickname(e.target.value)} />
+          
           <Text2>자기소개</Text2>
-          <Input placeholder='한줄 자기소개를 입력하세요'></Input>
+          <Input 
+          placeholder='한줄 자기소개를 입력하세요'
+          value = {introduction}
+          onChange ={(e) => setIntroduction(e.target.value)}
+          ></Input>
           <Text2>생년월일</Text2>
           <Wrap2>
             <Text3>*선택</Text3>
             <Wrap3>
               <Wrap5>
-                <Select>
+                <Select  value={selectedYear} onChange={(e) => setSelectedYear(e.target.value)}>
                   {Year_List.map((year, index) => (
                     <Option key={index}>{year}</Option>
                 ))}
                 </Select>
               </Wrap5>
               <Wrap5>
-                <Select>
+                <Select value={selectedMonth} onChange={(e) => setSelectedMonth(e.target.value)}>
                   {Month_List.map((month, index) => (
                     <Option key={index}>{month}</Option>
                 ))}
                 </Select>
               </Wrap5>
               <Wrap5>
-                <Select>
+                <Select value={selectedDay} onChange={(e) => setSelectedDay(e.target.value)}>
                   {Day_List.map((day, index) => (
                     <Option key={index}>{day}</Option>
                 ))}
@@ -379,10 +390,6 @@ const ProfileChange = () => {
         
       </Wrap1>
       <Text4>해당 페이지에 수정사항이 없다면 다음으로 넘어가주세요</Text4>
-
-
-
-
         </PageContainer>
     </Layout>
   )
