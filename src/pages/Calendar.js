@@ -71,9 +71,53 @@ const NavigationButtons = styled.div`
 display : flex;
 width : 100px;
 height : 50px;
-margin-left : 1000px;
-margin-top : 50px;
+margin-left : 700px;
+margin-top : 70px;
+margin-bottom : 10px;
+
 `;
+
+const ComboBox = styled.div`
+  width: 150px;
+  height: 68px;
+  flex-shrink: 0;
+  border-radius: 10px;
+  border: 1px solid #999;
+  background: #FFF;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right : 15px;
+
+
+  
+`
+
+const Dropdown = styled.select`
+width: 150px;
+height: 40.82
+flex-shrink: 0;
+border: 0;
+background: #FFF;
+color: #000;
+font-family: "Pretendard";
+font-size: 29px;
+font-style: normal;
+font-weight: 400;
+line-height: normal;
+display : flex;
+justify-content: center;
+align-items: center;
+text-align : center;
+
+`
+
+const ListItem = styled.option`
+  display: flex;
+  width: 150px;
+  height: 30.391px;
+  margin-top : 10px;
+`
 
 const CalendarWrapper = styled.div`
     display: grid;
@@ -83,8 +127,6 @@ const CalendarWrapper = styled.div`
     grid-template-columns: repeat(7, 150px);
     grid-template-rows: repeat(6, 92px);
     gap : 27px;
-    
-
     margin-left : 152.57px;
     margin-right : 152.57px;
     margin-top : 31px;
@@ -149,26 +191,14 @@ svg {
 
 
 
-
-const PrevMonthButton = styled.button`
-position : absolute;
-top : 0;
-`;
-
-
-const NextMonthButton = styled.button`
-position : absolute;
-align-self : flex- end;
-`;
-
-
-
-
 const Calendar = () => {
     const [currentDate, setCurrentDate] = useState(dayjs());
 
     const daysInMonth = currentDate.daysInMonth();
     const firstDayOfMonth = currentDate.startOf('month').day();
+    const [selectedYear, setSelectedYear] = useState(currentDate.year());
+    const [selectedMonth, setSelectedMonth] = useState(currentDate.month() + 1); 
+    
 
     const renderCalendar = () => {
         const emptyDays = Array.from({ length: firstDayOfMonth }, (_, i) => (
@@ -197,13 +227,11 @@ const Calendar = () => {
         return [...emptyDays, ...days];
     };
 
-    const PrevMonthButton = ({ onClick }) => (
-        <button onClick={onClick}>◀</button>
-    );
+    const YearList = Array.from( { length: 9 }, (_, i) => `${2024-i}`,);
+        
+  const MonthList = Array.from( {length: 12}, (_, i) => `${i+1}`);
     
-        const NextMonthButton = ({ onClick }) => (
-        <button onClick={onClick}>▶</button>
-    );
+
     
 
     return (
@@ -217,13 +245,36 @@ const Calendar = () => {
                     <div>{currentDate.format('MM월')}</div>
                      </MonthHeader> 
                     <NavigationButtons>
-                        <PrevMonthButton onClick={() => setCurrentDate(prevDate => prevDate.subtract(1, 'month'))}> ◀ </PrevMonthButton>
-                        <NextMonthButton onClick={() => setCurrentDate(prevDate => prevDate.add(1, 'month'))}>▶ </NextMonthButton>   
+                        <ComboBox>
+                <Dropdown value={selectedYear} onChange={(e) => 
+                    {const newYear = Number(e.target.value);
+                        setSelectedYear(newYear);
+                        setCurrentDate(dayjs().year(newYear).month(selectedMonth - 1));
+                      }}>
+                {YearList.map((year, index) => (
+                <ListItem key={index} value={year}>
+                    {year}
+                </ListItem>
+                 ))}
+                </Dropdown>
+              </ComboBox>
+              <ComboBox>
+              <Dropdown value={selectedMonth} onChange={(e) => 
+                {const newMonth = Number(e.target.value);
+                    setSelectedMonth(newMonth);
+                    setCurrentDate(dayjs().year(selectedYear).month(newMonth - 1));
+                    }}>
+                {MonthList.map((month, index) => (
+              <ListItem key={index} value={month}>
+                {(Number(month)).toString().padStart(2, '0')}
+            </ListItem>
+                 ))}
+                </Dropdown>
+                </ComboBox>    
                     </NavigationButtons>
                 </YearContainer>
                     <CalendarWrapper>
                     {renderCalendar()}
-            
                     </CalendarWrapper>
             </PageContainer>
         </Layout>
