@@ -135,11 +135,11 @@ function Home() {
                 return (
                     <div key={feed.id} ref={isLastFeed ? lastFeedElementRef : null}>
                         <FeedHeader>
-                            <div>{feed.username}</div>
-                            <div>{feed.trackInfo}</div>
+                            <div>{feed.feedUsername}</div>
+                            <div>{feed.feedTrackInfo}</div>
                         </FeedHeader>
                         <div onClick={goToShortForm}>
-                            <feed.ImageComponent />
+                            <feed.feedTrackImage />
                             <FeedContainer>
                                 <ContainerIcon>
                                     <IconConatiner>
@@ -151,7 +151,7 @@ function Home() {
                                         <Icon src={IconSeeMore} alt="See more"/>
                                     </IconConatiner>
                                 </ContainerIcon>
-                                <Description>{feed.description}</Description>
+                                <Description>{feed.feedDescription}</Description>
                             </FeedContainer>
                         </div>
                     </div>

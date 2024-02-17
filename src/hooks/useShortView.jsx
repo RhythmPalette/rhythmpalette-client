@@ -17,7 +17,7 @@ export const useShortView = (query, pageNumber) => {
         
         const loadMoreShorts = () => {
             const newShorts = dummyShorts
-                .filter(short => short.hastags.toLowerCase().includes(query.toLowerCase()))
+                .filter(short => short.hashtags.toLowerCase().includes(query.toLowerCase()))
                 .slice(0, pageNumber * 10); 
 
             setShorts(prevFeeds => {

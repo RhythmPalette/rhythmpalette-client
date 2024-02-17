@@ -10,11 +10,12 @@ import IconCommentWhite from "../assets/IconCommentWhite.svg";
 import IconSaveWhite from "../assets/IconSaveWhite.svg";
 import IconSeeMoreWhite from "../assets/IconSeeMoreWhite.svg";
 import IconEdit from "../assets/IconEdit.svg";
-import IconEmotion from "../assets/IconEmotionGood.svg";
+import IconEmotion from "../assets/EmotionGood.svg";
 import IconProfile from "../assets/IconProfile.svg";
 import IconPause from "../assets/IconPause.svg";
 import Modal from "../components/CommentModal";
 import EditModal from "../components/EditModal";
+import Emotion from "../components/Emotion";
 
 const PageLayout = styled.div`
     display: flex; 
@@ -168,9 +169,11 @@ function Shortform() {
     const [currentEditId, setCurrentEditId] = useState(null);
     const [currentTrackInfo, setCurrentTrackInfo] = useState('');
     const [currentTrackImage, setCurrentTrackImage] = useState('');
+    const [currentHashTags, setCurrentHashTags] = useState('');
     const [likes, setLikes] = useState({});
     const [isPlaying, setIsPlaying] = useState(false); 
     const audioRef = useRef(null); 
+    const [currentEmotion, setCurrentEmotion] = useState(null);
     
     const { shorts, hasMore, loading, error } = useShortView(query, pageNumber);
 
@@ -247,7 +250,7 @@ function Shortform() {
 
     useEffect(() => {
         const fetchLikes = async () => {
-            const response = await fetch('posts/{postId}');
+            const response = await fetch('/api/v1/posts/{postId}');
             if (response.ok) {
                 const { postLikeList } = await response.json();
                 const likedPosts = postLikeList.reduce((acc, like) => {
@@ -268,7 +271,7 @@ function Shortform() {
         const isLiked = !!likes[shortId]; 
         try {
             const method = isLiked ? "DELETE" : "POST";
-            const response = await fetch(`posts/{postId}/like`, {
+            const response = await fetch(`/api/v1/posts/{postId}/like`, {
                 method: method,
                 headers: {
                     'Content-Type': 'application/json',
@@ -292,14 +295,17 @@ function Shortform() {
         }
     };
     
+    const handleEmotionSelect = (emotion) => {
+        setCurrentEmotion(emotion); 
+    };
 
 
-
-
-    const openEditModal = (id, trackInfo, trackImage) => {
+    const openEditModal = (id, trackInfo, trackImage, hashtags, emotion ) => {
         setCurrentEditId(id);
         setCurrentTrackInfo(trackInfo);
         setCurrentTrackImage(trackImage);
+        setCurrentHashTags(hashtags);
+        setCurrentEmotion(emotion);
         setIsEditModalOpen(true);
       }; 
 
@@ -335,13 +341,13 @@ function Shortform() {
                                     <EditIcon 
                                         src={IconEdit} 
                                         alt="EditButton" 
-                                        onClick={() => openEditModal(short.id, short.trackInfo, short.trackImage)} />
+                                        onClick={() => openEditModal(short.id, short.trackInfo, short.trackImage, short.hashtags, short.emotion)} />
                                     <SaveIcon src={IconSaveWhite} alt="Save"/>
                                     <SeeMoreIcon src={IconSeeMoreWhite} alt="SeeMore"/>
                                 </TopIcons>
-                                <HashTags>{short.hastags}</HashTags>
+                                <HashTags>{short.hashtags}</HashTags>
                                 <OverlayIcons>
-                                    <EmotionIcon src={IconEmotion} alt="Emotion"/>
+                                <Emotion emotion={short.emotion} /> 
                                     <img 
                                         src={isPlaying ? IconPause : IconPlayWhite}
                                         alt={isPlaying ? "Pause" : "Play"}
@@ -374,6 +380,8 @@ function Shortform() {
                         onRequestClose={closeEditModal}
                         trackInfo={currentTrackInfo}
                         trackImage={currentTrackImage}
+                        hashtags={currentHashTags}
+                        onEmotionSelect={handleEmotionSelect}
                     />
                 )}
             </PageContainer>
