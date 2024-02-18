@@ -1,7 +1,8 @@
-import React ,{ useState} from 'react';
+import React ,{ useEffect, useState} from 'react';
 import styled from 'styled-components';
 import Images from '../components/Images';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 //아마 여기서 서버에서 이미지를 받아서 사용할 예정 전 페이지에서 서버에 데이터를 요청함
 const MakeImages = (props) => {
 
@@ -10,8 +11,58 @@ const MakeImages = (props) => {
     // // setImageData()
     // setImageData();
     
+    const prompt = useLocation();
     const navigate = useNavigate();
-    
+    const [retry, setRetry] = useState(0);
+
+
+    useEffect(() => {
+        // 비동기 함수 정의
+        const makeImage = async () => {
+          try {
+            const accessToken = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbHNndXIyIiwiaWF0IjoxNzA4MjUwMzE3LCJleHAiOjE3MDgyNTE3NTd9.QwumxUxyEwSSM982ymEMRICCyF9oEglSKezGZ4-DynQ" ;
+            const dataSend ={
+                "prompt" : prompt.state.prompt.name,
+                "samples" : 6,
+            }
+     
+            const response = await axios.post('http://52.78.99.156:8080/api/v1/posts/image',dataSend,{
+                headers : {
+                'Authorization': 'Bearer ' + accessToken,
+            }
+            });
+    //         const response = await fetch('http://52.78.99.156:8080/api/v1/posts/image', dataSend, {
+    //     method: 'POST',
+    //     headers: {
+    //       'Authorization' : 'Bearer ' + accessToken,
+    //     },
+    //   });
+       
+            console.log(response);
+            console.log(response.data)
+          } catch (error) {
+            console.log(prompt.state.prompt.name);
+            console.error('API 호출 에러:', error);
+            console.error('어떤 에러:',error.response);
+          }
+        }
+
+        makeImage();
+         },[retry]);
+
+
+    //     const getImage = async() =>{
+    //         try{
+
+    //         }
+
+    //     }
+    //     makeImage();
+    //   }, []);
+      
+
+
+
     const goToDecidePost = () =>
     {
         navigate(`/decideposts`);
@@ -24,6 +75,9 @@ const MakeImages = (props) => {
             url : "example",
         }
     ]
+
+
+
     return (
         <MakegImagesPackage>
             <ImageGrid>
@@ -38,10 +92,10 @@ const MakeImages = (props) => {
           }
             </ImageGrid>
             <BtnBox>
-                <RecreateBtn>
+                <RecreateBtn onClick={()=>{setRetry(retry+1)}}>
                     {"이미지 재생성"}
                 </RecreateBtn>
-                <ChooseBtn >
+                <ChooseBtn onClick={goToDecidePost}>
                     {"선택완료"}
                 </ChooseBtn>
             </BtnBox>

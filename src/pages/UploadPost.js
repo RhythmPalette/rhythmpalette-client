@@ -95,6 +95,7 @@ useEffect(()=>{
       //track 부분을 좀 더 다시 봐서 수정하는게 필요할듯 
     const getTracks = async () => {
       try {
+        
         const response = await fetch('https://api.spotify.com/v1/search?q=' + inputValue + '&type=track', {
           method: 'GET',
           headers: {
@@ -186,8 +187,11 @@ const retrySelectSong=() =>{
     setIsHaveInputValue(false);
     setHaveClicked(false);
 }
+
 const goToMakeImagePage = ()=>{
-  navigate(`/makeimages`, );
+
+
+  navigate(`/makeimages`, {state : {prompt : selectedData}});
   // 여기서 장르도 같이 넘겨줘야 한다.
 }
 
