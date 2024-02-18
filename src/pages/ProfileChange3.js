@@ -299,10 +299,10 @@ position : absolute;
 const ProfileChange3 = () => {
      // 상태 변수들 선언
   const [selectedData, setSelectedData] = useState(
-    {name : 'GANADARA (Feat.아이유)',
-    image : 'https://i.scdn.co/image/ab67616d0000b2738c0defcb336a0296eb7d704a',
-  
-    }); // 선택된 데이터의 상태
+    
+{name: '아이와 나의 바다', image: 'https://i.scdn.co/image/ab67616d0000b2734ed058b71650a6ca2c04adff'},
+
+ ); // 선택된 데이터의 상태
   const [haveClicked, setHaveClicked] = useState(false); // 클릭 여부 상태
   const [inputValue, setInputValue] = useState(""); // 입력된 값 상태
   const [isHaveInputValue, setIsHaveInputValue] = useState(false); // 입력값 존재 여부 상태
@@ -316,6 +316,7 @@ const ProfileChange3 = () => {
 
   // 드롭다운 아이템 스크롤 효과
   useEffect(() => {
+    
     if (dropDownRef.current && dropDownItemIndex >= 0) {
       const selectedElement = dropDownRef.current.children[dropDownItemIndex];
 
@@ -552,6 +553,7 @@ const ProfileChange3 = () => {
  
         
         </PageContainer>
+        {console.log(selectedData)}
     </Layout>
   )
 }

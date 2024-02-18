@@ -6,6 +6,7 @@ import images from '../store/dummyPlaylist';
 import checkboxUnchecked from '../assets/UnCheckedBox.svg'
 import checkboxChecked from '../assets/CheckedBox.svg'
 import Checkbox from '../components/Checkbox';
+import axios from 'axios';
 
 const Layout = styled.div`
     display : flex;
@@ -151,6 +152,28 @@ const Playlist = () => {
     newCheckedImages[index] = !newCheckedImages[index];
     setCheckedImages(newCheckedImages); }
 
+
+    const createPlaylist = async () => {
+    const playlistName = document.querySelector('input[type="text"]').value;
+    const selectedImages = images.filter((image, index) => checkedImages[index]);
+    try {
+      // API 호출
+      const response = await axios.post('http://52.78.99.156:8080/api/v1/playlists', {
+        name: playlistName,
+        images: selectedImages.map(image => image.id),
+      });
+
+      // 성공적으로 생성된 경우, 여기서 추가적인 처리
+      console.log('재생목록이 성공적으로 생성되었습니다.', response.data);
+    } catch (error) {
+      // 에러 처리
+      console.error('재생목록 생성 중 오류가 발생했습니다.', error);
+    }
+  };
+
+
+
+
   return (
     <Layout>
         <LeftBar />
@@ -177,7 +200,7 @@ const Playlist = () => {
       
             </ImageContainer>
             <ButtonContainer>
-                <Make>게시물 넣어 생성하기</Make>
+                <Make onClick={createPlaylist}>게시물 넣어 생성하기</Make>
                 <Skip>Skip</Skip>  
             </ButtonContainer>
             
