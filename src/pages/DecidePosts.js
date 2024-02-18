@@ -17,7 +17,7 @@ const DecidePosts = () => {
     const [situation1, setSituation1] = useState("");
     const [situation2, setSituation2] = useState("");
     const [situation3, setSituation3] = useState("");
-
+    const [hashDIvClicked, setHashDivClicked] =useState(false);
     const HashTagBtnClicked = (event) => {
         event.stopPropagation();
         setHashClicked(!hashClicked);
@@ -55,36 +55,62 @@ const DecidePosts = () => {
 
 
             <HashDiv>
-            <HashTagButton onClick={HashTagBtnClicked} display={hashClicked ? "none" : "block"} >
+            {!hashDIvClicked&&(<HashTagButton onClick={HashTagBtnClicked} display={hashClicked ? "none" : "block"} >
             {"#해시태그 추가"}
-            </HashTagButton>
-            {hashClicked&&(
+            </HashTagButton>)}
+            {hashClicked&&!hashDIvClicked&&(
                 <WriteHash>
                     <MentDiv>
                         {"3개까지 추가할 수 있어요"}
                     </MentDiv>
                     <HashTagDiv>
                         {"#"}
-                    <FirstHash>
+                    <FirstHash type='text' maxLength={10} value={situation1} onChange={(e)=>{
+                        setSituation1(e.target.value);
+                    }}>
                      </FirstHash>   
                     </HashTagDiv>
                     <HashTagDiv>
                          {"#"}   
-                    <SecondHash>
+                    <SecondHash type='text' maxLength={10} value={situation2} onChange={(e)=>{
+                        setSituation2(e.target.value);}}>
                     </SecondHash>
                     </HashTagDiv>
                     <HashTagDiv>
                          {"#"}   
-                    <ThirdHash>
+                    <ThirdHash type='text' maxLength={10} value={situation3} onChange={(e)=>{
+                        setSituation3(e.target.value);}}>
                     </ThirdHash>
                     </HashTagDiv>
                     <BtnDiv>
-                    <CompleteBtn>
+                    <CompleteBtn onClick={()=>{setHashDivClicked(!hashDIvClicked)}}>
                         {"완료"}
                     </CompleteBtn>
                     </BtnDiv>
                   
                 </WriteHash>
+            )}
+            {hashDIvClicked&&(
+                <HashBox>
+
+          
+                <MadeHashTagDiv>
+                    <ForHash>
+                    {"#" + situation1}
+                    </ForHash>
+                    <ForHash>
+                    {"#" + situation2}
+                    </ForHash>
+                    <ForHash>
+                    {"#" + situation3}
+                    </ForHash>
+                  
+                </MadeHashTagDiv>
+                <ReHashBtn onClick={()=>{setHashDivClicked(!hashDIvClicked)}}>
+                    {"#해시태그 수정"}
+                </ReHashBtn>
+                </HashBox>
+                
             )}
             </HashDiv>
             <UploadButton>
@@ -95,6 +121,46 @@ const DecidePosts = () => {
 };
 
 export default DecidePosts;
+const ForHash = styled.div`
+
+`;
+const HashBox = styled.div`
+    margin-left: 30px;
+`;
+const ReHashBtnDiv = styled.div`
+
+`;
+const ReHashBtn = styled.button`
+width: 162px;
+height: 40px;
+top: 641.91px;
+left: 1356.78px;
+border-radius: 15px;
+border: 1px;
+position: absolute;
+font-family: Pretendard Variable;
+font-size: 20px;
+font-weight: 400;
+line-height: 40px;
+letter-spacing: 0em;
+text-align: center;
+`;
+const MadeHashTagDiv = styled.div`
+position: absolute;
+Top: 528.53px;
+Left: 1346.43px;
+font-family: Pretendard Variable;
+font-size: 25px;
+font-weight: 400;
+line-height: 40px;
+letter-spacing: 0em;
+text-align: left;
+display: flex;
+flex-wrap: wrap;
+column-gap: 20px;
+row-gap: 20px;
+`;
+
 const SickImage = styled.img`
 width: 57.26px;
 height: 74.61px;
@@ -214,7 +280,8 @@ letter-spacing: -1px;
 text-align: center;
 padding-bottom: 3px;
 background: #F9C0C6;
-display: ${props => props.hashClicked ? "none" : "block" };
+
+border: 0;
 
 `;
 
@@ -294,6 +361,7 @@ line-height: 42px;
 letter-spacing: 0.01em;
 text-align: center;
 color: #ffff;
+border: 0;
 `;
 
 
@@ -315,6 +383,7 @@ line-height: 40px;
 letter-spacing: 0em;
 text-align: center;
 background-color :#9999;
+display: ${props => props.hashClicked ? "none" : "block" };
 `;
 
 
@@ -331,8 +400,9 @@ letter-spacing: 0em;
 text-align: left;
 width: 651.36px;
 height: 31.54px;
-top: 409.44px;
-left: 1112.95px;
+Top :412.78px;
+Left: 979.32px;
+padding-bottom: 10px;
 border-width: 0 0 1px;
 padding-bottom : 5px;
 `;
@@ -355,7 +425,7 @@ letter-spacing: 0.01em;
 text-align: left;
 width: 588px;
 height: 42px;
-top: 285.28px;
-left: 1112.95px;
+Top:285.28px;
+Left:979.32px;
 position: absolute;
 `;
