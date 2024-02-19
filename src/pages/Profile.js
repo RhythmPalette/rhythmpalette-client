@@ -1,12 +1,12 @@
 import React , {useState} from 'react'
 import styled from 'styled-components'
-import LeftBar from '../components/LeftBar'
 import SearchingBar from '../components/SearchingBar'
 import ProfileImage from '../assets/ProfileImage.svg'
 import IconChange from '../assets/IconChange.svg'
 import IconMusic from '../assets/IconMusic.svg'
 import PlaylistImg from '../assets/PlaylistImg.svg'
 import {Link} from 'react-router-dom'
+import SideNavBar from '../components/SideNavBar'
 
 const Layout = styled.div`
     display : flex;
@@ -293,7 +293,7 @@ const playlists = [
 
   return (
     <Layout>
-        <LeftBar />
+        <SideNavBar />
         <PageContainer>
             <SearchingBar />
             <ProfileBar>

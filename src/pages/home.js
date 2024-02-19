@@ -2,14 +2,12 @@ import { useState,  useRef, useCallback, Fragment } from "react";
 import { useNavigate } from 'react-router-dom'; 
 import styled from "styled-components";
 import { useFeedView } from "../hooks/useFeedView";
-import NavBar from "../components/NavBar";
 import SearchBarContainer from "../components/SearchBarContainer";
 import IconLike from "../assets/IconLike.svg";
 import IconComment from "../assets/IconComment.svg";
 import IconSave from "../assets/IconSave.svg";
 import IconSeeMore from "../assets/IconSeeMore.svg";
-import LeftBar from '../components/LeftBar';
-import ShortLeftBar from '../components/ShortLeftBar';
+import SideNavBar from '../components/SideNavBar';
 
 
 const PageLayout = styled.div`
@@ -129,7 +127,7 @@ function Home() {
 
     return (
         <PageLayout>
-            <ShortLeftBar />
+            <SideNavBar />
             <PageContainer>
             <SearchBarContainer query={query} handleSearch={handleSearch} />
             <Content>
