@@ -6,15 +6,15 @@ import IconProfile from '../assets/IconProfile.svg';
 
 const SearchBarContainerstyled = styled.div`
     display: flex;
-    width: 1560.78px;
-    height: 161.33px;
+    width: 1572px;
+    height: 162px;
     background-color: #F9F9F9;
 `;
 
 const SearchBar = styled.div`
-  display: flex;
-  flex-grow: 1; 
-  align-items: center; 
+    display: flex;
+    flex-grow: 1; 
+    align-items: center; 
 `;
 
 const SearchInput = styled.input`
@@ -28,6 +28,7 @@ const SearchInput = styled.input`
     margin-left: 221.79px;
     margin-top: 49.85px;
     margin-bottom: 49.49px;
+    font-size: 26px;
     &:focus {
         outline: none;
     }
