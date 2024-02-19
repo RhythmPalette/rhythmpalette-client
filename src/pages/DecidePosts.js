@@ -11,6 +11,7 @@ import  SadImg from '../assets/Emoticons/Sad.svg';
 import  ShyImg from '../assets/Emoticons/Shy.svg';
 import  SickImg from '../assets/Emoticons/Sick.svg';
 import  SquerkImg from '../assets/Emoticons/Squerk.svg';
+import axios from 'axios';
 
 const DecidePosts = () => {
     const [hashClicked,setHashClicked] = useState(false);
@@ -23,6 +24,91 @@ const DecidePosts = () => {
         setHashClicked(!hashClicked);
 
     }
+    useEffect(() => {
+        
+        const  makePost = async () => {
+            const accessToken = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbHNndXIyIiwiaWF0IjoxNzA4MjU1MTM5LCJleHAiOjE3MDgyNTY1Nzl9.gLMmeDD3SiFVCFfkSKiZQalXFccnWhNb2CALdCEiM_0" ;
+          try {
+       
+            const dataSend = {
+                "addDTO": {
+                  "postImg": "string",
+                  "content": "string",
+                  "situation1": "string",
+                  "situation2": "string",
+                  "situation3": "string",
+                  "emotionId": 0,
+                  "musicRequest": {
+                    "title": "string",
+                    "artist": "string",
+                    "genre": "string",
+                    "imageUrl": "string",
+                    "previewUrl": "string"
+                  }
+                },
+                "user": {
+                  "createdAt": "2024-02-18T11:13:31.966Z",
+                  "updateAt": "2024-02-18T11:13:31.966Z",
+                  "userId": 0,
+                  "loginId": "string",
+                  "password": "string",
+                  "name": "string",
+                  "email": "string",
+                  "nickname": "string",
+                  "introduction": "string",
+                  "gender": "string",
+                  "birth": "2024-02-18",
+                  "role": "ROEL_NO_USER",
+                  "profileImg": "string",
+                  "musicId": {
+                    "id": 0,
+                    "title": "string",
+                    "artist": "string",
+                    "genre": "string",
+                    "imageUrl": "string",
+                    "previewUrl": "string"
+                  },
+                  "enabled": true,
+                  "username": "string",
+                  "authorities": [
+                    {
+                      "authority": "string"
+                    }
+                  ],
+                  "accountNonExpired": true,
+                  "accountNonLocked": true,
+                  "credentialsNonExpired": true
+                }
+              }
+        
+     
+            const response = await axios.post('http://ec2-52-78-99-156.ap-northeast-2.compute.amazonaws.com:8080/api/v1/posts',dataSend,{
+                headers : {
+                'Authorization': 'Bearer ' + accessToken,
+            }
+            });
+    //         const response = await fetch('http://52.78.99.156:8080/api/v1/posts/image', dataSend, {
+    //     method: 'POST',
+    //     headers: {
+    //       'Authorization' : 'Bearer ' + accessToken,
+    //     },
+    //   });
+       
+            console.log(response);
+            console.log(response.data)
+          } catch (error) {
+            console.error('API 호출 에러:', error);
+            console.error('어떤 에러:',error.response);
+          }
+       
+        }
+        makePost();
+    }
+        ,[])
+
+
+
+
     const CompleteBtnClicked = () =>{
         
 

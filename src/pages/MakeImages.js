@@ -14,32 +14,38 @@ const MakeImages = (props) => {
     const prompt = useLocation();
     const navigate = useNavigate();
     const [retry, setRetry] = useState(0);
-
-
+    const [imgUrls, setImgUrls] = useState();
+    const [countFirst, setCountFirst]= useState(false);
+    const [chosenImg, setChosenImg] = useState();
+    const [imgChosen, setImgChosen] = useState(false);
     useEffect(() => {
         // 비동기 함수 정의
         const makeImage = async () => {
+            const accessToken = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbHNndXIyIiwiaWF0IjoxNzA4MzQwMjkzLCJleHAiOjE3MDgzNDE3MzN9.KEYG8J4BlTjFLn_hEGrVbtwDtjq2tUwEi6jrY4ukGkU" ;
           try {
-            const accessToken = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbHNndXIyIiwiaWF0IjoxNzA4MjUwMzE3LCJleHAiOjE3MDgyNTE3NTd9.QwumxUxyEwSSM982ymEMRICCyF9oEglSKezGZ4-DynQ" ;
+       
             const dataSend ={
                 "prompt" : prompt.state.prompt.name,
                 "samples" : 6,
             }
      
-            const response = await axios.post('http://52.78.99.156:8080/api/v1/posts/image',dataSend,{
+            const response =  await axios.post('http://52.78.99.156:8080/api/v1/posts/image',dataSend,{
                 headers : {
                 'Authorization': 'Bearer ' + accessToken,
             }
             });
-    //         const response = await fetch('http://52.78.99.156:8080/api/v1/posts/image', dataSend, {
-    //     method: 'POST',
-    //     headers: {
-    //       'Authorization' : 'Bearer ' + accessToken,
-    //     },
-    //   });
-       
+         
             console.log(response);
-            console.log(response.data)
+            console.log(response.data.data);
+            console.log(response.data.data.images)
+            const imgArr = await response.data.data.images.map((item)=>({
+                imgUrl : item.image,
+
+            }));
+
+            setImgUrls(imgArr);
+            
+            setCountFirst(true);
           } catch (error) {
             console.log(prompt.state.prompt.name);
             console.error('API 호출 에러:', error);
@@ -47,18 +53,24 @@ const MakeImages = (props) => {
           }
         }
 
+
+
+        
+        // const getImage = async() =>{
+        //     try{
+                
+
+
+        //     }
+
+        // }
+      
         makeImage();
+
          },[retry]);
 
 
-    //     const getImage = async() =>{
-    //         try{
-
-    //         }
-
-    //     }
-    //     makeImage();
-    //   }, []);
+ 
       
 
 
@@ -70,32 +82,31 @@ const MakeImages = (props) => {
     }
 
 
-    const imageData = [
-        {
-            url : "example",
-        }
-    ]
-
+ 
 
 
     return (
         <MakegImagesPackage>
             <ImageGrid>
-            {imageData.map((item)=>{
+
+            {countFirst&&(imgUrls.map((item)=>{
                 return (
                     <Images
-                    imgUrl = {item.url}
+                    imgUrl = {item.imgUrl}
+                    chosenImg = {chosenImg}
+                    setChosenImg = {setChosenImg}
+                    setImgChosen = {setImgChosen}
                     />
                 )
             }
-            )
+            ))
           }
             </ImageGrid>
             <BtnBox>
                 <RecreateBtn onClick={()=>{setRetry(retry+1)}}>
                     {"이미지 재생성"}
                 </RecreateBtn>
-                <ChooseBtn onClick={goToDecidePost}>
+                <ChooseBtn onClick={goToDecidePost} disabled={!imgChosen} >
                     {"선택완료"}
                 </ChooseBtn>
             </BtnBox>
@@ -111,6 +122,16 @@ const MakegImagesPackage = styled.div`
 `;
 
 const ImageGrid = styled.div`
+width: 829.14px;
+height: 535.07px;
+Top:275.92px;
+Left:590.46px;
+border-radius: 10px;
+position: absolute;
+display: grid;
+grid-template-columns: 1fr 1fr 1fr;
+row-gap: 20px;
+column-gap: 20px;
 
 `;
 const BtnBox = styled.div`
@@ -150,4 +171,5 @@ const ChooseBtn = styled.button`
     letter-spacing: 0.01em;
     text-align: center;
     color: #ffff;
+    
 `;
