@@ -13,10 +13,10 @@ import  SickImg from '../assets/Emoticons/Sick.svg';
 import  SquerkImg from '../assets/Emoticons/Squerk.svg';
 import axios from 'axios';
 import { useLocation } from 'react-router-dom';
-import LeftBar from '../components/LeftBar';
+import NavBar from '../components/NavBar';
 
 const DecidePosts = (props) => {
-    const access_token = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbHNndXIyIiwiaWF0IjoxNzA4MzUwMTk1LCJleHAiOjE3MDgzNTE2MzV9.39auC6J6g4EX-1iPh1KGKnP1emR5gIwmpC86_XsWjOY"
+    const access_token = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbHNndXIyIiwiaWF0IjoxNzA4MzUzNDA0LCJleHAiOjE3MDgzNTQ4NDR9.oZTyCT_y9GwVJfbnWmv4UpQ52bsPqpB3gZ0tOAZ1Mbg"
     const [hashClicked,setHashClicked] = useState(false);
     const [situation1, setSituation1] = useState("");
     const [situation2, setSituation2] = useState("");
@@ -152,9 +152,11 @@ const DecidePosts = (props) => {
     //여기에 클릭되었을 때 hashtag넣을 수 있는 div만들어두고 
     useEffect(()=>{},[hashClicked]);
     return (
+        <DecidePostsBigPackage>
+            <NavBar/>
         <DecidePostsPackage>
             <ImgBox>
-            <CreatedImg src={getUrl.state.imgUrl} alt={"이미지"}/>
+            {getUrl.state.imgUrl&&( <CreatedImg src={getUrl.state.imgUrl} alt={"이미지"}/>)}
             </ImgBox>
             <TrackName>
             {"Track: "}
@@ -244,10 +246,14 @@ const DecidePosts = (props) => {
             {"업로드"}
             </UploadButton>
         </DecidePostsPackage>
+        </DecidePostsBigPackage>
     );
 };
 
 export default DecidePosts;
+const DecidePostsBigPackage = styled.div`
+
+`;
 const TestBtn = styled.button`
 `;
 const CreatedImg = styled.img`
@@ -362,7 +368,7 @@ width: 57.19px;
 height: 73.85px;
 top: 632.24px;
 left: 978.95px;
-position: relative;
+position: absolute;
 `;
 
 const SquerkImage = styled.img`

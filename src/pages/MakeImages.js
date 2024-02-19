@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import Images from '../components/Images';
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import NavBar from '../components/NavBar';
 //아마 여기서 서버에서 이미지를 받아서 사용할 예정 전 페이지에서 서버에 데이터를 요청함
 const MakeImages = (props) => {
 
@@ -10,7 +11,7 @@ const MakeImages = (props) => {
     // //서버에서 이미지 데이터를 받아와서 사용함.
     // // setImageData()
     // setImageData();
-    const access_token = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbHNndXIyIiwiaWF0IjoxNzA4MzUwMTk1LCJleHAiOjE3MDgzNTE2MzV9.39auC6J6g4EX-1iPh1KGKnP1emR5gIwmpC86_XsWjOY"
+    const access_token = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbHNndXIyIiwiaWF0IjoxNzA4MzUzNDA0LCJleHAiOjE3MDgzNTQ4NDR9.oZTyCT_y9GwVJfbnWmv4UpQ52bsPqpB3gZ0tOAZ1Mbg"
     const prompt = useLocation();
     const navigate = useNavigate();
     const [retry, setRetry] = useState(0);
@@ -78,6 +79,7 @@ const MakeImages = (props) => {
 
     return (
         <MakegImagesPackage>
+            <NavBar/>
             <ImageGrid>
 
             {countFirst&&(imgUrls.map((item)=>{
