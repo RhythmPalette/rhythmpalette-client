@@ -146,7 +146,7 @@ const NavBar = () => {
         <Divider />
         <LinkContainer>
             <LinkIcon src={IconMyPage} alt="마이페이지" />
-            <StyledLink to="/mypage">마이페이지</StyledLink>
+            <StyledLink to="/profile">마이페이지</StyledLink>
         </LinkContainer>
         <Divider />
         <FriendListTitle>친구 목록</FriendListTitle>

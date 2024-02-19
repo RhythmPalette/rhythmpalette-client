@@ -8,10 +8,13 @@ import IconLike from "../assets/IconLike.svg";
 import IconComment from "../assets/IconComment.svg";
 import IconSave from "../assets/IconSave.svg";
 import IconSeeMore from "../assets/IconSeeMore.svg";
+import LeftBar from '../components/LeftBar';
+import ShortLeftBar from '../components/ShortLeftBar';
 
 
 const PageLayout = styled.div`
     display: flex; 
+    position: relative;
     justify-content: center;
     align-items: center;
     height: auto;
@@ -126,7 +129,7 @@ function Home() {
 
     return (
         <PageLayout>
-            <NavBar />
+            <ShortLeftBar />
             <PageContainer>
             <SearchBarContainer query={query} handleSearch={handleSearch} />
             <Content>
