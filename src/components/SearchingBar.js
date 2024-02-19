@@ -6,11 +6,10 @@ import ProfileImage from '../assets/ProfileImage.svg';
 
 const SearchingContainer = styled.div`
     display : flex;
-    width: 1544.525px;
-    height: 161.334px;
+    width: 1562.377pxpx;
+    height: 162px;
     background: #F9F9F9;
-    margin-top : 0;
-    box-shadow: 3px 3px 10px 3px rgba(0, 0, 0, 0.10);
+
     
     `
 const SearchBar =styled.div`
