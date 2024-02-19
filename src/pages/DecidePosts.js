@@ -12,38 +12,68 @@ import  ShyImg from '../assets/Emoticons/Shy.svg';
 import  SickImg from '../assets/Emoticons/Sick.svg';
 import  SquerkImg from '../assets/Emoticons/Squerk.svg';
 import axios from 'axios';
+import { useLocation } from 'react-router-dom';
 
-const DecidePosts = () => {
+const DecidePosts = (props) => {
+    const access_token = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbHNndXIyIiwiaWF0IjoxNzA4MzUwMTk1LCJleHAiOjE3MDgzNTE2MzV9.39auC6J6g4EX-1iPh1KGKnP1emR5gIwmpC86_XsWjOY"
     const [hashClicked,setHashClicked] = useState(false);
     const [situation1, setSituation1] = useState("");
     const [situation2, setSituation2] = useState("");
     const [situation3, setSituation3] = useState("");
     const [hashDIvClicked, setHashDivClicked] =useState(false);
+    const [content, setContent] = useState("");
+    const [emoticonId, setEmoticonId] =useState();
     const HashTagBtnClicked = (event) => {
         event.stopPropagation();
         setHashClicked(!hashClicked);
 
     }
-    useEffect(() => {
+    const getUrl = useLocation();
+   
+    useEffect(()=>{
+        const sendImg = async ()=>{
+            try{
+                const response = await axios.post('http://52.78.99.156:8080/api/v1/posts/image/upload?imageUrl='+getUrl.state.imgUrl,null,{
+                params : {
+                    imageUrl : getUrl.state.imgUrl
+                },   
+                headers : {
+                        'Authorization': 'Bearer ' + access_token,
+                    },
+                });
+                console.log(response);
+            }
+            catch (error) {
+                console.log(getUrl.state.imgUrl);
+                console.error('API 호출 에러:', error);
+                console.error('어떤 에러:',error.response);
+              }
+
+        }
+        sendImg();
+    },[])
+    //왜 안되는지 이유를 모르겠음. 이건 나중에 다시 확인하는 것으로 고
+
+    
         
         const  makePost = async () => {
-            const accessToken = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbHNndXIyIiwiaWF0IjoxNzA4MjU1MTM5LCJleHAiOjE3MDgyNTY1Nzl9.gLMmeDD3SiFVCFfkSKiZQalXFccnWhNb2CALdCEiM_0" ;
+           
           try {
        
             const dataSend = {
                 "addDTO": {
-                  "postImg": "string",
-                  "content": "string",
-                  "situation1": "string",
-                  "situation2": "string",
-                  "situation3": "string",
-                  "emotionId": 0,
+                  "postImg": getUrl.state.imgUrl,
+                  "content": content,
+                  "situation1": situation1,
+                  "situation2": situation2,
+                  "situation3": situation3,
+                  "emotionId": emoticonId,
                   "musicRequest": {
-                    "title": "string",
-                    "artist": "string",
-                    "genre": "string",
-                    "imageUrl": "string",
-                    "previewUrl": "string"
+                    "title": getUrl.state.musicData.name,
+                    "artist": getUrl.state.musicData.artist_name,
+                    "genre": getUrl.state.musicData.genre,
+                    "imageUrl": getUrl.state.musicData.image,
+                    "previewUrl": getUrl.state.musicData.preview_url
                   }
                 },
                 "user": {
@@ -84,7 +114,7 @@ const DecidePosts = () => {
      
             const response = await axios.post('http://ec2-52-78-99-156.ap-northeast-2.compute.amazonaws.com:8080/api/v1/posts',dataSend,{
                 headers : {
-                'Authorization': 'Bearer ' + accessToken,
+                'Authorization': 'Bearer ' + access_token,
             }
             });
     //         const response = await fetch('http://52.78.99.156:8080/api/v1/posts/image', dataSend, {
@@ -102,41 +132,51 @@ const DecidePosts = () => {
           }
        
         }
-        makePost();
+       
+    
+    const testBtnClicked =() =>{
+
+        console.log(getUrl.state.imgUrl);
     }
-        ,[])
+
+
 
 
 
 
     const CompleteBtnClicked = () =>{
         
-
     }
+
     //여기에 클릭되었을 때 hashtag넣을 수 있는 div만들어두고 
     useEffect(()=>{},[hashClicked]);
     return (
         <DecidePostsPackage>
             <ImgBox>
-            <ExampleSquareImg
-            width={"559.55px"} height={"545.07px"}/>
+            <CreatedImg src={getUrl.state.imgUrl} alt={"이미지"}/>
             </ImgBox>
             <TrackName>
-            {"Track"}
+            {"Track: "}
+            {getUrl.state.musicData.name}
+            <TestBtn onClick={testBtnClicked}>
+                {"실헝"}
+            </TestBtn>
             </TrackName>
-            <InPutPost type = "text" placeholder='게시글 내용을 입력해주세요'>
+            <InPutPost type = "text" placeholder='게시글 내용을 입력해주세요' value={content} onChange={(e)=>{
+                setContent(e.target.value)
+            }}>
             </InPutPost>
             <EmotionDiv>
-                <ComplexImage src ={ComplexImg} alt="짜증"/>
-                <DepressImage src = {DepressImg} alt="우울"/>
-                <GoodImage src ={GoodImg} alt="기분좋음"/>
-                <HappyImage src = {HappyImg} alt="행복"/>
-                <NoExpressImage src={NoExpressImg} alt="무표정"/>
-                <NothingImage src = {NothingImg} alt="무념무상"/>
-                <SadImage src = {SadImg} alt="슬픔"/>
-                <ShyImage src = {ShyImg} alt="머쓱"/>
-                <SickImage src = {SickImg} alt="아픔"/>
-                <SquerkImage src={SquerkImg} alt="삐짐"/>
+                <ComplexImage src ={ComplexImg} alt="짜증" onClick={()=>{setEmoticonId(1)}}/>
+                <DepressImage src = {DepressImg} alt="우울"onClick={()=>{setEmoticonId(2)}}/>
+                <GoodImage src ={GoodImg} alt="기분좋음"onClick={()=>{setEmoticonId(3)}}/>
+                <HappyImage src = {HappyImg} alt="행복"onClick={()=>{setEmoticonId(4)}}/>
+                <NoExpressImage src={NoExpressImg} alt="무표정"onClick={()=>{setEmoticonId(5)}}/>
+                <NothingImage src = {NothingImg} alt="무념무상"onClick={()=>{setEmoticonId(6)}}/>
+                <SadImage src = {SadImg} alt="슬픔"onClick={()=>{setEmoticonId(7)}}/>
+                <ShyImage src = {ShyImg} alt="머쓱"onClick={()=>{setEmoticonId(8)}}/>
+                <SickImage src = {SickImg} alt="아픔"onClick={()=>{setEmoticonId(9)}}/>
+                <SquerkImage src={SquerkImg} alt="삐짐"onClick={()=>{setEmoticonId(10)}}/>
             </EmotionDiv>
 
 
@@ -207,6 +247,11 @@ const DecidePosts = () => {
 };
 
 export default DecidePosts;
+const TestBtn = styled.button`
+`;
+const CreatedImg = styled.img`
+
+`;
 const ForHash = styled.div`
 
 `;

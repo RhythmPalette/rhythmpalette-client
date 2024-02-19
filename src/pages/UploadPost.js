@@ -55,43 +55,8 @@ useEffect(()=>{
 
  useEffect(() => {
     // let artistArr;
-    // const getArtists = async () => {
-    //   try {
-    //     const response = await fetch('https://api.spotify.com/v1/search?q=' + inputValue + '&type=artist', {
-    //       method: 'GET',
-    //       headers: {
-    //         'Authorization' : 'Bearer ' + accessToken,
-    //       },
-    //     });
-  
-    //     if (response.ok) {
-    //       const data = await response.json();
-    //       // artists 객체가 존재하면서 items 속성이 존재하는지 확인
-    //       if (data.artists && data.artists.items) {
-    //         // 관련 아티스트 목록 업데이트
-    //         // setWholeTextArray(data.artists.items.map((artists) => artists.name));
-    //         // console.log("그냥 JSon파일 자체를 가져왔을 때"+data);
-    //         artistArr = data.artists.items.map((artist) => ({
-    //         name : artist.name,
-    //         image : artist.images[0].url,
-    //         genre : artist.genres,
-    //         issong : false,
-    //       }));
-    //         setWholeTextArray(artistArr);
-     
-    //       } else {
-    //         // 예상치 못한 데이터 형식이거나 검색 결과가 없는 경우
-    //         console.error('Unexpected data format or no search results:', data);
-    //       }
-    //     } else {
-    //       // 오류 응답 처리
-    //       console.error('Error fetching artist data. Status:', response.status);
-    //     }
-    //   } catch (error) {
-    //     console.error('Error fetching artist data:', error);
-    //   }
-    // };
-  
+    let artistName;
+    let tracksArr;
       //track 부분을 좀 더 다시 봐서 수정하는게 필요할듯 
     const getTracks = async () => {
       try {
@@ -110,15 +75,14 @@ useEffect(()=>{
           if (data.tracks && data.tracks.items) {
             // 관련 아티스트 목록 업데이트
             // setWholeTextArray(data.artists.items.map((artists) => artists.name));
-            const tracksArr = data.tracks.items.map((track) => ({
+           tracksArr = data.tracks.items.map((track) => ({
               name : track.name,
               image : track.album.images[0].url,
-              gerne :"",
               preview_url : track.preview_url,
               artist_name : track.album.artists[0].name,
               album_name : track.album.name,        //추가로 받아서 넣을 정보는 여기에 넣어주면 됨
             }));
-          
+            artistName = tracksArr.artist_name;
             setWholeTextArray(tracksArr);
             // console.log("데이터를 받아왔을 때 "+wholeTextArray);
      
@@ -134,10 +98,49 @@ useEffect(()=>{
         console.error('Error fetching track data:', error);
       }
     };
- 
-    // getArtists();
+ const getArtists = async (artistName) => {
+      try {
+        const response = await fetch('https://api.spotify.com/v1/search?q=' + artistName + '&type=artist', {
+          method: 'GET',
+          headers: {
+            'Authorization' : 'Bearer ' + accessToken,
+          },
+        });
+  
+        if (response.ok) {
+          const data = await response.json();
+          // artists 객체가 존재하면서 items 속성이 존재하는지 확인
+          if (data.artists && data.artists.items) {
+            // 관련 아티스트 목록 업데이트
+            // setWholeTextArray(data.artists.items.map((artists) => artists.name));
+            // console.log("그냥 JSon파일 자체를 가져왔을 때"+data);
+            const genre = data.artists.items.map((artist) => ({
+                genre : artist.genres,
+          }));
+         tracksArr = tracksArr.map((items)=>({
+          name : items.name,
+          image : items.album.images[0].url,
+          preview_url : items.preview_url,
+          artist_name : items.album.artists[0].name,
+          album_name : items.album.name,
+          genre : genre,
+         }))
+          setWholeTextArray(tracksArr);
+          } else {
+            // 예상치 못한 데이터 형식이거나 검색 결과가 없는 경우
+            console.error('Unexpected data format or no search results:', data);
+          }
+        } else {
+          // 오류 응답 처리
+          console.error('Error fetching artist data. Status:', response.status);
+        }
+      } catch (error) {
+        console.error('Error fetching artist data:', error);
+      }
+    };
+    
     getTracks();
-
+    getArtists();
   }, [inputValue, accessToken]);
 
 

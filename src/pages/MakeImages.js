@@ -10,7 +10,7 @@ const MakeImages = (props) => {
     // //서버에서 이미지 데이터를 받아와서 사용함.
     // // setImageData()
     // setImageData();
-    
+    const access_token = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbHNndXIyIiwiaWF0IjoxNzA4MzUwMTk1LCJleHAiOjE3MDgzNTE2MzV9.39auC6J6g4EX-1iPh1KGKnP1emR5gIwmpC86_XsWjOY"
     const prompt = useLocation();
     const navigate = useNavigate();
     const [retry, setRetry] = useState(0);
@@ -21,7 +21,7 @@ const MakeImages = (props) => {
     useEffect(() => {
         // 비동기 함수 정의
         const makeImage = async () => {
-            const accessToken = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbHNndXIyIiwiaWF0IjoxNzA4MzQwMjkzLCJleHAiOjE3MDgzNDE3MzN9.KEYG8J4BlTjFLn_hEGrVbtwDtjq2tUwEi6jrY4ukGkU" ;
+        //     const accessToken = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbHNndXIyIiwiaWF0IjoxNzA4MzQwMjkzLCJleHAiOjE3MDgzNDE3MzN9.KEYG8J4BlTjFLn_hEGrVbtwDtjq2tUwEi6jrY4ukGkU" ;
           try {
        
             const dataSend ={
@@ -31,7 +31,7 @@ const MakeImages = (props) => {
      
             const response =  await axios.post('http://52.78.99.156:8080/api/v1/posts/image',dataSend,{
                 headers : {
-                'Authorization': 'Bearer ' + accessToken,
+                'Authorization': 'Bearer ' + access_token,
             }
             });
          
@@ -44,7 +44,6 @@ const MakeImages = (props) => {
             }));
 
             setImgUrls(imgArr);
-            
             setCountFirst(true);
           } catch (error) {
             console.log(prompt.state.prompt.name);
@@ -53,18 +52,6 @@ const MakeImages = (props) => {
           }
         }
 
-
-
-        
-        // const getImage = async() =>{
-        //     try{
-                
-
-
-        //     }
-
-        // }
-      
         makeImage();
 
          },[retry]);
@@ -77,12 +64,16 @@ const MakeImages = (props) => {
 
     const goToDecidePost = () =>
     {
-        navigate(`/decideposts`);
+
+        const data ={
+            imgUrl : chosenImg,
+            musicData : prompt.state.prompt
+        }
+        navigate(`/decideposts`, {state:  data});
         //여기서 url하고 트랙이름이랑 다 넘겨주면 된다.
     }
 
 
- 
 
 
     return (
