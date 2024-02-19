@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import {useNavigate} from 'react-router-dom';
 import {ReactComponent as Scope} from '../assets/ScopeImg.svg';
 import {ReactComponent as Note} from '../assets/NoteImg.svg';
+import GifImg from '../assets/Pulse.gif';
 
 
 const CLIENT_ID = "d1b1e1bd14254ae2b50f43eb69ba9a87";
@@ -20,6 +21,9 @@ const [dropDownItemIndex, setDropDownItemIndex] = useState(-1);
 const [accessToken, setAccessToken] = useState("");
 const [wholeTextArray,setWholeTextArray] = useState([]);
 const [play, setPlay] = useState(false);
+const [currentMouseMusic , setCurrentMouseMusic] = useState();
+const [selectedMusic , setSelectedMusic] = useState();
+const audioRef = useRef(null);
 const dropDownRef = useRef(null); 
 const navigate = useNavigate();
 
@@ -50,47 +54,48 @@ useEffect(()=>{
  },[])
 
  useEffect(() => {
-    let artistArr;
-    const getArtists = async () => {
-      try {
-        const response = await fetch('https://api.spotify.com/v1/search?q=' + inputValue + '&type=artist', {
-          method: 'GET',
-          headers: {
-            'Authorization' : 'Bearer ' + accessToken,
-          },
-        });
+    // let artistArr;
+    // const getArtists = async () => {
+    //   try {
+    //     const response = await fetch('https://api.spotify.com/v1/search?q=' + inputValue + '&type=artist', {
+    //       method: 'GET',
+    //       headers: {
+    //         'Authorization' : 'Bearer ' + accessToken,
+    //       },
+    //     });
   
-        if (response.ok) {
-          const data = await response.json();
-          // artists 객체가 존재하면서 items 속성이 존재하는지 확인
-          if (data.artists && data.artists.items) {
-            // 관련 아티스트 목록 업데이트
-            // setWholeTextArray(data.artists.items.map((artists) => artists.name));
-            // console.log("그냥 JSon파일 자체를 가져왔을 때"+data);
-            artistArr = data.artists.items.map((artist) => ({
-            name : artist.name,
-            image : artist.images[0].url,
-            genre : artist.genres,
-            issong : false,
-          }));
-            setWholeTextArray(artistArr);
+    //     if (response.ok) {
+    //       const data = await response.json();
+    //       // artists 객체가 존재하면서 items 속성이 존재하는지 확인
+    //       if (data.artists && data.artists.items) {
+    //         // 관련 아티스트 목록 업데이트
+    //         // setWholeTextArray(data.artists.items.map((artists) => artists.name));
+    //         // console.log("그냥 JSon파일 자체를 가져왔을 때"+data);
+    //         artistArr = data.artists.items.map((artist) => ({
+    //         name : artist.name,
+    //         image : artist.images[0].url,
+    //         genre : artist.genres,
+    //         issong : false,
+    //       }));
+    //         setWholeTextArray(artistArr);
      
-          } else {
-            // 예상치 못한 데이터 형식이거나 검색 결과가 없는 경우
-            console.error('Unexpected data format or no search results:', data);
-          }
-        } else {
-          // 오류 응답 처리
-          console.error('Error fetching artist data. Status:', response.status);
-        }
-      } catch (error) {
-        console.error('Error fetching artist data:', error);
-      }
-    };
+    //       } else {
+    //         // 예상치 못한 데이터 형식이거나 검색 결과가 없는 경우
+    //         console.error('Unexpected data format or no search results:', data);
+    //       }
+    //     } else {
+    //       // 오류 응답 처리
+    //       console.error('Error fetching artist data. Status:', response.status);
+    //     }
+    //   } catch (error) {
+    //     console.error('Error fetching artist data:', error);
+    //   }
+    // };
   
       //track 부분을 좀 더 다시 봐서 수정하는게 필요할듯 
     const getTracks = async () => {
       try {
+        
         const response = await fetch('https://api.spotify.com/v1/search?q=' + inputValue + '&type=track', {
           method: 'GET',
           headers: {
@@ -109,11 +114,12 @@ useEffect(()=>{
               name : track.name,
               image : track.album.images[0].url,
               gerne :"",
-              issong : true,
-              //추가로 받아서 넣을 정보는 여기에 넣어주면 됨
+              preview_url : track.preview_url,
+              artist_name : track.album.artists[0].name,
+              album_name : track.album.name,        //추가로 받아서 넣을 정보는 여기에 넣어주면 됨
             }));
           
-            setWholeTextArray([...artistArr,...tracksArr]);
+            setWholeTextArray(tracksArr);
             // console.log("데이터를 받아왔을 때 "+wholeTextArray);
      
           } else {
@@ -129,7 +135,7 @@ useEffect(()=>{
       }
     };
  
-    getArtists();
+    // getArtists();
     getTracks();
 
   }, [inputValue, accessToken]);
@@ -181,12 +187,34 @@ const retrySelectSong=() =>{
     setIsHaveInputValue(false);
     setHaveClicked(false);
 }
+
 const goToMakeImagePage = ()=>{
-  navigate(`/makeimages`);
+
+
+  navigate(`/makeimages`, {state : {prompt : selectedData}});
+  // 여기서 장르도 같이 넘겨줘야 한다.
 }
 
-const playOn = ()=>{
+const playOn = (dropDownItem,event)=>{
+  event.stopPropagation();
+  console.log(play);
   setPlay(!play);
+  if(audioRef.current){
+
+  
+  if(play){
+    console.log(dropDownItem);
+    audioRef.current.play();
+    setSelectedMusic(dropDownItem);
+  }
+  else{
+    audioRef.current.pause();
+    setSelectedMusic("");
+  }
+}
+else{
+  console.log("error caused");
+}
 }
 
 const handleDropDownKey = event =>{
@@ -219,15 +247,17 @@ const handleDropDownKey = event =>{
         }
     }
 }
-    useEffect(showDropDownList,[inputValue,wholeTextArray]);
-    
-    useEffect(()=>{
 
-  },[play])
+const CurrentMusic = (dropDownItem,dropDownIndex)=>{
+  setCurrentMouseMusic(dropDownItem);
+  setDropDownItemIndex(dropDownIndex);
+}
+
+    useEffect(showDropDownList,[inputValue,wholeTextArray]);
+
 
     return (
         <UploadPostPackage>
-
             <SearchingBox>
                 <TextBox>
                  {"어떤 음악을 공유하고 싶으신가요?"}
@@ -239,25 +269,40 @@ const handleDropDownKey = event =>{
           {isHaveInputValue && (
             <DropDownBox ref={dropDownRef} >
           {dropDownList.length === 0 && (
-            <FirstDropDownItem>{"가수 이름, 노래 제목으로 음악을 검색하세요."}</FirstDropDownItem>
+            <FirstDropDownItem>{"노래 제목으로 음악을 검색하세요."}</FirstDropDownItem>
           )}
           {dropDownList.map((dropDownItem, dropDownIndex) => {
-            const {name,image,issong} = dropDownItem;
+            const {name,image} = dropDownItem;
+            const isSelected = selectedMusic ===dropDownItem;
             return (
               <DropDownItem
                 key={dropDownIndex}
                 onClick={() => clickListItem(dropDownItem)}
-                onMouseOver={() => setDropDownItemIndex(dropDownIndex)}
+                onMouseOver={() => 
+                  CurrentMusic(dropDownItem,dropDownIndex)
+                }
                 className={
                   dropDownItemIndex === dropDownIndex ? 'selected' : ''
                 }
               >
+             
                 {image && <img src={image} alt={name} style={{ width: '65px', height: '65px' }} />}
                 <GrabText>
                 {name}
                 </GrabText>
-                {issong && <Note  />} 
-                {/* 노트에 클릭을 했을 때는 선택이 안되도록 구현해야한다. */}
+                <AudioDiv>
+                <audio ref = {audioRef}>
+                 {play&&(  
+                    <source src={currentMouseMusic.preview_url} />
+                   )}
+                </audio>
+                
+               {play && isSelected ? (
+               <PulseImg src={GifImg} alt="Pulse" onClick={(event) => playOn(dropDownItem, event)} />
+                  ) :<Note  onClick={(event)=>playOn(dropDownItem,event)}/>}
+  
+                </AudioDiv>
+            
                </DropDownItem>
             )
           })}
@@ -275,7 +320,14 @@ const handleDropDownKey = event =>{
                     <img  src={selectedData.image} alt={"이미지"} width={"62px"} height={"62px"}/>
                     {selectedData.name}
                     </ImgandName>
-                    <Note onClick={playOn}/>
+                    <AudioDiv>
+
+                    <audio ref = {audioRef}>
+                    <source src={selectedData.preview_url} />
+                   </audio>
+                  {play ? 
+                  (<PulseImg src={GifImg} alt="Pulse" onClick={(event) => playOn(selectedData, event)} />) : <Note onClick={(event)=>playOn(selectedData,event)}/>}  
+                   </AudioDiv>
                     </SongBox>
                   </SongDetail>
                 <RetryBtn  onClick={retrySelectSong} >
@@ -287,13 +339,24 @@ const handleDropDownKey = event =>{
             <ImgCreateBtn disabled={haveClicked ? false : true} onClick={goToMakeImagePage}>
                 {"이미지 생성하기"}
             </ImgCreateBtn>
-
+        
          </BottonBox>
+   
         </UploadPostPackage>
     );
 };
 
 export default UploadPost;
+
+const PulseImg = styled.img`
+  width: 28.25px;
+  height: 29.6px;
+`;
+
+const AudioDiv = styled.div`
+
+`;
+
 
 const FirstDropDownItem =styled.div`
   font-size: 20px;
