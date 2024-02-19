@@ -18,6 +18,10 @@ import Home from './pages/home';
 import Shortform from './pages/ShortForm';
 import Profile from './pages/Profile';
 import DecidePosts from './pages/DecidePosts';
+import Playlist from './pages/Playlist';
+import ProfileChange1 from './pages/ProfileChange1';
+import ProfileChange2 from './pages/ProfileChange2';
+import ProfileChange3 from './pages/ProfileChange3';
 
 const App = () => {
   return (
@@ -25,6 +29,12 @@ const App = () => {
       <GlobalStyles />
       <Routes>
         <Route path="/" element={<Landing />} />
+        <Route path="/calendar" element={<Calendar />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/playlist" element={<Playlist />} />
+        <Route path="/profilechange1" element={<ProfileChange1 />} />
+        <Route path="/profilechange2" element={<ProfileChange2 />} />
+        <Route path="/profilechange3" element={<ProfileChange3 />} />
         <Route path="/searching" element={<Searching/>}/>
         <Route path="/post/:inputValue" element={<Posts/>}/>
         <Route path="/uploadpost" element={<UploadPost/>}/>
@@ -39,8 +49,6 @@ const App = () => {
         <Route path="/Profile_music" element={<Profile_music />} />
         <Route path="/home" element={<Home />} />
         <Route path="/shortform" element={<Shortform />} />
-        <Route path="/calendar" element={<Calendar />} />
-        <Route path="/profile" element={<Profile />} />
         <Route path="/decideposts" element={<DecidePosts/>}/>
       </Routes>
     </>
