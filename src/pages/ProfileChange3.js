@@ -295,7 +295,30 @@ left : 520px;
 position : absolute;
 
 ` 
-
+const DefaultBox = styled.div`
+width: 770.373px;
+  height: 82.421px;
+  background-color: #F7F7F7;
+  border-radius: 10px;
+  box-shadow: 5px 4px 5px 0px #00000033;
+  display: ${props=>props.disabled? 'none': 'block' };
+  position: relative;
+  margin-top: 54.5px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  column-gap: 33px;
+  font-family: Pretendard Variable;
+  font-size: 26px;
+  font-weight: 400;
+  line-height: 31px;
+  letter-spacing: 0.01em;
+  text-align: center;
+  
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+`
 const ProfileChange3 = () => {
      // 상태 변수들 선언
   const [selectedData, setSelectedData] = useState(
@@ -313,7 +336,7 @@ const ProfileChange3 = () => {
   const dropDownRef = useRef(null); // 드롭다운 참조를 위한 useRef
   const navigate = useNavigate(); // React Router의 useNavigate 훅 사용
   const isPlaceholderVisible = !isHaveInputValue && !selectedData;
-
+  const [searchButtonClicked, setSearchButtonClicked] = useState(false);
   // 드롭다운 아이템 스크롤 효과
   useEffect(() => {
     
@@ -346,9 +369,15 @@ const ProfileChange3 = () => {
       .then(data => setAccessToken(data.access_token));
   }, []);
 
+  const handleSearchButtonClick = () => {
+    setSearchButtonClicked(true);
+  };
+
   // 입력값이 변경될 때마다 Spotify API에서 아티스트 및 트랙 검색
   useEffect(() => {
     let artistArr;
+    const searchMusic = async () => {
+      if (isHaveInputValue) {
     const getArtists = async () => {
       try {
         const response = await fetch('https://api.spotify.com/v1/search?q=' + inputValue + '&type=artist', {
@@ -414,7 +443,11 @@ const ProfileChange3 = () => {
 
     getArtists();
     getTracks();
-  }, [inputValue, accessToken]);
+    setSearchButtonClicked(false);
+  }
+}
+  searchMusic();
+  }, [inputValue, accessToken,isHaveInputValue]);
 
   // 드롭다운 리스트 표시 및 관리
   const showDropDownList = () => {
@@ -528,7 +561,7 @@ const ProfileChange3 = () => {
             )}
           </SearchingBox>
           <BottonBox>
-            {haveClicked && (
+            {haveClicked ? (
               <ClickedBox disabled={haveClicked ? false : true}>
                 <SongDetail>
                   <SongBox>
@@ -543,8 +576,15 @@ const ProfileChange3 = () => {
                   {"다시 고르기"}
                 </RetryBtn>
               </ClickedBox>
-            )}
+            ) : 
+            <DefaultBox>
+            {/* 기본 설정값을 여기에 렌더링 */}
+            <img src={selectedData.image} alt={"이미지"} width={"65px"} height={"64px"} />
+            {selectedData.name}
+          </DefaultBox> }
           </BottonBox>
+          
+          
         </UploadPostPackage>
         <ClearBtn>프로필 수정 완료</ClearBtn>
         <Text4>해당 페이지에 수정사항이 없다면 다음으로 넘어가주세요</Text4>
