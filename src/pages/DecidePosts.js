@@ -16,7 +16,7 @@ import { useLocation } from 'react-router-dom';
 import NavBar from '../components/NavBar';
 
 const DecidePosts = (props) => {
-    const access_token = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbHNndXIyIiwiaWF0IjoxNzA4MzUzNDA0LCJleHAiOjE3MDgzNTQ4NDR9.oZTyCT_y9GwVJfbnWmv4UpQ52bsPqpB3gZ0tOAZ1Mbg"
+    const access_token = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbHNndXIyIiwiaWF0IjoxNzA4MzU2OTYwLCJleHAiOjE3MDgzNTg0MDB9.YHBPbMfu07nopn1HC2crtHk-na6VKgzlankEcHTAW0E"
     const [hashClicked,setHashClicked] = useState(false);
     const [situation1, setSituation1] = useState("");
     const [situation2, setSituation2] = useState("");

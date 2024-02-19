@@ -25,6 +25,7 @@ const [currentMouseMusic , setCurrentMouseMusic] = useState();
 const [selectedMusic , setSelectedMusic] = useState();
 const audioRef = useRef(null);
 const dropDownRef = useRef(null); 
+
 const navigate = useNavigate();
 
 
@@ -55,8 +56,8 @@ useEffect(()=>{
 
  useEffect(() => {
     // let artistArr;
-    let artistName;
     let tracksArr;
+   
       //track 부분을 좀 더 다시 봐서 수정하는게 필요할듯 
     const getTracks = async () => {
       try {
@@ -80,9 +81,15 @@ useEffect(()=>{
               image : track.album.images[0].url,
               preview_url : track.preview_url,
               artist_name : track.album.artists[0].name,
-              album_name : track.album.name,        //추가로 받아서 넣을 정보는 여기에 넣어주면 됨
+              album_name : track.album.name,     
+              trackId : track.id   //추가로 받아서 넣을 정보는 여기에 넣어주면 됨
             }));
-            artistName = tracksArr.artist_name;
+            tracksArr.forEach((track) => {
+              getArtists(track.artist_name, track.name);
+            });
+           
+            console.log("트랙데이터 저장방식");
+            console.log(tracksArr);
             setWholeTextArray(tracksArr);
             // console.log("데이터를 받아왔을 때 "+wholeTextArray);
      
@@ -98,7 +105,7 @@ useEffect(()=>{
         console.error('Error fetching track data:', error);
       }
     };
- const getArtists = async (artistName) => {
+ const getArtists = async (artistName,trackName) => {
       try {
         const response = await fetch('https://api.spotify.com/v1/search?q=' + artistName + '&type=artist', {
           method: 'GET',
@@ -109,23 +116,55 @@ useEffect(()=>{
   
         if (response.ok) {
           const data = await response.json();
+          console.log("여기까진 됨");
+
           // artists 객체가 존재하면서 items 속성이 존재하는지 확인
           if (data.artists && data.artists.items) {
             // 관련 아티스트 목록 업데이트
             // setWholeTextArray(data.artists.items.map((artists) => artists.name));
             // console.log("그냥 JSon파일 자체를 가져왔을 때"+data);
-            const genre = data.artists.items.map((artist) => ({
-                genre : artist.genres,
-          }));
-         tracksArr = tracksArr.map((items)=>({
-          name : items.name,
-          image : items.album.images[0].url,
-          preview_url : items.preview_url,
-          artist_name : items.album.artists[0].name,
-          album_name : items.album.name,
-          genre : genre,
-         }))
-          setWholeTextArray(tracksArr);
+        //     const genre = data.artists.items.map((artist) => ({
+        //         genre : artist.genres,
+        //   }));
+        //   console.log(genre);
+        //   console.log("분기점");
+        //  tracksArr = tracksArr.map((items)=>({
+        //   name : items.name,
+        //   image : items.image,
+        //   preview_url : items.preview_url,
+        //   artist_name : items.artist_name,
+        //   album_name : items.album_name,
+        //   trackId : items.trackId,
+        //   genre : genre,
+        //  }))
+        // const genres = data.artists.items.flatMap((artist) => artist.genres); // 모든 아티스트의 장르를 배열로 가져오기
+        // console.log(genres);
+        // console.log("분기점");
+        // tracksArr = tracksArr.map((items) => ({
+        //   name: items.name,
+        //   image: items.image,
+        //   preview_url: items.preview_url,
+        //   artist_name: items.artist_name,
+        //   album_name: items.album_name,
+        //   trackId: items.trackId,
+        //   genres: genres, // genres를 배열로 넣어줌
+        // }));
+        const genres = data.artists.items.flatMap((artist) => artist.genres); // 모든 아티스트의 장르를 배열로 가져오기
+        console.log(genres);
+        console.log("분기점");
+
+        // trackName을 기준으로 tracksArr을 맵으로 구성
+        const tracksMap = new Map(tracksArr.map((item) => [item.name, item]));
+
+        // trackName에 해당하는 트랙이 있다면 장르를 업데이트
+        if (tracksMap.has(trackName)) {
+          const trackToUpdate = tracksMap.get(trackName);
+          trackToUpdate.genres = genres; // 장르를 배열로 업데이트
+        }
+
+        // 업데이트된 배열을 다시 설정
+        setWholeTextArray([...tracksMap.values()]);
+         
           } else {
             // 예상치 못한 데이터 형식이거나 검색 결과가 없는 경우
             console.error('Unexpected data format or no search results:', data);
@@ -140,7 +179,6 @@ useEffect(()=>{
     };
     
     getTracks();
-    getArtists();
   }, [inputValue, accessToken]);
 
 

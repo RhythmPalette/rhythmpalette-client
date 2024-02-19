@@ -11,7 +11,7 @@ const MakeImages = (props) => {
     // //서버에서 이미지 데이터를 받아와서 사용함.
     // // setImageData()
     // setImageData();
-    const access_token = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbHNndXIyIiwiaWF0IjoxNzA4MzUzNDA0LCJleHAiOjE3MDgzNTQ4NDR9.oZTyCT_y9GwVJfbnWmv4UpQ52bsPqpB3gZ0tOAZ1Mbg"
+    const access_token = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbHNndXIyIiwiaWF0IjoxNzA4MzYwMTYyLCJleHAiOjE3MDgzNjE2MDJ9.nw3reURcdoF46o4cuSHxvw7b8_EQwoFzJcZQVF1CJeg"
     const prompt = useLocation();
     const navigate = useNavigate();
     const [retry, setRetry] = useState(0);
@@ -19,14 +19,15 @@ const MakeImages = (props) => {
     const [countFirst, setCountFirst]= useState(false);
     const [chosenImg, setChosenImg] = useState();
     const [imgChosen, setImgChosen] = useState(false);
+    const [makePrompt, setMakePrompt] =useState();
     useEffect(() => {
         // 비동기 함수 정의
-        const makeImage = async () => {
+        const makeImage = async (madePrompt) => {
         //     const accessToken = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbHNndXIyIiwiaWF0IjoxNzA4MzQwMjkzLCJleHAiOjE3MDgzNDE3MzN9.KEYG8J4BlTjFLn_hEGrVbtwDtjq2tUwEi6jrY4ukGkU" ;
           try {
        
             const dataSend ={
-                "prompt" : prompt.state.prompt.name,
+                "prompt" : madePrompt,
                 "samples" : 6,
             }
      
@@ -47,18 +48,73 @@ const MakeImages = (props) => {
             setImgUrls(imgArr);
             setCountFirst(true);
           } catch (error) {
+            console.log(prompt.state.prompt.trackId);
             console.log(prompt.state.prompt.name);
             console.error('API 호출 에러:', error);
             console.error('어떤 에러:',error.response);
           }
         }
+        const getLyrics = (trackId) => {
+            let config = {
+              method: 'get',
+              maxBodyLength: Infinity,
+              url: `https://spotify-lyric-api-984e7b4face0.herokuapp.com/?trackid=${trackId}&format=lrc`,
+              headers: { }
+            };
+          
+            axios.request(config)
+            .then((response) => {
+              const originLyrics = response.data.lines;
+              const result = originLyrics.map(line => line.words).join('. ');
+              console.log("lyrics done");
+             getPrompt(result);
+            })
+            .catch((error) => {
+              console.log(error);
+              alert("해당 곡은 가사를 지원하지 않습니다. 다른 곡을 선택해주세요.")
+            });
+          }
+        
+        const getPrompt = async (message) => {
+            const apiKey = process.env.REACT_APP_GPT_KEY;
+            let config = {
+              method: 'post',
+              maxBodyLength: Infinity,
+              url: 'https://api.openai.com/v1/chat/completions',
+              headers: {
+                'Content-Type' : 'application/json',
+                'Authorization' : `Bearer ${apiKey}`
+              },
+              data : {
+                'model' : "gpt-3.5-turbo",
+                "messages": [
+                  { "role": "system", "content": "You are prompt generator. Task is to convert song lyrics into a single descriptive prompt under 3 sentences that can be utilized by an image creation AI to generate an image aligned with the lyrical content. You have to finish this task in 10 seconds."},
+                  { "role": "user", "content": `${message}`},
+                ],
+                'max_tokens': 500,
+              }
+            }
+            console.log(message);
+            axios.request(config)
+            .then((response) => {
+              console.log(response.data.choices[0].message.content);
+              const result = response.data.choices[0].message.content;
+            setMakePrompt(result);
+            })
+            .catch((error) => {
+              console.log(error);
+            })
+          };
 
-        makeImage();
+
+        getLyrics(prompt.state.prompt.trackId);
+        makeImage(makePrompt);
 
          },[retry]);
 
+    //프롬프트 생성하는 부분
 
- 
+   
       
 
 
@@ -81,7 +137,11 @@ const MakeImages = (props) => {
         <MakegImagesPackage>
             <NavBar/>
             <ImageGrid>
-
+            {!countFirst&&(
+                <AltDiv>
+                    {"이미지 생성중입니다."}
+                </AltDiv>
+            )}
             {countFirst&&(imgUrls.map((item)=>{
                 return (
                     <Images
@@ -111,6 +171,12 @@ const MakeImages = (props) => {
 
 export default MakeImages;
 
+const AltDiv = styled.div`
+    font-size: 40px;
+    position: absolute;
+    top:200px;
+    left : 250px;
+    `;
 const MakegImagesPackage = styled.div`
 `;
 

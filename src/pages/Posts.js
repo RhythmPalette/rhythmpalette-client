@@ -1,14 +1,38 @@
-import React,{useState} from 'react';
+import React,{useEffect, useState} from 'react';
 import styled  from 'styled-components';
 import { dummy } from '../store/postExampleDummyData';
 import Post from '../components/Post';
 import NavBar from '../components/NavBar';
+import axios from 'axios';
 const Posts = () => {
 
 const [selectedFilter, setSelectedFilter] = useState('all');
 const handleFilterChange = (event) => {
     setSelectedFilter(event.target.value);
   };
+//   useEffect(()=>{
+//     const getPost = async ()=>{
+//         try{
+//             const response = await axios.get('http://52.78.99.156:8080/api/v1/posts',null,{
+ 
+//             headers : {
+//                     'Authorization': 'Bearer ' + access_token,
+//                 },
+//             });
+//             console.log(response);
+//         }
+//         catch (error) {
+            
+//             console.error('API 호출 에러:', error);
+//             console.error('어떤 에러:',error.response);
+//           }
+
+//     }
+//     getPost();
+// },[])
+
+    
+
     //이제 post들을 가져와서 띄우는 형식으로 보여주면 된다. Post들을 가져오는 부분을 여기에 짜고 Post에 정보들을 넘겨줘서 map으로 띄워주면 된다.
     return (
         <PostsPackage>
