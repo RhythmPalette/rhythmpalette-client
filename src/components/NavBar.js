@@ -5,54 +5,57 @@ import MenuBar from '../assets/MenuBar.svg';
 import IconHome from '../assets/IconHome.svg';
 import IconUpload from '../assets/IconUpload.svg';
 import IconMyPage from '../assets/IconMypage.svg';
+import Logo from '../assets/Logo.svg';
+import Help from '../assets/IconHelp.svg';
+import FriendsAdd from '../assets/FriendsAdd.svg';
+import IconSetting from "../assets/IconSetting.svg";
 
 const NavBarContainer = styled.div`
     display: flex;
     flex-direction: column;
     background-color: #F9F9F9; 
     height: 1080px;
-    width: 348.01px;
+    width: 348px;
 `;
 
 const LogoContainer = styled.div`
     display: flex;
     align-items: center;
-    padding: 20px;
 `
 
-const Logo = styled.div`
-    background-color: #04DB8F; 
-    margin-top: 50.18px;
-    margin-right: 38.42px;
-    height: 62px;
-    width: 164.21px;
-    font-size: 30px;
-    text-align: center;
+const MainLogo = styled.img` 
+    margin-top: 41.54px;
+    margin-right: 70.51px;
+    height: 86.9px;
+    width: 110.28px;
 `;
 
 const MenuBarImg = styled.img`
     height: 19.49px;
     width: 31.41px;
     margin-right: 75.24px;
-    margin-left: 38.73px;
-    margin-top: 71.79px;
+    margin-left: 39px;
+    margin-top: 33.7px;
 `
-
 
 const StyledLink = styled(Link)`
   text-decoration: none;
-  color: #333; // 텍스트 색상
-  margin: 5px 0; // 링크 간격 조정
+  color: #333; 
+  margin: 5px 0; 
   &:hover {
     color: #555; 
   }
 `;
 
-const Divider = styled.div`
-height: 0.5px;
-width: 348.01px;
-background-color: #C3C3C3;
-margin: 10px 0; 
+const Divider = styled.hr`
+  height: 1px;
+  width: 348px;
+  background-color: #C3C3C3;
+  margin: 26 39; 
+
+  &:first-of-type {
+    margin-top: 33.56px; // 예시로, 맨 위의 Divider의 상단 마진을 다르게 설정
+  }
 `;
 
 const LinkContainer = styled.div`
@@ -72,22 +75,63 @@ const LinkIcon = styled.img`
 const FriendListTitle = styled.div`
   margin-left: 30px;
   font-size: 27px;
-  margin-top: 20px;
-  margin-bottom: 10px;
+  margin-top: 47.04px;
+  margin-left: 47.04px;
 `;
 
-const FriendLink = styled.div`
+const FriendList = styled.ul`
   padding: 5px;
-  margin-left: 30px;
+  margin-left: 74.09px;
+  margin-top: 24.78px;
+  margin-bottom: 17.31px;
   font-size: 24px;
+`;
+
+const FriendListItem = styled.li`
+  /*list-style-type: none; */
+`;
+
+const FriendLink = styled(Link)`
+  display: block; // 링크를 블록 요소로 만들어 줄 바꿈 효과
+  color: #333; // 기본 텍스트 색상
+  text-decoration: none; // 밑줄 제거
+  &:hover {
+    color: #555;
+  }
+  padding: 5px 0; // 상하 패딩 조정
+`;
+
+const FriendsAddIcon = styled.img`
+  height: 32.62px;
+  width: 32.62px;
+  margin-left: 157.49px;
 `
+
+const IconContainer = styled.div`
+    display: flex; // Flex 컨테이너로 만들기
+    justify-content: flex-start; // 아이템들을 왼쪽 정렬
+    align-items: center; // 아이템들을 세로 중앙 정렬
+    margin-left: 33px; // 필요에 따라 조정
+    margin-top: 55.32px; // 기존 HelpIcon의 margin-top을 이용
+`;
+
+const HelpIcon = styled.img`
+    height: 40.33px;
+    width: 40.33px;
+`;
+
+const SettingIcon = styled.img`
+    height: 40.51px;
+    width: 40.63px;
+    margin-left: 201.04px; 
+`;
 
 const NavBar = () => {
   return (
     <NavBarContainer>
         <LogoContainer>
             <MenuBarImg src={MenuBar} alt="menuBar" />
-            <Logo>logo</Logo>
+            <MainLogo src={Logo} alt="logo" />
         </LogoContainer>
         <Divider />
         <LinkContainer>
@@ -106,16 +150,24 @@ const NavBar = () => {
         </LinkContainer>
         <Divider />
         <FriendListTitle>친구 목록</FriendListTitle>
-        <FriendLink to=""><li>리듬 1</li></FriendLink>
-        <FriendLink to=""><li>리듬 2</li></FriendLink>
-        <FriendLink to=""><li>리듬 3</li></FriendLink>
-        <FriendLink to=""><li>리듬 4</li></FriendLink>
-        <FriendLink to=""><li>리듬 5</li></FriendLink>
-        <FriendLink to=""><li>리듬 6</li></FriendLink>
-        <FriendLink to=""><li>리듬 7</li></FriendLink>
-        <FriendLink to=""><li>리듬 8</li></FriendLink>
-        <FriendLink to=""><li>리듬 9</li></FriendLink>
-        <FriendLink to=""><li>리듬 10</li></FriendLink>
+        <FriendList>
+          <FriendListItem><FriendLink to="#">리듬 1</FriendLink></FriendListItem>
+          <FriendListItem><FriendLink to="#">리듬 2</FriendLink></FriendListItem>
+          <FriendListItem><FriendLink to="#">리듬 3</FriendLink></FriendListItem>
+          <FriendListItem><FriendLink to="#">리듬 4</FriendLink></FriendListItem>
+          <FriendListItem><FriendLink to="#">리듬 5</FriendLink></FriendListItem>
+          <FriendListItem><FriendLink to="#">리듬 6</FriendLink></FriendListItem>
+          <FriendListItem><FriendLink to="#">리듬 7</FriendLink></FriendListItem>
+          <FriendListItem><FriendLink to="#">리듬 8</FriendLink></FriendListItem>
+          <FriendListItem><FriendLink to="#">리듬 9</FriendLink></FriendListItem>
+          <FriendListItem><FriendLink to="#">리듬 10</FriendLink></FriendListItem>
+          {/* 기타 리스트 아이템 */}
+        </FriendList>
+        <FriendsAddIcon src={FriendsAdd} alt="친구추가" />
+        <IconContainer>
+          <HelpIcon src={Help} alt="도움말"/>
+          <SettingIcon src={IconSetting} alt="설정" />
+        </IconContainer>
     </NavBarContainer>
   );
 };

@@ -9,22 +9,22 @@ const StyledFeedDummyImage1 = styled(FeedDummyImage1)`
 
 const dummyFeeds = [
     {
-      id: 1,
-      username: "user1",
-      trackInfo: "Track: 분홍신 - 아이유",
-      ImageComponent: StyledFeedDummyImage1,
-      likes: 20,
-      comments: 5,
-      description: "기분 좋은 하루"
+      feedId: 1,
+      feedUsername: "user1",
+      feedTrackInfo: "Track: 분홍신 - 아이유",
+      feedTrackImage: StyledFeedDummyImage1,
+      feedLikes: 20,
+      feedComments: 5,
+      feedDescription: "기분 좋은 하루"
     },
     {
-      id: 2,
-      username: "user2",
-      trackInfo: "Track: Ditto - NewJeans",
-      ImageComponent: StyledFeedDummyImage1,
-      likes: 15,
-      comments: 3,
-      description: "따뜻한 겨울"
+      feedId: 2,
+      feedUsername: "user2",
+      feedTrackInfo: "Track: Ditto - NewJeans",
+      feedTrackImage: StyledFeedDummyImage1,
+      feedLikes: 15,
+      feedComments: 3,
+      feedDescription: "따뜻한 겨울"
     },
   ];
   
