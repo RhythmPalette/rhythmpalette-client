@@ -13,6 +13,7 @@ import  SickImg from '../assets/Emoticons/Sick.svg';
 import  SquerkImg from '../assets/Emoticons/Squerk.svg';
 import axios from 'axios';
 import { useLocation } from 'react-router-dom';
+import LeftBar from '../components/LeftBar';
 
 const DecidePosts = (props) => {
     const access_token = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbHNndXIyIiwiaWF0IjoxNzA4MzUwMTk1LCJleHAiOjE3MDgzNTE2MzV9.39auC6J6g4EX-1iPh1KGKnP1emR5gIwmpC86_XsWjOY"

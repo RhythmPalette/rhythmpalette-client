@@ -4,8 +4,8 @@ import {useNavigate} from 'react-router-dom';
 import {ReactComponent as Scope} from '../assets/ScopeImg.svg';
 import {ReactComponent as Note} from '../assets/NoteImg.svg';
 import GifImg from '../assets/Pulse.gif';
-
-
+import LeftBar from '../components/LeftBar';
+import NavBar from '../components/NavBar';
 const CLIENT_ID = "d1b1e1bd14254ae2b50f43eb69ba9a87";
 const CLIENT_SECRET ="2064724783bd4462b8671a035d864b13";
 
@@ -260,6 +260,9 @@ const CurrentMusic = (dropDownItem,dropDownIndex)=>{
 
 
     return (
+
+      <UploadPostBigPackage>
+        <NavBar/>
         <UploadPostPackage>
             <SearchingBox>
                 <TextBox>
@@ -346,10 +349,17 @@ const CurrentMusic = (dropDownItem,dropDownIndex)=>{
          </BottonBox>
    
         </UploadPostPackage>
+          </UploadPostBigPackage>
     );
 };
 
 export default UploadPost;
+const UploadPostBigPackage = styled.div`
+  display: flex;
+  flex-direction: row;
+  
+`;
+
 
 const PulseImg = styled.img`
   width: 28.25px;
@@ -525,6 +535,9 @@ const UploadPostPackage = styled.div`
     align-items: center;
     justify-content: center;
     max-height: 1000px;
+    position: absolute;
+    Top :230.11px;
+    Left:808.32px;
 `;
 const TextBox = styled.div`
     font-size: 40px;    

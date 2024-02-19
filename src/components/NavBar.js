@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import MenuBar from '../assets/MenuBar.svg';
 import IconHome from '../assets/IconHome.svg';
 import IconUpload from '../assets/IconUpload.svg';
-import IconMyPage from '../assets/IconMypage.svg';
+import IconMyPage from '../assets/IconMyPage.svg';
 import Logo from '../assets/Logo.svg';
 import Help from '../assets/IconHelp.svg';
 import FriendsAdd from '../assets/FriendsAdd.svg';
