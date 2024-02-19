@@ -2,6 +2,7 @@ import React,{useState} from 'react';
 import styled  from 'styled-components';
 import { dummy } from '../store/postExampleDummyData';
 import Post from '../components/Post';
+import NavBar from '../components/NavBar';
 const Posts = () => {
 
 const [selectedFilter, setSelectedFilter] = useState('all');
@@ -10,6 +11,9 @@ const handleFilterChange = (event) => {
   };
     //이제 post들을 가져와서 띄우는 형식으로 보여주면 된다. Post들을 가져오는 부분을 여기에 짜고 Post에 정보들을 넘겨줘서 map으로 띄워주면 된다.
     return (
+        <PostsPackage>
+
+        <NavBar/>
         <BigBox>
         <FilterDiv>
        
@@ -35,13 +39,18 @@ const handleFilterChange = (event) => {
         }
         </PostContainer>
         </BigBox>
+        </PostsPackage>
     );
 };
 
 
 export default Posts;
+const PostsPackage = styled.div`
+    display: flex;
+    flex-direction: row;
+`;
 const Filtering = styled.select`
-position: relative;
+position: absolute;
 top: 183.79px;
 left: 576.63px;
 border-radius: 16px;
@@ -64,14 +73,26 @@ const FilterDiv = styled.div`
 
 const BigBox = styled.div`
 
-`
+`;
 
 const PostContainer = styled.div`
     display: grid;
-    grid-template-columns: 100px 100px 100px 100px 100px;
+    grid-template-columns: 257.93px 257.93px 257.93px 257.93px ;
     grid-template-rows: 1fr 1fr 1fr;
     gap: 10px ; 
     row-gap: 20px;
     column-gap: 80px;
+    border-radius: 10px;
     justify-content: center;
-` 
+    position: absolute;
+    Top :243.45px;
+    Left: 576.79px;
+    overflow: scroll;
+    min-height: 400px;
+    max-height: 800px; 
+    -ms-overflow-style:none; /* IE and Edge */
+    scrollbar-width : none; /* Firefox */
+    &::-webkit-scrollbar{
+    display: none;
+     };
+` ;

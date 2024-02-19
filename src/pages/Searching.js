@@ -4,7 +4,7 @@ import Clouds from '../components/Clouds';
 import {useNavigate} from 'react-router-dom'
 import { IoSearchSharp } from "react-icons/io5";
 import {classificationData} from "../store/classificationData";
-import LeftBar from '../components/LeftBar';
+import NavBar from '../components/NavBar';
 import SearchingBar from '../components/SearchingBar';
 
 const CLIENT_ID = "d1b1e1bd14254ae2b50f43eb69ba9a87";
@@ -197,7 +197,7 @@ const Searching = () => {
   useEffect(showDropDownList,[inputValue,wholeTextArray]);
     return (
       <BigBoxDiv>
-        <LeftBar/>
+        <NavBar/>
         <SearchingBar></SearchingBar>
         <SearchingPackage> 
           <SearchingBox>
