@@ -21,6 +21,8 @@ const Searching = () => {
     const [dropDownItemIndex, setDropDownItemIndex] = useState(-1);
     const [accessToken, setAccessToken] = useState("");
     const [wholeTextArray,setWholeTextArray] = useState([]);
+    const [clickedGenre, setClickedGenre] = useState();
+    //이걸로 cloud누르면 해당하는 장르의 post들이 나오게끔 하는 것이다.
     const dropDownRef = useRef(null); 
 
     useEffect(()=>{
@@ -52,7 +54,6 @@ const Searching = () => {
       let artistArr;
       const getArtists = async () => {
         try {
-          
           const response = await fetch('https://api.spotify.com/v1/search?q=' + inputValue + '&type=artist', {
             method: 'GET',
             headers: {
@@ -130,6 +131,11 @@ const Searching = () => {
 
     }, [inputValue, accessToken]);
   
+
+
+
+
+    
     const showDropDownList = () =>{
     
         if(inputValue === ''){
@@ -269,6 +275,8 @@ const SearchImg = styled.img`
 width: 24.62px;
 height: 25.439px;
 margin-left : -66.72px;
+margin-top: 10px;
+padding-top: 10px;
 `;
 const BigBoxDiv = styled.div`
   display: flex;

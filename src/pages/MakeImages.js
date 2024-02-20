@@ -12,7 +12,7 @@ const MakeImages = (props) => {
     // //서버에서 이미지 데이터를 받아와서 사용함.
     // // setImageData()
     // setImageData();
-    const access_token = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbHNndXIyIiwiaWF0IjoxNzA4NDEwNDY5LCJleHAiOjE3MDg0MTE5MDl9.o-D8wOVXcOIvUuGYU4PIpnLzQP4ed8KidOKzM2VX638"
+    const access_token = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbHNndXIyMzQiLCJpYXQiOjE3MDg0NTg3ODcsImV4cCI6MTcwODQ2MDIyN30.wmNGv8f9KbjAMF9yITL17nmpkg2wXeA7oVmYgxuoc5o"
     const prompt = useLocation();
     const navigate = useNavigate();
     const [retry, setRetry] = useState(0);
@@ -77,7 +77,7 @@ const MakeImages = (props) => {
           }
         
         const getPrompt = async (message) => {
-            const apiKey = process.env.REACT_APP_GPT_KEY; //여기에 api 키를 할당받아서 넣으면 된다.
+            const apiKey = process.env.REACT_APP_API_KEY; //여기에 api 키를 할당받아서 넣으면 된다.
             let config = {
               method: 'post',
               maxBodyLength: Infinity,
@@ -124,7 +124,7 @@ const MakeImages = (props) => {
     {
 
         const data ={
-            imgUrl : chosenImg,
+            imgUrl : "https://img.freepik.com/free-photo/cute-puppy-sitting-in-grass-enjoying-nature-playful-beauty-generated-by-artificial-intelligence_188544-84973.jpg",
             musicData : prompt.state.prompt
         }
         navigate(`/decideposts`, {state:  data});
@@ -161,7 +161,7 @@ const MakeImages = (props) => {
                 <RecreateBtn onClick={()=>{setRetry(retry+1)}}>
                     {"이미지 재생성"}
                 </RecreateBtn>
-                <ChooseBtn onClick={goToDecidePost} disabled={!imgChosen} >
+                <ChooseBtn onClick={goToDecidePost}  >
                     {"선택완료"}
                 </ChooseBtn>
             </BtnBox>
@@ -180,6 +180,8 @@ const AltDiv = styled.div`
     left : 250px;
     `;
 const MakegImagesPackage = styled.div`
+display: flex;
+flex-direction: row;
 `;
 
 const ImageGrid = styled.div`

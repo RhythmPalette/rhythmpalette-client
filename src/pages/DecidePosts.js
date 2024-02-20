@@ -11,37 +11,41 @@ import  ShyImg from '../assets/Emoticons/Shy.svg';
 import  SickImg from '../assets/Emoticons/Sick.svg';
 import  SquerkImg from '../assets/Emoticons/Squerk.svg';
 import axios from 'axios';
-import { useLocation } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import NavBar from '../components/NavBar';
 import SearchingBar from '../components/SearchingBar';
 
 const DecidePosts = (props) => {
-    const access_token = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbHNndXIyIiwiaWF0IjoxNzA4NDEyODgyLCJleHAiOjE3MDg0MTQzMjJ9.VBSMj3k3fTaaIhVeezN0vkKvfDCTTEwtPwI6eFWKAxQ"
+    const access_token = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbHNndXIyMyIsImlhdCI6MTcwODQ2MjI1NywiZXhwIjoxNzA4NDYzNjk3fQ.8y79V-LGgehL-vo9RuIqyykgutH4ZnPzUWJa6kvcAJs"
     const [hashClicked,setHashClicked] = useState(false);
-    const [situation1, setSituation1] = useState("");
-    const [situation2, setSituation2] = useState("");
-    const [situation3, setSituation3] = useState("");
+    const [situation1, setSituation1] = useState(" ");
+    const [situation2, setSituation2] = useState(" ");
+    const [situation3, setSituation3] = useState(" ");
     const [hashDIvClicked, setHashDivClicked] =useState(false);
-    const [content, setContent] = useState("");
-    const [emoticonId, setEmoticonId] =useState();
+    const [content, setContent] = useState(" ");
+    const [emoticonId, setEmoticonId] =useState(1);
     const [userData, setUserData] = useState();
+
+    const navigate = useNavigate();
     const HashTagBtnClicked = (event) => {
         event.stopPropagation();
         setHashClicked(!hashClicked);
 
     }
     const getUrl = useLocation();
-   
+    const [urlData,setUrlData] = useState(getUrl);
     useEffect(()=>{
         const sendImg = async ()=>{
             try{
-                const response = await axios.post('http://52.78.99.156:8080/api/v1/posts/image/upload?imageUrl=',null,{
-                params : {
-                    imageUrl : getUrl.state.imgUrl
-                },   
+                console.log("여기서"+getUrl.state.imgUrl);
+                const response = await axios.post('http://52.78.99.156:8080/api/v1/posts/image/upload?',null,{
+               
                 headers : {
                         'Authorization': 'Bearer ' + access_token,
                     },
+                params : {
+                        imageUrl : getUrl.state.imgUrl
+                    },   
                 });
                 console.log(response);
             }
@@ -54,7 +58,7 @@ const DecidePosts = (props) => {
         }
         const getUserData  = async (userName)=>{
             try{
-                const response = await axios.get(`http://52.78.99.156:8080/api/v1/user/{${userName}}`,{
+                const response = await axios.get(`http://52.78.99.156:8080/api/v1/user/${userName}`,{
                     headers : {
                         'Authorization': 'Bearer ' + access_token,
                     },
@@ -69,81 +73,43 @@ const DecidePosts = (props) => {
         }
 
         sendImg();
-        getUserData("alsgur2");
+        getUserData("alsgur23");
         //우선적으로는 내 id를 해두고 추후에 로컬스토리지 통해서 전환
     },[])
-    //왜 안되는지 이유를 모르겠음. 이건 나중에 다시 확인하는 것으로 고
+    
 
 
         
         const  makePost = async () => {
-           
           try {
-       
-            const dataSend = {
-                "addDTO": {
-                  "postImg": getUrl.state.imgUrl,
-                  "content": content,
-                  "situation1": situation1,
-                  "situation2": situation2,
-                  "situation3": situation3,
-                  "emotionId": emoticonId,
-                  "musicRequest": {
-                    "title": getUrl.state.musicData.name,
-                    "artist": getUrl.state.musicData.artist_name,
-                    "genre": getUrl.state.musicData.genre,
-                    "imageUrl": getUrl.state.musicData.image,
-                    "previewUrl": getUrl.state.musicData.preview_url
-                  }
-                },
-                "user": {
-                  "createdAt": "2024-02-18T11:13:31.966Z",
-                  "updateAt": "2024-02-18T11:13:31.966Z",
-                  "userId": 0,
-                  "loginId": "string",
-                  "password": "string",
-                  "name": "string",
-                  "email": "string",
-                  "nickname": "string",
-                  "introduction": "string",
-                  "gender": "string",
-                  "birth": "2024-02-18",
-                  "role": "ROEL_NO_USER",
-                  "profileImg": "string",
-                  "musicId": {
-                    "id": 0,
-                    "title": "string",
-                    "artist": "string",
-                    "genre": "string",
-                    "imageUrl": "string",
-                    "previewUrl": "string"
+            const dataSend = 
+            {
+                  'postImg': getUrl.state.imgUrl,
+                  'content': content,
+                  'situation1': situation1,
+                  'situation2': situation2,
+                  'situation3': situation3,
+                  'emotionId': 1,
+                  'musicRequest': {
+                    'title': getUrl.state.musicData.name,
+                    'artist': getUrl.state.musicData.artist_name,
+                    'genre': getUrl.state.musicData.genres[0],
+                    'imageUrl': getUrl.state.musicData.image,
+                    'previewUrl': getUrl.state.musicData.preview_url
                   },
-                  "enabled": true,
-                  "username": "string",
-                  "authorities": [
-                    {
-                      "authority": "string"
-                    }
-                  ],
-                  "accountNonExpired": true,
-                  "accountNonLocked": true,
-                  "credentialsNonExpired": true
-                }
-              }
+                    'userId': 45
+              };
         
-     
-            const response = await axios.post('http://ec2-52-78-99-156.ap-northeast-2.compute.amazonaws.com:8080/api/v1/posts',dataSend,{
-                headers : {
-                'Authorization': 'Bearer ' + access_token,
-            }
-            });
-    //         const response = await fetch('http://52.78.99.156:8080/api/v1/posts/image', dataSend, {
-    //     method: 'POST',
-    //     headers: {
-    //       'Authorization' : 'Bearer ' + accessToken,
-    //     },
-    //   });
-       
+              console.log(dataSend);
+          
+
+            const response = await fetch('http://52.78.99.156:8080/api/v1/user/posts', dataSend, {
+        method: 'POST',
+        headers: {
+          'Authorization' : 'Bearer ' + access_token,
+        },
+      });
+            console.log("성공");
             console.log(response);
             console.log(response.data)
           } catch (error) {
@@ -155,8 +121,13 @@ const DecidePosts = (props) => {
        
     
     const testBtnClicked =() =>{
-
+        makePost();
+        console.log(emoticonId);
+        console.log(getUrl.state.musicData.genres[0]);
         console.log(getUrl.state.imgUrl);
+        console.log(userData);
+        console.log(userData.data.data.userId);
+        console.log(userData.data.data);
     }
 
 
@@ -165,7 +136,8 @@ const DecidePosts = (props) => {
 
 
     const CompleteBtnClicked = () =>{
-        
+        makePost();
+        navigate(`/home`);
     }
 
     //여기에 클릭되었을 때 hashtag넣을 수 있는 div만들어두고 
@@ -262,7 +234,7 @@ const DecidePosts = (props) => {
                 
             )}
             </HashDiv>
-            <UploadButton>
+            <UploadButton onClick={CompleteBtnClicked}>
             {"업로드"}
             </UploadButton>
         </DecidePostsPackage>
@@ -272,7 +244,8 @@ const DecidePosts = (props) => {
 
 export default DecidePosts;
 const DecidePostsBigPackage = styled.div`
-
+display: flex;
+flex-direction: row;
 `;
 const TestBtn = styled.button`
 `;

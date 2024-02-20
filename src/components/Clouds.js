@@ -4,7 +4,7 @@ import {useNavigate} from 'react-router-dom'
 import {ReactComponent as PaintImg} from "../assets/PaintImg.svg";
 const Clouds = (props) => {
     const navigate = useNavigate();
-
+    
     const onClickCloudItem = () => {
         navigate(`/post/${props.title}`,{
             state : props
