@@ -1,4 +1,4 @@
-import React , {useState} from 'react'
+import React , {useState, useEffect} from 'react'
 import styled from 'styled-components'
 import SearchingBar from '../components/SearchingBar'
 import ProfileImage from '../assets/ProfileImage.svg'
@@ -275,13 +275,67 @@ display : flex;
 flex-direction : row;
 
 `
-
+const ImageContainer=styled.div`
+`
+const PostImage = styled.img`
+`
 
 
 const Profile = () => {
 const [selectedTab, setSelectedTab] = useState('myPost');
+const [posts, setPosts] = useState([]);
+const [playlists, setPlaylists] = useState([]);
 
-const playlists = [
+
+useEffect(() => {
+  const fetchPost = async () => {
+    try {
+      const response = await fetch('http://52.78.99.156:8080/api/v1/posts/mypage', {
+      method: 'get',
+      maxBodyLength: Infinity,
+      headers: {
+        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhYmMiLCJpYXQiOjE3MDgzNzg4ODYsImV4cCI6MTcwODM4MDMyNn0.8cTHjOm1htPTeBSYiA6UNJkHLkaT1KUBpccvC2MLGjE'
+      }
+    });
+    if (response.ok){
+
+      const data = await response.json();
+      setPosts(data);
+  }
+    } catch (error) {
+      console.error('게시물 가져오기 오류:', error);
+    }
+  };
+
+  fetchPost();
+}, []);
+
+useEffect(() => {
+  const fetchPlaylist = async () => {
+    try {
+      const response = await fetch('http://52.78.99.156:8080/playlists/{playlistid}', {
+      method: 'get',
+      maxBodyLength: Infinity,
+      headers: {
+        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhYmMiLCJpYXQiOjE3MDgzNzg4ODYsImV4cCI6MTcwODM4MDMyNn0.8cTHjOm1htPTeBSYiA6UNJkHLkaT1KUBpccvC2MLGjE'
+      }
+    });
+    if (response.ok){
+
+      const data = await response.json();
+      setPlaylists(data);
+  }
+    } catch (error) {
+      console.error('재생목록 가져오기 오류:', error);
+    }
+  };
+
+  fetchPlaylist();
+}, []);
+
+
+
+/*const playlists = [
   { id: 1, title: '재생목록 1', posts: 11, musicCount: 15 },
   { id: 2, title: '재생목록 2', posts: 8, musicCount: 12 },
   { id: 3, title: '재생목록 3', posts: 15, musicCount: 20 },
@@ -289,7 +343,7 @@ const playlists = [
   { id: 5, title: '재생목록 5', posts: 2, musicCount: 8 },
 
 
-];
+]; */
 
   return (
     <Layout>
@@ -329,8 +383,15 @@ const playlists = [
             <Divider />
             {selectedTab === 'myPost' && (
           <div>
-             
+             {posts.length > 0 ? (
+            posts.map((post) => (
+              <ImageContainer key={post.id}>
+                <PostImage src={post.imageUrl} alt={`Post ${post.id}`} />
+              </ImageContainer>
+            ))
+          ) : (
            <Text>게시물을 올려보세요</Text> 
+          )}
           </div>
         )}
         {selectedTab === 'playlist' && (

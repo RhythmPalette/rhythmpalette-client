@@ -370,5 +370,5 @@ export const InputText = styled.input`
   font-size: 16px;
   width: 550px;
   border: none; 
-  
+
 `;

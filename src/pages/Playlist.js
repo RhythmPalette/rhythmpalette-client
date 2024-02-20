@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import styled from 'styled-components'
 import LeftBar from '../components/LeftBar'
 import SearchingBar from '../components/SearchingBar'
@@ -145,6 +145,7 @@ border : 1px solid #04DB8F;
 
 
 const Playlist = () => {
+  const [playlists, setPlaylists] = useState([]);
     const [checkedImages, setCheckedImages] = useState(images.map(()=> false));
 
   const toggleCheckbox = (index) => {
@@ -153,23 +154,32 @@ const Playlist = () => {
     setCheckedImages(newCheckedImages); }
 
 
-    const createPlaylist = async () => {
-    const playlistName = document.querySelector('input[type="text"]').value;
-    const selectedImages = images.filter((image, index) => checkedImages[index]);
-    try {
-      // API 호출
-      const response = await axios.post('http://52.78.99.156:8080/api/v1/playlists', {
-        name: playlistName,
-        images: selectedImages.map(image => image.id),
-      });
+      const createPlaylist= async () => {
+        try {
+          const response = await fetch('http://52.78.99.156:8080/playlists', {
+          method: 'post',
+          maxBodyLength: Infinity,
+          headers: {
+            'Authorization': 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhYmMiLCJpYXQiOjE3MDgzNzg4ODYsImV4cCI6MTcwODM4MDMyNn0.8cTHjOm1htPTeBSYiA6UNJkHLkaT1KUBpccvC2MLGjE'
+          }
+        });
+        if (response.ok){
+    
+          const data = await response.json();
+          setPlaylists(data);
+          console.log('재생목록이 성공적으로 생성되었습니다.', response.data);
+      }
+        } catch (error) {
+          console.error('재생목록 가져오기 오류:', error);
+        }
+      };
+ 
 
-      // 성공적으로 생성된 경우, 여기서 추가적인 처리
-      console.log('재생목록이 성공적으로 생성되었습니다.', response.data);
-    } catch (error) {
-      // 에러 처리
-      console.error('재생목록 생성 중 오류가 발생했습니다.', error);
-    }
-  };
+useEffect(() => {
+  createPlaylist();
+}, []);
+
+
 
 
 
