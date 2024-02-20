@@ -8,6 +8,8 @@ import PlaylistImg from '../assets/PlaylistImg.svg'
 import {Link} from 'react-router-dom'
 import SideNavBar from '../components/SideNavBar'
 
+
+
 const Layout = styled.div`
     display : flex;
     justify-content : center;
@@ -285,6 +287,8 @@ const Profile = () => {
 const [selectedTab, setSelectedTab] = useState('myPost');
 const [posts, setPosts] = useState([]);
 const [playlists, setPlaylists] = useState([]);
+const [info, setInfo] = useState([]);
+
 
 
 useEffect(() => {
@@ -292,16 +296,20 @@ useEffect(() => {
     try {
       const response = await fetch('http://52.78.99.156:8080/api/v1/posts/mypage', {
       method: 'get',
-      maxBodyLength: Infinity,
       headers: {
-        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhYmMiLCJpYXQiOjE3MDgzNzg4ODYsImV4cCI6MTcwODM4MDMyNn0.8cTHjOm1htPTeBSYiA6UNJkHLkaT1KUBpccvC2MLGjE'
+        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhc2QiLCJpYXQiOjE3MDg0NTg2OTksImV4cCI6MTcwODQ2MDEzOX0.DUG2UDlJmtydzrQM-RlofqkFYBoDMtrTdzF2fPIaSZs'
       }
     });
     if (response.ok){
 
       const data = await response.json();
+      console.log('게시물이 불러와졌습니다.', response.data);
+
       setPosts(data);
   }
+  else {
+    console.error('게시물 가져오기 실패:', response.statusText);
+    } 
     } catch (error) {
       console.error('게시물 가져오기 오류:', error);
     }
@@ -315,17 +323,19 @@ useEffect(() => {
     try {
       const response = await fetch('http://52.78.99.156:8080/playlists/{playlistid}', {
       method: 'get',
-      maxBodyLength: Infinity,
       headers: {
-        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhYmMiLCJpYXQiOjE3MDgzNzg4ODYsImV4cCI6MTcwODM4MDMyNn0.8cTHjOm1htPTeBSYiA6UNJkHLkaT1KUBpccvC2MLGjE'
+        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkZCIsImlhdCI6MTcwODQyODMwMiwiZXhwIjoxNzA4NDI5NzQyfQ.wcAlnIPlwflC0XLf2c5fdA3L8MIdNBNtfnnXzw-0MGM'
       }
     });
     if (response.ok){
-
       const data = await response.json();
       setPlaylists(data);
   }
-    } catch (error) {
+  else {
+    console.error('플레이리스트 가져오기 실패:', response.statusText);
+    } 
+  }
+  catch (error) {
       console.error('재생목록 가져오기 오류:', error);
     }
   };
@@ -334,8 +344,34 @@ useEffect(() => {
 }, []);
 
 
+useEffect(() => {
+  const fetchInfo = async () => {
+    try {
+      const response = await fetch('http://52.78.99.156:8080/ap1/v1/user/{loginId}', {
+      method: 'get',
+      headers: {
+        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkZCIsImlhdCI6MTcwODQyODMwMiwiZXhwIjoxNzA4NDI5NzQyfQ.wcAlnIPlwflC0XLf2c5fdA3L8MIdNBNtfnnXzw-0MGM'
+      }
+    });
+    if (response.ok){
+      const data = await response.json();
+      setInfo(data);
+  }
+  else {
+    console.error('사용자 정보 가져오기 실패:', response.statusText);
+    } 
+  }
+  catch (error) {
+      console.error('사용자 정보 가져오기 오류:', error);
+    }
+  };
 
-/*const playlists = [
+  fetchInfo();
+}, []);
+
+
+/*
+const playlists = [
   { id: 1, title: '재생목록 1', posts: 11, musicCount: 15 },
   { id: 2, title: '재생목록 2', posts: 8, musicCount: 12 },
   { id: 3, title: '재생목록 3', posts: 15, musicCount: 20 },
@@ -354,15 +390,15 @@ useEffect(() => {
                 <ProfileImg src = {ProfileImage} alt = '프로필' />
                 <Info>
                     <Name>
-                        <UserName> user name </UserName>
+                        <UserName> {info.nickname} </UserName>
                         <Link to ='/ProfileChange1'>
                         <ChangeImg src = {IconChange} alt = '수정' />
                         </Link>
                     </Name>
                     <MyInfo>
-                        <Post> 게시물 15 </Post>
-                        <Follower> 팔로워 110 </Follower>
-                        <Following> 팔로잉 89 </Following>
+                        <Post> 게시물 {posts.length} </Post>
+                        <Follower> 팔로워 {info['Total Follower']} </Follower>
+                        <Following> 팔로잉 {info['Total Following']}</Following>
                     </MyInfo>
                     <Music>
                         <MusicImg src = {IconMusic} alt = '음악' />
@@ -425,3 +461,24 @@ useEffect(() => {
 }
 
 export default Profile;
+
+/*
+<Info>
+                    <Name>
+                        <UserName> username </UserName>
+                        <Link to ='/ProfileChange1'>
+                        <ChangeImg src = {IconChange} alt = '수정' />
+                        </Link>
+                    </Name>
+                    <MyInfo>
+                        <Post> 게시물 15 </Post>
+                        <Follower> 팔로워 110 </Follower>
+                        <Following> 팔로잉 89 </Following>
+                    </MyInfo>
+                    <Music>
+                        <MusicImg src = {IconMusic} alt = '음악' />
+                        <MusicName> NewJeans-ETA </MusicName>    
+                    </Music>
+                    <Comment> 저는 팝송을 좋아합니다~!</Comment>  
+                </Info>
+                */

@@ -1,6 +1,6 @@
 import React, {useState, useEffect, useRef} from 'react'
 import styled from 'styled-components'
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import LeftBar from '../components/LeftBar'
 import SearchingBar from '../components/SearchingBar'
 import { ReactComponent as Scope } from '../assets/IconSearch.svg';
@@ -586,7 +586,9 @@ const ProfileChange3 = () => {
           
           
         </UploadPostPackage>
+        <Link to ="/profile">
         <ClearBtn>프로필 수정 완료</ClearBtn>
+        </Link>
         <Text4>해당 페이지에 수정사항이 없다면 다음으로 넘어가주세요</Text4>
    
       </Wrap>

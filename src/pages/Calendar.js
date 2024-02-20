@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {Link} from 'react-router-dom';
 import dayjs from 'dayjs';
 import styled from 'styled-components';
@@ -73,8 +73,6 @@ width : 100px;
 height : 50px;
 margin-left : 700px;
 margin-top : 70px;
-margin-bottom : 10px;
-
 `;
 
 const ComboBox = styled.div`
@@ -89,8 +87,6 @@ const ComboBox = styled.div`
   align-items: center;
   margin-right : 15px;
 
-
-  
 `
 
 const Dropdown = styled.select`
@@ -198,7 +194,8 @@ const Calendar = () => {
     const firstDayOfMonth = currentDate.startOf('month').day();
     const [selectedYear, setSelectedYear] = useState(currentDate.year());
     const [selectedMonth, setSelectedMonth] = useState(currentDate.month() + 1); 
-    
+    const [calendar, setCalendar] = useState([]);
+ 
 
     const renderCalendar = () => {
         const emptyDays = Array.from({ length: firstDayOfMonth }, (_, i) => (
@@ -206,7 +203,9 @@ const Calendar = () => {
           ));
         
             const days = Array.from({ length: daysInMonth }, (_, i) => {
-            const imageData = post_id.find(item => item.day === i+1);
+            //const imageData = post_id.find(item => item.day === i+1);
+            const imageData = calendar.find(item => item.day === i+1);
+
 
 
             return(
@@ -227,10 +226,34 @@ const Calendar = () => {
         return [...emptyDays, ...days];
     };
 
-    const YearList = Array.from( { length: 9 }, (_, i) => `${2024-i}`,);
-        
-  const MonthList = Array.from( {length: 12}, (_, i) => `${i+1}`);
+    const YearList = Array.from( { length: 9 }, (_, i) => `${2024-i}`,);   
+    const MonthList = Array.from( {length: 12}, (_, i) => `${i+1}`);
     
+    useEffect(() => {
+        const fetchCalendar = async () => {
+          try {
+            const response = await fetch('http://52.78.99.156:8080/ap1/v1/posts/calear/{month}', {
+            method: 'get',
+            headers: {
+              'Authorization': 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkZCIsImlhdCI6MTcwODQyODMwMiwiZXhwIjoxNzA4NDI5NzQyfQ.wcAlnIPlwflC0XLf2c5fdA3L8MIdNBNtfnnXzw-0MGM'
+            }
+          });
+          if (response.ok){
+            const data = await response.json();
+            setCalendar(data);
+        }
+        else {
+          console.error('캘린더 정보 가져오기 실패:', response.statusText);
+          } 
+        }
+        catch (error) {
+            console.error('캘린더 정보 가져오기 오류:', error);
+          }
+        };
+      
+        fetchCalendar();
+      }, []);
+      
 
     
 

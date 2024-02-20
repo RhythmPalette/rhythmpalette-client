@@ -7,6 +7,8 @@ import checkboxUnchecked from '../assets/UnCheckedBox.svg'
 import checkboxChecked from '../assets/CheckedBox.svg'
 import Checkbox from '../components/Checkbox';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+
 
 const Layout = styled.div`
     display : flex;
@@ -145,6 +147,7 @@ border : 1px solid #04DB8F;
 
 
 const Playlist = () => {
+  const navigate = useNavigate();
   const [playlists, setPlaylists] = useState([]);
     const [checkedImages, setCheckedImages] = useState(images.map(()=> false));
 
@@ -158,19 +161,29 @@ const Playlist = () => {
         try {
           const response = await fetch('http://52.78.99.156:8080/playlists', {
           method: 'post',
-          maxBodyLength: Infinity,
           headers: {
-            'Authorization': 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhYmMiLCJpYXQiOjE3MDgzNzg4ODYsImV4cCI6MTcwODM4MDMyNn0.8cTHjOm1htPTeBSYiA6UNJkHLkaT1KUBpccvC2MLGjE'
-          }
+            'Authorization': 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhc2QiLCJpYXQiOjE3MDg0NTg2OTksImV4cCI6MTcwODQ2MDEzOX0.DUG2UDlJmtydzrQM-RlofqkFYBoDMtrTdzF2fPIaSZs',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            // 서버에 플레이리스트 정보 전송
+            name : "name"
+          }),
         });
         if (response.ok){
     
           const data = await response.json();
-          setPlaylists(data);
           console.log('재생목록이 성공적으로 생성되었습니다.', response.data);
+         
+        setPlaylists((prevPlaylists) => [...prevPlaylists, data]);
+        navigate('/profile');
+      } 
+      else {
+        console.error('플레이리스트 생성 실패:', response.statusText);
       }
         } catch (error) {
           console.error('재생목록 가져오기 오류:', error);
+          
         }
       };
  
@@ -178,11 +191,6 @@ const Playlist = () => {
 useEffect(() => {
   createPlaylist();
 }, []);
-
-
-
-
-
 
   return (
     <Layout>
