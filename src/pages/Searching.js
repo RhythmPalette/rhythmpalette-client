@@ -6,6 +6,7 @@ import { IoSearchSharp } from "react-icons/io5";
 import {classificationData} from "../store/classificationData";
 import NavBar from '../components/NavBar';
 import SearchingBar from '../components/SearchingBar';
+import IconSearch from '../assets/IconSearch.svg';
 
 const CLIENT_ID = "d1b1e1bd14254ae2b50f43eb69ba9a87";
 const CLIENT_SECRET ="2064724783bd4462b8671a035d864b13";
@@ -194,17 +195,23 @@ const Searching = () => {
             }
         }
     }
+    const detectTwoTouch =(event) =>{
+      event.stopPropagation();
+
+    }
   useEffect(showDropDownList,[inputValue,wholeTextArray]);
     return (
       <BigBoxDiv>
         <NavBar/>
-        <SearchingBar></SearchingBar>
+         <SearchingBar/>  
         <SearchingPackage> 
           <SearchingBox>
             <InputBox isHaveInputValue={isHaveInputValue}>
                 <label>
-                    <InputText type='text' placeholder='Search' value = {inputValue} onChange={changeInputValue} onKeyUp={handleDropDownKey}/>
-                    <IoSearchSharp />
+                    <InputText type='text' placeholder='Search' value = {inputValue} onChange={changeInputValue} onKeyUp={handleDropDownKey} onClick={(event)=>{
+                      detectTwoTouch(event);
+                    }}/>
+                    <SearchImg src={IconSearch} alt ="검색"/>
                 </label>
            
             </InputBox>
@@ -258,7 +265,11 @@ const Searching = () => {
 
 export default Searching;
 
-
+const SearchImg = styled.img`
+width: 24.62px;
+height: 25.439px;
+margin-left : -66.72px;
+`;
 const BigBoxDiv = styled.div`
   display: flex;
   flex-direction: row;
@@ -270,8 +281,7 @@ const SearchingBox = styled.div`
   max-height: 300px;
   width: 770.37px;
   height: 62px;
-  top: 54px;
-  left: 575.1px;
+ 
   border-radius: 50px;
   position: absolute;
 
@@ -279,10 +289,9 @@ const SearchingBox = styled.div`
 
 const CloudBox = styled.div`
   position: absolute;
-   width: 730.83px;
+  width: 730.83px;
   height: 812.36px;
   top: 221.15px;
-  left: 768.59px;
   border: 25px;
 
 `;
@@ -298,6 +307,9 @@ const CloudGrid = styled.div`
 
 export const SearchingPackage = styled.div`
     display: flex;
+    top: 18px;
+    left: 820.1px;
+    position : absolute;
     max-height: 1000px;
     justify-content: center;
     flex-direction: column;
@@ -306,14 +318,15 @@ export const SearchingPackage = styled.div`
 export const DropDownBox = styled.ul`
   display: flex;
   position: absolute;
-  top: 60px;
+  top: 125px;
+  left : 135px;
   flex-direction: column;
   margin: 0 auto;
   padding: 8px 0;
   background-color: white;
   border: 1px solid rgba(0, 0, 0, 0.3);
   border-top: none;
-  width: 600px;
+  width: 770px;
   border-radius: 35px 35px 35px 35px;
   box-shadow: 0 10px 10px rgb(0, 0, 0, 0.3);
   list-style-type: none;
@@ -349,8 +362,14 @@ export const GrabText = styled.div`
 export const InputBox = styled.div`
   display: flex;
   background-color: #E3E3E3;
+  height:60px;
+  position :absolute;
+  top:64px;
+  Left: 134px;
   flex-direction: row;
-  width: 770.37px;
+  align-items :center;
+  justify-content : center;
+  width: 770.373px;
   padding: 16px;
   border: 1px solid rgba(0, 0, 0, 0.3);
   z-index: 3;
@@ -361,6 +380,7 @@ export const InputBox = styled.div`
 `;
 
 export const InputText = styled.input`
+
   flex: 1 0 0;
   margin: 0;
   padding: 0;
@@ -370,5 +390,7 @@ export const InputText = styled.input`
   font-size: 16px;
   width: 550px;
   border: none; 
- 
+  width: 770.373px;
+  height: 62px;
+
 `;

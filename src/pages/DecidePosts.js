@@ -1,6 +1,5 @@
 import React ,{useEffect, useState} from 'react';
 import styled from 'styled-components';
-import  {ReactComponent as ExampleSquareImg}  from '../assets/ExampleSquareImg.svg';
 import  NothingImg from '../assets/Emoticons/Nothing.svg';
 import  ComplexImg from '../assets/Emoticons/Complex.svg';
 import  DepressImg from '../assets/Emoticons/Depressed.svg';
@@ -14,9 +13,10 @@ import  SquerkImg from '../assets/Emoticons/Squerk.svg';
 import axios from 'axios';
 import { useLocation } from 'react-router-dom';
 import NavBar from '../components/NavBar';
+import SearchingBar from '../components/SearchingBar';
 
 const DecidePosts = (props) => {
-    const access_token = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbHNndXIyIiwiaWF0IjoxNzA4MzU2OTYwLCJleHAiOjE3MDgzNTg0MDB9.YHBPbMfu07nopn1HC2crtHk-na6VKgzlankEcHTAW0E"
+    const access_token = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbHNndXIyIiwiaWF0IjoxNzA4NDEyODgyLCJleHAiOjE3MDg0MTQzMjJ9.VBSMj3k3fTaaIhVeezN0vkKvfDCTTEwtPwI6eFWKAxQ"
     const [hashClicked,setHashClicked] = useState(false);
     const [situation1, setSituation1] = useState("");
     const [situation2, setSituation2] = useState("");
@@ -24,6 +24,7 @@ const DecidePosts = (props) => {
     const [hashDIvClicked, setHashDivClicked] =useState(false);
     const [content, setContent] = useState("");
     const [emoticonId, setEmoticonId] =useState();
+    const [userData, setUserData] = useState();
     const HashTagBtnClicked = (event) => {
         event.stopPropagation();
         setHashClicked(!hashClicked);
@@ -34,7 +35,7 @@ const DecidePosts = (props) => {
     useEffect(()=>{
         const sendImg = async ()=>{
             try{
-                const response = await axios.post('http://52.78.99.156:8080/api/v1/posts/image/upload?imageUrl='+getUrl.state.imgUrl,null,{
+                const response = await axios.post('http://52.78.99.156:8080/api/v1/posts/image/upload?imageUrl=',null,{
                 params : {
                     imageUrl : getUrl.state.imgUrl
                 },   
@@ -46,16 +47,34 @@ const DecidePosts = (props) => {
             }
             catch (error) {
                 console.log(getUrl.state.imgUrl);
-                console.error('API 호출 에러:', error);
+                console.error('이미지전송의 API 호출 에러:', error);
                 console.error('어떤 에러:',error.response);
               }
 
         }
+        const getUserData  = async (userName)=>{
+            try{
+                const response = await axios.get(`http://52.78.99.156:8080/api/v1/user/{${userName}}`,{
+                    headers : {
+                        'Authorization': 'Bearer ' + access_token,
+                    },
+                });
+                console.log(response);
+                setUserData(response);
+            }
+            catch (error) {
+                console.error('유저데이터 송신의 API 호출 에러:', error);
+                console.error('어떤 에러:',error.response);
+              }
+        }
+
         sendImg();
+        getUserData("alsgur2");
+        //우선적으로는 내 id를 해두고 추후에 로컬스토리지 통해서 전환
     },[])
     //왜 안되는지 이유를 모르겠음. 이건 나중에 다시 확인하는 것으로 고
 
-    
+
         
         const  makePost = async () => {
            
@@ -154,6 +173,7 @@ const DecidePosts = (props) => {
     return (
         <DecidePostsBigPackage>
             <NavBar/>
+            <SearchingBar/>
         <DecidePostsPackage>
             <ImgBox>
             {getUrl.state.imgUrl&&( <CreatedImg src={getUrl.state.imgUrl} alt={"이미지"}/>)}
@@ -294,7 +314,7 @@ line-height: 40px;
 letter-spacing: 0em;
 text-align: left;
 display: flex;
-flex-wrap: wrap;
+flex-direction : row;
 column-gap: 20px;
 row-gap: 20px;
 `;

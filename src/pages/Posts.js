@@ -4,6 +4,7 @@ import { dummy } from '../store/postExampleDummyData';
 import Post from '../components/Post';
 import NavBar from '../components/NavBar';
 import axios from 'axios';
+import SearchingBar from '../components/SearchingBar';
 const Posts = () => {
 
 const [selectedFilter, setSelectedFilter] = useState('all');
@@ -38,6 +39,7 @@ const handleFilterChange = (event) => {
         <PostsPackage>
 
         <NavBar/>
+        <SearchingBar/>
         <BigBox>
         <FilterDiv>
        

@@ -3,8 +3,9 @@ import styled from 'styled-components';
 import IconSearch from '../assets/IconSearch.svg';
 import IconAlarm from '../assets/IconAlarm.svg';
 import ProfileImage from '../assets/ProfileImage.svg';
+import { useNavigate } from 'react-router-dom';
 
-const SearchingContainer = styled.div`
+export const SearchingContainer = styled.div`
     display : flex;
     width: 1562.377pxpx;
     height: 162px;
@@ -12,11 +13,11 @@ const SearchingContainer = styled.div`
 
     
     `
-const SearchBar =styled.div`
+export const SearchBar =styled.div`
     display : flex;
     align-items : center;
 `
-const SearchingInput = styled.input`
+export const SearchingInput = styled.input`
     width: 770.373px;
     height: 62px;
     border-radius: 50px;
@@ -34,20 +35,20 @@ const SearchingInput = styled.input`
         
     }
 `
-const SearchButton = styled.button`
+export const SearchButton = styled.button`
 background: none;
 border: none;
 cursor: pointer;
  `
 
-const SearchImg = styled.img`
-    width: 24.62px;
-    height: 25.439px;
-    margin-left : -66.72px;
+export const SearchImg = styled.img`
+width: 24.62px;
+height: 25.439px;
+margin-left : -66.72px;
   
 `
 
-const AlarmImg = styled.img`
+export const AlarmImg = styled.img`
 width: 36.795px;
 height: 39.231px;
 flex-shrink: 0;
@@ -57,7 +58,7 @@ margin-bottom : 60.19px;
 
 
 `
-const ProfileImg = styled.img`
+export const ProfileImg = styled.img`
 width: 62.488px;
 height: 62.488px;
 flex-shrink: 0;
@@ -69,9 +70,10 @@ margin-left : 41.17px;
 
 
 
+
 const SearchingBar = () =>{
     const [query, setQuery] = useState('');
-
+    const navigate = useNavigate();
     const handleInputChange = (event) => {
         setQuery(event.target.value);
     };
@@ -86,7 +88,8 @@ return (
             <SearchingInput
                 type = 'text'
                 value = {query}
-                onChange = {handleInputChange}
+                onChange = {setQuery}
+                onClick={()=>{navigate(`/searching`)}}
                 placeholder = 'Search'
             />
             <SearchButton onClick = {handleSearch}>

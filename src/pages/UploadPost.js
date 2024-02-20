@@ -4,7 +4,8 @@ import {useNavigate} from 'react-router-dom';
 import {ReactComponent as Scope} from '../assets/ScopeImg.svg';
 import {ReactComponent as Note} from '../assets/NoteImg.svg';
 import GifImg from '../assets/Pulse.gif';
-import LeftBar from '../components/LeftBar';
+import SearchingBar from '../components/SearchingBar';
+
 import NavBar from '../components/NavBar';
 const CLIENT_ID = "d1b1e1bd14254ae2b50f43eb69ba9a87";
 const CLIENT_SECRET ="2064724783bd4462b8671a035d864b13";
@@ -301,6 +302,7 @@ const CurrentMusic = (dropDownItem,dropDownIndex)=>{
 
       <UploadPostBigPackage>
         <NavBar/>
+        <SearchingBar/>
         <UploadPostPackage>
             <SearchingBox>
                 <TextBox>

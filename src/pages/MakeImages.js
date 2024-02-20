@@ -4,6 +4,7 @@ import Images from '../components/Images';
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import NavBar from '../components/NavBar';
+import SearchingBar from '../components/SearchingBar';
 //아마 여기서 서버에서 이미지를 받아서 사용할 예정 전 페이지에서 서버에 데이터를 요청함
 const MakeImages = (props) => {
 
@@ -11,7 +12,7 @@ const MakeImages = (props) => {
     // //서버에서 이미지 데이터를 받아와서 사용함.
     // // setImageData()
     // setImageData();
-    const access_token = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbHNndXIyIiwiaWF0IjoxNzA4MzYwMTYyLCJleHAiOjE3MDgzNjE2MDJ9.nw3reURcdoF46o4cuSHxvw7b8_EQwoFzJcZQVF1CJeg"
+    const access_token = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbHNndXIyIiwiaWF0IjoxNzA4NDEwNDY5LCJleHAiOjE3MDg0MTE5MDl9.o-D8wOVXcOIvUuGYU4PIpnLzQP4ed8KidOKzM2VX638"
     const prompt = useLocation();
     const navigate = useNavigate();
     const [retry, setRetry] = useState(0);
@@ -58,7 +59,7 @@ const MakeImages = (props) => {
             let config = {
               method: 'get',
               maxBodyLength: Infinity,
-              url: `https://spotify-lyric-api-984e7b4face0.herokuapp.com/?trackid=${trackId}&format=lrc`,
+              url: `https://spotify-lyrics-api-six.vercel.app/?trackid=${trackId}&format=lrc`,
               headers: { }
             };
           
@@ -76,7 +77,7 @@ const MakeImages = (props) => {
           }
         
         const getPrompt = async (message) => {
-            const apiKey = process.env.REACT_APP_GPT_KEY;
+            const apiKey = process.env.REACT_APP_GPT_KEY; //여기에 api 키를 할당받아서 넣으면 된다.
             let config = {
               method: 'post',
               maxBodyLength: Infinity,
@@ -136,6 +137,7 @@ const MakeImages = (props) => {
     return (
         <MakegImagesPackage>
             <NavBar/>
+            <SearchingBar/>
             <ImageGrid>
             {!countFirst&&(
                 <AltDiv>
