@@ -1,11 +1,12 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
-import Modal from './check_Modal'; 
-import Logo from './Img/Logo.svg'
+import Modal_1 from './check_Modal_1'; 
+import Modal_2 from './check_Modal_2';
+import Logo from './Img/Logo.svg';
 import Arrow from "./Img/화살표.svg";
 import checkbox1 from "./Img/Group 411.png";
 import checkbox2 from "./Img/Group 410.png"
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 const Background = styled.div`
   width: 100vw;
@@ -111,6 +112,11 @@ const ArrowBtn = styled.button`
   margin-top: 219.19px;
   margin-bottom: 76.24px;
 `
+const ModalContent = styled.div`
+  max-height: 400px; /* 원하는 높이로 조정 */
+  overflow-y: auto;
+  padding: 20px;
+`;
 
 const SignUp_check = () => {
   const [isCheckedTerms, setIsCheckedTerms] = useState(false);
@@ -120,6 +126,12 @@ const SignUp_check = () => {
 
   const navigate = useNavigate();
 
+  // useLocation을 사용하여 데이터 받아오기
+  const location = useLocation();
+
+  // 사용자 정보를 저장할 상태 정의
+  const { name, loginId, email, password } = location.state;
+
   const handleTermsCheckboxChange = () => {
     setIsCheckedTerms(!isCheckedTerms);
   };
@@ -128,21 +140,65 @@ const SignUp_check = () => {
     setIsCheckedPrivacy(!isCheckedPrivacy);
   };
 
+  const handleCheckboxChange = () => {
+    if (isCheckedTerms) {
+      setIsCheckedTerms(true);
+    }
+    if (isCheckedPrivacy) {
+      setIsCheckedPrivacy(true);
+    }
+  };
+
   const handleProceedButtonClick = () => {
-    // 이용 약관과 개인정보 보호정책에 모두 동의했는지 확인
     if (isCheckedTerms && isCheckedPrivacy) {
-      // congratulations 페이지로 이동
-      navigate('/congratulation');
+      // 회원가입 요청 함수 호출
+      signUpRequest();
     } else {
-      // 동의하지 않은 항목이 있을 경우 경고 메시지 등을 표시
       alert('이용 약관과 개인정보 보호정책에 동의해주세요.');
     }
   };
-  const handleCheckboxChange = () => {
-    // 이미 동의한 경우에만 상태를 업데이트
-    if (isCheckedTerms && isCheckedPrivacy) {
-      setIsCheckedTerms(true);
-      setIsCheckedPrivacy(true);
+
+  // 서버에 회원가입 요청을 보내는 함수
+  const signUpRequest = async () => {
+    try {
+      console.log('회원가입 요청 데이터:', {
+        name,
+        loginId,
+        email,
+        password,
+      });
+      // 사용자 정보와 함께 서버에 POST 요청 보내기
+      const response = await fetch(
+        'http://ec2-52-78-99-156.ap-northeast-2.compute.amazonaws.com:8080/api/v1/auth/signup',
+        {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            name,
+            loginId,
+            email,
+            password,
+          }),
+        }
+      );
+
+      console.log('회원가입 응답 데이터:', await response.json());
+      
+      // 응답 확인 및 처리
+      if (response.ok) {
+        // 회원가입 성공
+        navigate('/congratulation');
+      } else {
+        // 오류 처리, 적절한 메시지 표시
+        alert('회원가입에 실패했습니다. 다시 시도해주세요.');
+      }
+    } catch (error) {
+      // 오류 처리, 적절한 메시지 표시
+      console.error('회원가입 오류:', error);
+      alert('회원가입에 실패했습니다. 다시 시도해주세요.');
     }
   };
 
@@ -186,30 +242,28 @@ const SignUp_check = () => {
         </ArrowBtn>
         {/* 이용 약관 모달 */}
         {isTermsModalOpen && (
-          <Modal
+          <Modal_1
             title="서비스 이용약관 (상품, 서비스 등 이용 일반 회원용)"
-            subtitle_1="제1조(목적)" 
-            content_1="1. 본 약관은 Rhythm Palette가 운영하는 온라인 쇼핑몰 ‘http://www.rhythmpalette.store’에서 제공하는 서비스(이하 ‘서비스’라 합니다)를 이용함에 있어 당사자 의 권리 의무 및 책임 사항을 규정하는 것을 목적으로 합니다."
-            content_2="2. PC통신, 무선 등을 이용하는 전자상거래에 대해서도 그 성질에 반하지 않는 한 본 약관을 준용합니다."
-            subtitle_2="제2조(정의)"
-            content_3="1. ‘회사’라 함은, ‘Rhythm Palette’가 재화 또는 용역을 이용자에게 제공하기 위하여 컴퓨터 등 정보통신설비를 이용하여 재화 등을 거래할 수 있도록 설정한 가상의 영업장을 운영하는 사업자를 말하며, 아울러 ‘http://www.rhythmpalette.store’을 통해 제공되는 전자상거래 관련 서비스의 의미로도 사용합니다."
-            content_4="2. ‘이용자’라 함은, ‘사이트’에 접속하여 본 약관에 따라 ‘회사’가 제공하는 서비스를 받는 회원 및 비회원을 말합니다."
-            content_5="3. ‘회원’이라 함은, ‘회사’에 개인정보를 제공하고 회원으로 등록한 자로서, ‘회사’의 서비스를 계속하여 이용할 수 있는 자를 말합니다."
-            content_6="4. ‘비회원’이라 함은, 회원으로 등록하지 않고, ‘회사’가 제공하는 서비스를 이용하는 자를 말합니다."
-            content_7="5. ‘상품’이라 함은 ‘사이트’를 통하여 제공되는 재화 또는 용역을 말합니다."
-            content_8="6. ‘구매자’라 함은 ‘회사’가 제공하는 ‘상품’에 대한 구매서비스의 이용을 청약한 ‘회원’ 및 ‘비회원’을 말합니다."
             onClose={() => setIsTermsModalOpen(false)}
-          />
+          >
+            <ModalContent>
+              {/* 이용 약관 내용을 여기에 입력하세요. */}
+              {/* 긴 텍스트나 스크롤이 필요한 경우 이 부분에 내용을 추가하세요. */}
+            </ModalContent>
+          </Modal_1>
         )}
 
         {/* 개인정보취급방침 모달 */}
         {isPrivacyModalOpen && (
-          <Modal
+          <Modal_1
             title="개인정보취급방침"
-            content1="개인정보취급방침 내용을 여기에 입력하세요."
-            content2="dsfs"
             onClose={() => setIsPrivacyModalOpen(false)}
-          />
+          >
+            <ModalContent>
+              {/* 개인정보취급방침 내용을 여기에 입력하세요. */}
+              {/* 긴 텍스트나 스크롤이 필요한 경우 이 부분에 내용을 추가하세요. */}
+            </ModalContent>
+          </Modal_1>
         )}
       </SignUp>
     </Background>

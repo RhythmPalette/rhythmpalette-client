@@ -1,7 +1,7 @@
 // SignUp_email.jsx
 
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import Arrow from "./Img/화살표.svg";
 import Logo from "./Img/Logo.svg"
@@ -143,6 +143,8 @@ const ArrowBtn = styled.button`
   margin-bottom: 76.24px;
 `
 const SignUp_email = () => {
+  const location = useLocation();
+  const { name, loginId, password } = location.state;
   const [email, setEmail] = useState('');
   const [verificationCode, setVerificationCode] = useState('');
   const [timer, setTimer] = useState(120); // 초 단위로 타이머 설정
@@ -151,34 +153,62 @@ const SignUp_email = () => {
 
   const navigate = useNavigate();
 
-  const handleSendVerificationCode = () => {
-    // TODO: 서버로 이메일과 함께 요청을 보내어 인증번호를 받아오는 로직 추가
-    // 이 예제에서는 간단히 콘솔에 출력하여 확인
-    console.log('인증번호를 이메일로 발송합니다.');
-    startTimer();
+  const handleSendVerificationCode = async () => {
+    try {
+      const response = await fetch(
+        'http://ec2-52-78-99-156.ap-northeast-2.compute.amazonaws.com:8080/api/v1/auth/signup/emailCheck',
+        {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            email: email,
+          }),
+        }
+      );
+
+      if (response.ok) {
+        // 서버 응답이 성공이면 타이머 시작
+        startTimer();
+      } else {
+        // 서버 응답이 실패이면 에러 메시지를 설정합니다.
+        console.error('인증번호 발송에 실패했습니다.');
+      }
+    } catch (error) {
+      // 네트워크 오류 등의 예외 처리
+      console.error('API 호출 에러:', error);
+    }
   };
 
-  const handleResendVerificationCode = () => {
-    // TODO: 서버로 이메일과 함께 요청을 보내어 인증번호를 다시 발송하는 로직 추가
-    // 이 예제에서는 간단히 콘솔에 출력하여 확인
-    console.log('인증번호를 다시 이메일로 발송합니다.');
-    startTimer();
-  };
+  const handleResendVerificationCode = async () => {
+    try {
+      const response = await fetch(
+        'http://ec2-52-78-99-156.ap-northeast-2.compute.amazonaws.com:8080/api/v1/auth/signup/emailCheck',
+        {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            email: email,
+          }),
+        }
+      );
 
-  const handleVerifyCode = () => {
-    // TODO: 서버로 인증번호를 포함한 요청을 보내어 검증하는 로직 추가
-    // 이 예제에서는 간단히 콘솔에 출력하여 확인
-    console.log('인증번호를 확인합니다.');
-
-    // TODO: 실제로는 서버로 인증번호를 검증하는 요청을 보내어 결과를 받아옵니다.
-    const isCodeCorrect = true; // 예제에서는 항상 맞다고 가정합니다.
-
-    if (isCodeCorrect) {
-      // 인증이 맞으면 로그인 페이지로 이동
-      navigate('/signup_check');
-    } else {
-      // 인증이 틀리면 에러 메시지 표시
-      setVerificationError('인증번호가 올바르지 않습니다. 다시 시도해주세요.');
+      if (response.ok) {
+        // 서버 응답이 성공이면 타이머 시작
+        startTimer();
+      } else {
+        // 서버 응답이 실패이면 에러 메시지를 설정합니다.
+        setVerificationError('인증번호 재발송에 실패했습니다.');
+      }
+    } catch (error) {
+      // 네트워크 오류 등의 예외 처리
+      console.error('API 호출 에러:', error);
+      setVerificationError('API 호출 중 오류가 발생했습니다.');
     }
   };
 
@@ -204,6 +234,46 @@ const SignUp_email = () => {
 
     return () => clearInterval(intervalId);
   }, [isTimerRunning]);
+  const handleVerifyCode = async () => {
+    try {
+      const response = await fetch(
+        'http://ec2-52-78-99-156.ap-northeast-2.compute.amazonaws.com:8080/api/v1/auth/signup/emailAuthentication',
+        {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            certificationNum: verificationCode,
+          }),
+        }
+      );
+
+      if (response.ok) {
+        // 서버 응답이 성공이면 다음 페이지로 이동
+        navigate('/signup_check', {
+          state: {
+            name,
+            loginId,
+            email,
+            password
+          }
+        });
+        // 콘솔에 데이터 출력
+        console.log('Name:', name);
+        console.log('ID:', loginId);
+        console.log('email', email)
+        console.log('Password:', password);
+      } else {
+        // 서버 응답이 실패이면 에러 메시지를 설정합니다.
+        console.error('인증번호가 일치하지 않습니다. 다시 시도해주세요.');
+      }
+    } catch (error) {
+      // 네트워크 오류 등의 예외 처리
+      console.error('API 호출 에러:', error);
+    }
+  };
 
   return (
     <Background>

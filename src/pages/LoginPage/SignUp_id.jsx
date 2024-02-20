@@ -122,35 +122,35 @@ const InputHalf = styled.input`
 `
 
 const Check = styled.button`
-width: 152.789px;
-height: 58px;
-background: #04DB8F;
-border-top-right-radius: 10px;
-border-bottom-right-radius: 10px;
-border: 0;
-color: #000;
-text-align: center;
-font-family: "Pretendard Variable";
-font-size: 20px;
-font-style: normal;
-font-weight: 400;
-line-height: 18px; /* 90% */
+  width: 152.789px;
+  height: 58px;
+  background: #04DB8F;
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+  border: 0;
+  color: #000;
+  text-align: center;
+  font-family: "Pretendard Variable";
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 18px; /* 90% */
 `
 
 const Error = styled.div`
-display: flex;
-flex-direction: column;
-justify-content: center;
-width: 520px;
-height: 30.391px;
-flex-shrink: 0;
-color: #F00;
-font-family: "Pretendard Variable";
-font-size: 20px;
-font-style: normal;
-font-weight: 400;
-line-height: 18px; /* 90% */
-margin-top: 2px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 520px;
+  height: 30.391px;
+  flex-shrink: 0;
+  color: ${(props) => (props.isAvailable ?  '#F00' : '#0029FF' )};
+  font-family: "Pretendard Variable";
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 18px; /* 90% */
+  margin-top: 2px;
 `
 
 const ArrowBtn = styled.button`
@@ -160,27 +160,54 @@ const ArrowBtn = styled.button`
   margin-bottom: 76.24px;
 `
 
-
 const SignUp_id = () => {
   const [name, setName] = useState('');
-  const [id, setId] = useState('');
-  const [isIdAvailable, setIsIdAvailable] = useState(true);
+  const [loginId, setId] = useState('');
+  const [isIdAvailable, setIsIdAvailable] = useState('');
+  const [error, setError] = useState('');
 
   const navigate = useNavigate();
-  const handleCheckId = () => {
-    // 여기에 아이디 중복 확인 로직을 추가
-    // 예제로 간단하게 구현하겠습니다.
-    // 실제로는 서버에 아이디 중복 확인 요청을 보내야 합니다.
-    // 중복이면 setIsIdAvailable(false), 중복이 아니면 setIsIdAvailable(true) 설정
-    console.log('아이디 중복 확인:', id);
-    // 예제에서는 아이디 중복 여부에 따라 상태를 변경
-    setIsIdAvailable(Math.random() > 0.5); // 임의로 설정한 예제 중복 여부
-    
 
+  const doubleCheck = async () => {
+    try {
+        // 요청값 콘솔에 출력
+      console.log('요청값:', name, loginId);
+
+      const response = await fetch(
+        'http://ec2-52-78-99-156.ap-northeast-2.compute.amazonaws.com:8080/api/v1/auth/signup/qq',
+        {
+          method: 'GET',
+          headers: {
+            'Accept': 'application/json',
+          },
+        }
+      );
+      const responseData = await response.json();
+
+      // 응답값 콘솔에 출력
+      console.log('응답값:', responseData);
+
+      if (response.ok) {
+        // 서버 응답이 성공이면 handleNext가 활성화 되도록 해줘
+        setIsIdAvailable(true);
+        setError('사용가능한 아이디입니다');
+      } else {
+        // 서버 응답이 실패이면 에러 메시지를 설정합니다.
+        setIsIdAvailable(false);
+        setError('중복된 아이디입니다');
+      }
+    } catch (error) {
+      // 네트워크 오류 등의 예외 처리
+      console.error('API 호출 에러:', error);
+      setError('API 호출 중 오류가 발생했습니다.');
+    }
   };
+
   const handleNext = () => {
-    if(setIsIdAvailable){
-      navigate('/signup_pw');
+    if (isIdAvailable) {
+      navigate('/signup_pw', { state: { 'name' : name, 'loginId': loginId } });
+    } else {
+      console.error('중복된 아이디로 인해 다음 페이지로 이동할 수 없습니다.');
     }
   }
 
@@ -188,37 +215,31 @@ const SignUp_id = () => {
     <Background>
       <SignUp>
         <LogoImg>
-          <img src={Logo} alt='logo'/>
+          <img src={Logo} alt='logo' />
         </LogoImg>
         <Title>회원가입</Title>
         <Name>이름</Name>
         <Input
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
+          type="text"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
         />
         <Id>아이디</Id>
         <Wrapping>
           <div>
             <InputHalf
-            type="text"
-            value={id}
-            onChange={(e) => setId(e.target.value)}
+              type="text"
+              value={loginId}
+              onChange={(e) => setId(e.target.value)}
             />
           </div>
           <div>
-            <Check type="button" onClick={handleCheckId}>
+            <Check type="button" onClick={doubleCheck}>
               중복 확인
             </Check>
           </div>
         </Wrapping>
-        <Error>
-        {isIdAvailable ? (
-            <div style={{ color: '#0029FF' }}>사용가능한 아이디입니다.</div>
-          ) : (
-            <div style={{ color: '#F00' }}>중복된 아이디입니다.</div>
-          )}
-        </Error>
+        <Error>{error}</Error>
         <ArrowBtn type="button" onClick={handleNext} disabled={!isIdAvailable}>
           <img src={Arrow} alt="arrow" />
         </ArrowBtn>
