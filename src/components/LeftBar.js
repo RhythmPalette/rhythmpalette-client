@@ -144,11 +144,11 @@ margin-top : 45px;
 margin-left : 201.04px;
 `
 
-const LeftBar = () => {
+const LeftBar = ({setExtended}) => {
   return (
     <LeftContainer>
         <LogoContainer>
-            <MenuBarImg src = {MenuBar} alt = 'MenuBar' />
+            <MenuBarImg src = {MenuBar} alt = 'MenuBar' onClick={()=>setExtended(false)}/>
             <LogoImg src = {IconLogo} alt = 'Logo' />
         </LogoContainer>
         <Divider />

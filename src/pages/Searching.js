@@ -4,7 +4,8 @@ import Clouds from '../components/Clouds';
 import {useNavigate} from 'react-router-dom'
 import { IoSearchSharp } from "react-icons/io5";
 import {classificationData} from "../store/classificationData";
-
+import LeftBar from '../components/LeftBar';
+import SearchingBar from '../components/SearchingBar';
 
 const CLIENT_ID = "d1b1e1bd14254ae2b50f43eb69ba9a87";
 const CLIENT_SECRET ="2064724783bd4462b8671a035d864b13";
@@ -195,11 +196,12 @@ const Searching = () => {
     }
   useEffect(showDropDownList,[inputValue,wholeTextArray]);
     return (
-        <SearchingPackage>
+      <BigBoxDiv>
+        <LeftBar/>
+        <SearchingBar></SearchingBar>
+        <SearchingPackage> 
           <SearchingBox>
             <InputBox isHaveInputValue={isHaveInputValue}>
-         
-         
                 <label>
                     <InputText type='text' placeholder='Search' value = {inputValue} onChange={changeInputValue} onKeyUp={handleDropDownKey}/>
                     <IoSearchSharp />
@@ -247,22 +249,42 @@ const Searching = () => {
           }
         </CloudGrid>
         </CloudBox>
+     
         </SearchingPackage>
+          </BigBoxDiv>
     );
 };
 
 
 export default Searching;
 
+
+const BigBoxDiv = styled.div`
+  display: flex;
+  flex-direction: row;
+`;
+
  const activeBorderRadius = '50px 50px 50px 50px';
  const inactiveBorderRadius = '50px 50px 50px 50px';
 const SearchingBox = styled.div`
   max-height: 300px;
+  width: 770.37px;
+  height: 62px;
+  top: 54px;
+  left: 575.1px;
+  border-radius: 50px;
+  position: absolute;
+
 `;
 
 const CloudBox = styled.div`
-  position: relative;
-  margin-top: 10px;
+  position: absolute;
+   width: 730.83px;
+  height: 812.36px;
+  top: 221.15px;
+  left: 768.59px;
+  border: 25px;
+
 `;
 const CloudGrid = styled.div`
   display: grid;
@@ -284,7 +306,7 @@ export const SearchingPackage = styled.div`
 export const DropDownBox = styled.ul`
   display: flex;
   position: absolute;
-  top: 88px;
+  top: 60px;
   flex-direction: column;
   margin: 0 auto;
   padding: 8px 0;
@@ -327,9 +349,8 @@ export const GrabText = styled.div`
 export const InputBox = styled.div`
   display: flex;
   background-color: #E3E3E3;
-  margin-top: 30px;
   flex-direction: row;
-  width: 600px;
+  width: 770.37px;
   padding: 16px;
   border: 1px solid rgba(0, 0, 0, 0.3);
   z-index: 3;

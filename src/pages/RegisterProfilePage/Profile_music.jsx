@@ -7,255 +7,6 @@ import { ReactComponent as Note } from './Img/NoteImg.svg';
 import checkbox1 from './Img/체크 버튼 전.png';
 import checkbox2 from './Img/체크 버튼 후.png';
 
-// Spotify API 인증 정보
-const CLIENT_ID = "d1b1e1bd14254ae2b50f43eb69ba9a87";
-const CLIENT_SECRET ="2064724783bd4462b8671a035d864b13";
-
-// UploadPost 컴포넌트 정의
-const UploadPost = () => {
-  // 상태 변수들 선언
-  const [selectedData, setSelectedData] = useState(""); // 선택된 데이터의 상태
-  const [haveClicked, setHaveClicked] = useState(false); // 클릭 여부 상태
-  const [inputValue, setInputValue] = useState(""); // 입력된 값 상태
-  const [isHaveInputValue, setIsHaveInputValue] = useState(false); // 입력값 존재 여부 상태
-  const [dropDownList, setDropDownList] = useState([]); // 드롭다운 리스트 상태
-  const [dropDownItemIndex, setDropDownItemIndex] = useState(-1); // 드롭다운 아이템 인덱스 상태
-  const [accessToken, setAccessToken] = useState(""); // Spotify API 접근 토큰 상태
-  const [wholeTextArray, setWholeTextArray] = useState([]); // 전체 텍스트 배열 상태
-  const dropDownRef = useRef(null); // 드롭다운 참조를 위한 useRef
-  const navigate = useNavigate(); // React Router의 useNavigate 훅 사용
-  const isPlaceholderVisible = !isHaveInputValue && !selectedData;
-
-  // 드롭다운 아이템 스크롤 효과
-  useEffect(() => {
-    if (dropDownRef.current && dropDownItemIndex >= 0) {
-      const selectedElement = dropDownRef.current.children[dropDownItemIndex];
-
-      if (selectedElement) {
-        selectedElement.scrollIntoView({
-          behavior: 'smooth',
-          block: 'nearest',
-          inline: 'start'
-        });
-      }
-    }
-  }, [dropDownItemIndex]);
-
-  // Spotify API 토큰 획득
-  useEffect(() => {
-    const authParameters = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded'
-      },
-      body: 'grant_type=client_credentials&client_id=' + CLIENT_ID + '&client_secret=' + CLIENT_SECRET
-    };
-
-    fetch('https://accounts.spotify.com/api/token', authParameters)
-      .then(result => result.json())
-      .then(data => setAccessToken(data.access_token));
-  }, []);
-
-  // 입력값이 변경될 때마다 Spotify API에서 아티스트 및 트랙 검색
-  useEffect(() => {
-    let artistArr;
-    const getArtists = async () => {
-      try {
-        const response = await fetch('https://api.spotify.com/v1/search?q=' + inputValue + '&type=artist', {
-          method: 'GET',
-          headers: {
-            'Authorization': 'Bearer ' + accessToken,
-          },
-        });
-
-        if (response.ok) {
-          const data = await response.json();
-          if (data.artists && data.artists.items) {
-            artistArr = data.artists.items.map((artist) => ({
-              name: artist.name,
-              image: artist.images[0].url,
-              genre: artist.genres,
-            }));
-            setWholeTextArray(artistArr);
-          } else {
-            console.error('Unexpected data format or no search results:', data);
-          }
-        } else {
-          console.error('Error fetching artist data. Status:', response.status);
-        }
-      } catch (error) {
-        console.error('Error fetching artist data:', error);
-      }
-    };
-
-    const getTracks = async () => {
-      try {
-        const response = await fetch('https://api.spotify.com/v1/search?q=' + inputValue + '&type=track', {
-          method: 'GET',
-          headers: {
-            'Authorization': 'Bearer ' + accessToken,
-          },
-        });
-
-        if (response.ok) {
-          const data = await response.json();
-          if (data.tracks && data.tracks.items) {
-            const tracksArr = data.tracks.items.map((track) => ({
-              name: track.name,
-              image: track.album.images[0].url,
-            }));
-            setWholeTextArray([...artistArr, ...tracksArr]);
-          } else {
-            console.error('Unexpected data format or no search results:', data);
-          }
-        } else {
-          console.error('Error fetching artist data. Status:', response.status);
-        }
-      } catch (error) {
-        console.error('Error fetching artist data:', error);
-      }
-    };
-
-    getArtists();
-    getTracks();
-  }, [inputValue, accessToken]);
-
-  // 드롭다운 리스트 표시 및 관리
-  const showDropDownList = () => {
-    if (inputValue === '') {
-      setIsHaveInputValue(false);
-      setDropDownList([]);
-    } else {
-      const choosenTextList = wholeTextArray.filter(textItem =>
-        textItem.name.includes(inputValue)
-      );
-      setDropDownList(choosenTextList);
-    }
-  };
-
-  // 입력값 변경 시 드롭다운 리스트 업데이트
-  const changeInputValue = event => {
-    setInputValue(event.target.value);
-    setIsHaveInputValue(true);
-  };
-
-  // 드롭다운 아이템 클릭 시
-  const clickDropDownItem = clickedItem => {
-    setSelectedData(clickedItem);
-    setIsHaveInputValue(false);
-    setHaveClicked(true);
-  };
-
-  // 리스트 아이템 클릭 시
-  const clickListItem = clickedItem => {
-    setSelectedData(clickedItem);
-    setIsHaveInputValue(false);
-    setHaveClicked(true);
-    setInputValue('');
-  };
-
-  // 노래 재선택 시
-  const retrySelectSong = () => {
-    setIsHaveInputValue(false);
-    setHaveClicked(false);
-  };
-
-  // 드롭다운 키 이벤트 핸들링
-  const handleDropDownKey = event => {
-    if (isHaveInputValue) {
-      if (event.key === 'ArrowDown' && dropDownList.length - 1 > dropDownItemIndex) {
-        setDropDownItemIndex(dropDownItemIndex + 1);
-      }
-      if (event.key === 'ArrowUp' && dropDownItemIndex >= 0) {
-        setDropDownItemIndex(dropDownItemIndex - 1);
-      }
-      if (event.keyCode === 27) {
-        setIsHaveInputValue(false);
-      }
-      if (event.key === 'Enter' && dropDownItemIndex >= 0) {
-        if (dropDownList[dropDownItemIndex]) {
-          clickDropDownItem(dropDownList[dropDownItemIndex]);
-          setDropDownItemIndex(-1);
-        } else {
-          clickListItem(dropDownList[dropDownItemIndex]);
-        }
-      }
-    }
-  };
-
-  useEffect(showDropDownList, [inputValue, wholeTextArray]);
-
-  return (
-    <Background>
-      <Wrap>
-        <UploadPostPackage>
-          <SearchingBox>
-            <TextBox>
-              {"대표 프로필 뮤직을 설정해주세요"}
-            </TextBox>
-            <InputBox isHaveInputValue={isHaveInputValue}>
-              <InputText
-                type='text'
-                placeholder={isPlaceholderVisible ? 'Search' : 'Search'}
-                value={inputValue}
-                onChange={changeInputValue}
-                onKeyUp={handleDropDownKey}
-              />
-              <Scope width={"25px"} height={"25px"} />
-            </InputBox>
-            {isHaveInputValue && (
-              <DropDownBox ref={dropDownRef}>
-                {dropDownList.length === 0 && (
-                  <DropDownItem1>해당하는 단어가 없습니다</DropDownItem1>
-                )}
-                {dropDownList.map((dropDownItem, dropDownIndex) => {
-                  const { name, image } = dropDownItem;
-                  return (
-                    <DropDownItem
-                      key={dropDownIndex}
-                      onClick={() => clickListItem(dropDownItem)}
-                      onMouseOver={() => setDropDownItemIndex(dropDownIndex)}
-                      className={dropDownItemIndex === dropDownIndex ? 'selected' : ''}
-                    >
-                      {image && <img src={image} alt={name} style={{ width: '65px', height: '64px' }} />}
-                      <GrabText>
-                        {name}
-                      </GrabText>
-                      <Note />
-                    </DropDownItem>
-                  );
-                })}
-              </DropDownBox>
-            )}
-          </SearchingBox>
-          <BottonBox>
-            {haveClicked && (
-              <ClickedBox disabled={haveClicked ? false : true}>
-                <SongDetail>
-                  <SongBox>
-                    <ImgandName>
-                      <img src={selectedData.image} alt={"이미지"} width={"65px"} height={"64px"} />
-                      {selectedData.name}
-                    </ImgandName>
-                    <Note />
-                  </SongBox>
-                </SongDetail>
-                <RetryBtn onClick={retrySelectSong}>
-                  {"다시 고르기"}
-                </RetryBtn>
-              </ClickedBox>
-            )}
-          </BottonBox>
-        </UploadPostPackage>
-        <ImgCreateBtn disabled={haveClicked ? false : true}></ImgCreateBtn>
-        <CompleteText>완료</CompleteText>
-      </Wrap>
-    </Background>
-  );
-};
-
-export default UploadPost;
-
 // 스타일 컴포넌트로 스타일링된 하위 컴포넌트들 정의
 const Background = styled.div`
   width: 100vw;
@@ -502,3 +253,257 @@ const DropDownBox = styled.ul`
     display: none;
   };
 `
+
+
+// Spotify API 인증 정보
+const CLIENT_ID = "d1b1e1bd14254ae2b50f43eb69ba9a87";
+const CLIENT_SECRET ="2064724783bd4462b8671a035d864b13";
+
+// UploadPost 컴포넌트 정의
+const UploadPost = () => {
+  // 상태 변수들 선언
+  const [selectedData, setSelectedData] = useState(""); // 선택된 데이터의 상태
+  const [haveClicked, setHaveClicked] = useState(false); // 클릭 여부 상태
+  const [inputValue, setInputValue] = useState(""); // 입력된 값 상태
+  const [isHaveInputValue, setIsHaveInputValue] = useState(false); // 입력값 존재 여부 상태
+  const [dropDownList, setDropDownList] = useState([]); // 드롭다운 리스트 상태
+  const [dropDownItemIndex, setDropDownItemIndex] = useState(-1); // 드롭다운 아이템 인덱스 상태
+  const [accessToken, setAccessToken] = useState(""); // Spotify API 접근 토큰 상태
+  const [wholeTextArray, setWholeTextArray] = useState([]); // 전체 텍스트 배열 상태
+  const dropDownRef = useRef(null); // 드롭다운 참조를 위한 useRef
+  const navigate = useNavigate(); // React Router의 useNavigate 훅 사용
+  const isPlaceholderVisible = !isHaveInputValue && !selectedData;
+
+  // 드롭다운 아이템 스크롤 효과
+  useEffect(() => {
+    if (dropDownRef.current && dropDownItemIndex >= 0) {
+      const selectedElement = dropDownRef.current.children[dropDownItemIndex];
+
+      if (selectedElement) {
+        selectedElement.scrollIntoView({
+          behavior: 'smooth',
+          block: 'nearest',
+          inline: 'start'
+        });
+      }
+    }
+  }, [dropDownItemIndex]);
+
+  // Spotify API 토큰 획득
+  useEffect(() => {
+    const authParameters = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      body: 'grant_type=client_credentials&client_id=' + CLIENT_ID + '&client_secret=' + CLIENT_SECRET
+    };
+
+    fetch('https://accounts.spotify.com/api/token', authParameters)
+      .then(result => result.json())
+      .then(data => setAccessToken(data.access_token));
+  }, []);
+
+  // 입력값이 변경될 때마다 Spotify API에서 아티스트 및 트랙 검색
+  useEffect(() => {
+    let artistArr;
+    const getArtists = async () => {
+      try {
+        const response = await fetch('https://api.spotify.com/v1/search?q=' + inputValue + '&type=artist', {
+          method: 'GET',
+          headers: {
+            'Authorization': 'Bearer ' + accessToken,
+          },
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          if (data.artists && data.artists.items) {
+            artistArr = data.artists.items.map((artist) => ({
+              name: artist.name,
+              image: artist.images[0].url,
+              genre: artist.genres,
+            }));
+            setWholeTextArray(artistArr);
+          } else {
+            console.error('Unexpected data format or no search results:', data);
+          }
+        } else {
+          console.error('Error fetching artist data. Status:', response.status);
+        }
+      } catch (error) {
+        console.error('Error fetching artist data:', error);
+      }
+    };
+
+    const getTracks = async () => {
+      try {
+        const response = await fetch('https://api.spotify.com/v1/search?q=' + inputValue + '&type=track', {
+          method: 'GET',
+          headers: {
+            'Authorization': 'Bearer ' + accessToken,
+          },
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          if (data.tracks && data.tracks.items) {
+            const tracksArr = data.tracks.items.map((track) => ({
+              name: track.name,
+              image: track.album.images[0].url,
+            }));
+            setWholeTextArray([...artistArr, ...tracksArr]);
+          } else {
+            console.error('Unexpected data format or no search results:', data);
+          }
+        } else {
+          console.error('Error fetching artist data. Status:', response.status);
+        }
+      } catch (error) {
+        console.error('Error fetching artist data:', error);
+      }
+    };
+
+    getArtists();
+    getTracks();
+  }, [inputValue, accessToken]);
+
+  // 드롭다운 리스트 표시 및 관리
+  const showDropDownList = () => {
+    if (inputValue === '') {
+      setIsHaveInputValue(false);
+      setDropDownList([]);
+    } else {
+      const choosenTextList = wholeTextArray.filter(textItem =>
+        textItem.name.includes(inputValue)
+      );
+      setDropDownList(choosenTextList);
+    }
+  };
+
+  // 입력값 변경 시 드롭다운 리스트 업데이트
+  const changeInputValue = event => {
+    setInputValue(event.target.value);
+    setIsHaveInputValue(true);
+  };
+
+  // 드롭다운 아이템 클릭 시
+  const clickDropDownItem = clickedItem => {
+    setSelectedData(clickedItem);
+    setIsHaveInputValue(false);
+    setHaveClicked(true);
+  };
+
+  // 리스트 아이템 클릭 시
+  const clickListItem = clickedItem => {
+    setSelectedData(clickedItem);
+    setIsHaveInputValue(false);
+    setHaveClicked(true);
+    setInputValue('');
+  };
+
+  // 노래 재선택 시
+  const retrySelectSong = () => {
+    setIsHaveInputValue(false);
+    setHaveClicked(false);
+  };
+
+  // 드롭다운 키 이벤트 핸들링
+  const handleDropDownKey = event => {
+    if (isHaveInputValue) {
+      if (event.key === 'ArrowDown' && dropDownList.length - 1 > dropDownItemIndex) {
+        setDropDownItemIndex(dropDownItemIndex + 1);
+      }
+      if (event.key === 'ArrowUp' && dropDownItemIndex >= 0) {
+        setDropDownItemIndex(dropDownItemIndex - 1);
+      }
+      if (event.keyCode === 27) {
+        setIsHaveInputValue(false);
+      }
+      if (event.key === 'Enter' && dropDownItemIndex >= 0) {
+        if (dropDownList[dropDownItemIndex]) {
+          clickDropDownItem(dropDownList[dropDownItemIndex]);
+          setDropDownItemIndex(-1);
+        } else {
+          clickListItem(dropDownList[dropDownItemIndex]);
+        }
+      }
+    }
+  };
+
+  useEffect(showDropDownList, [inputValue, wholeTextArray]);
+  const handleNext = () => {
+    if(haveClicked)
+      navigate('/home');
+  }
+  return (
+    <Background>
+      <Wrap>
+        <UploadPostPackage>
+          <SearchingBox>
+            <TextBox>
+              {"대표 프로필 뮤직을 설정해주세요"}
+            </TextBox>
+            <InputBox isHaveInputValue={isHaveInputValue}>
+              <InputText
+                type='text'
+                placeholder={isPlaceholderVisible ? 'Search' : 'Search'}
+                value={inputValue}
+                onChange={changeInputValue}
+                onKeyUp={handleDropDownKey}
+              />
+              <Scope width={"25px"} height={"25px"} />
+            </InputBox>
+            {isHaveInputValue && (
+              <DropDownBox ref={dropDownRef}>
+                {dropDownList.length === 0 && (
+                  <DropDownItem1>해당하는 단어가 없습니다</DropDownItem1>
+                )}
+                {dropDownList.map((dropDownItem, dropDownIndex) => {
+                  const { name, image } = dropDownItem;
+                  return (
+                    <DropDownItem
+                      key={dropDownIndex}
+                      onClick={() => clickListItem(dropDownItem)}
+                      onMouseOver={() => setDropDownItemIndex(dropDownIndex)}
+                      className={dropDownItemIndex === dropDownIndex ? 'selected' : ''}
+                    >
+                      {image && <img src={image} alt={name} style={{ width: '65px', height: '64px' }} />}
+                      <GrabText>
+                        {name}
+                      </GrabText>
+                      <Note />
+                    </DropDownItem>
+                  );
+                })}
+              </DropDownBox>
+            )}
+          </SearchingBox>
+          <BottonBox>
+            {haveClicked && (
+              <ClickedBox disabled={haveClicked ? false : true}>
+                <SongDetail>
+                  <SongBox>
+                    <ImgandName>
+                      <img src={selectedData.image} alt={"이미지"} width={"65px"} height={"64px"} />
+                      {selectedData.name}
+                    </ImgandName>
+                    <Note />
+                  </SongBox>
+                </SongDetail>
+                <RetryBtn onClick={retrySelectSong}>
+                  {"다시 고르기"}
+                </RetryBtn>
+              </ClickedBox>
+            )}
+          </BottonBox>
+        </UploadPostPackage>
+        <ImgCreateBtn type="button" onClick={handleNext} disabled={haveClicked ? false : true}></ImgCreateBtn>
+        <CompleteText>완료</CompleteText>
+      </Wrap>
+    </Background>
+  );
+};
+
+export default UploadPost;
+

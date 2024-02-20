@@ -2,20 +2,22 @@ import { useState,  useRef, useCallback, Fragment } from "react";
 import { useNavigate } from 'react-router-dom'; 
 import styled from "styled-components";
 import { useFeedView } from "../hooks/useFeedView";
-import NavBar from "../components/NavBar";
 import SearchBarContainer from "../components/SearchBarContainer";
 import IconLike from "../assets/IconLike.svg";
 import IconComment from "../assets/IconComment.svg";
 import IconSave from "../assets/IconSave.svg";
 import IconSeeMore from "../assets/IconSeeMore.svg";
+import SideNavBar from '../components/SideNavBar';
 
 
 const PageLayout = styled.div`
     display: flex; 
+    position: relative;
     justify-content: center;
     align-items: center;
-    height: 1080px; 
-    max-width: 1910.81px;
+    height: auto;
+    min-height: 1080px; 
+    max-width: 1920px;
     margin: auto;
 `;
 
@@ -31,13 +33,13 @@ const Content = styled.div`
     flex-grow: 1;
     padding: 20px;
     overflow-y: auto;
-    margin-left: 402px;
-
-    ::-webkit-scrollbar {
-        display: none;
-      }
+    margin-left: 402.42px;
+    scrollbar-width: none; 
     -ms-overflow-style: none; 
-     scrollbar-width: none;  
+
+    &::-webkit-scrollbar {
+        display: none; 
+    }
 `;
 
 
@@ -125,21 +127,20 @@ function Home() {
 
     return (
         <PageLayout>
-            <NavBar />
+            <SideNavBar />
             <PageContainer>
             <SearchBarContainer query={query} handleSearch={handleSearch} />
             <Content>
             {feeds.map((feed, index) => {
-                const ImageComponent = feed.ImageComponent;
                 const isLastFeed = feeds.length === index + 1;
-                const feedContent = (
-                    <Fragment key={feed.id}>
+                return (
+                    <div key={feed.id} ref={isLastFeed ? lastFeedElementRef : null}>
                         <FeedHeader>
-                            <div>{feed.username}</div>
-                            <div>{feed.trackInfo}</div>
+                            <div>{feed.feedUsername}</div>
+                            <div>{feed.feedTrackInfo}</div>
                         </FeedHeader>
                         <div onClick={goToShortForm}>
-                            <ImageComponent />
+                            <feed.feedTrackImage />
                             <FeedContainer>
                                 <ContainerIcon>
                                     <IconConatiner>
@@ -151,19 +152,14 @@ function Home() {
                                         <Icon src={IconSeeMore} alt="See more"/>
                                     </IconConatiner>
                                 </ContainerIcon>
-                                <Description>{feed.description}</Description>
+                                <Description>{feed.feedDescription}</Description>
                             </FeedContainer>
                         </div>
-
-                    </Fragment>
+                    </div>
                 );
-            
-                return isLastFeed 
-                    ? <div ref={lastFeedElementRef}>{feedContent}</div> 
-                    : feedContent;
             })}
             {loading && '...loading'}
-            <div>{error && 'Error'}</div>
+            {error && 'Error'}
             </Content>
             </PageContainer>
         </PageLayout>

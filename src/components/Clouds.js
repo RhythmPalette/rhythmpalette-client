@@ -6,7 +6,7 @@ const Clouds = (props) => {
     const navigate = useNavigate();
 
     const onClickCloudItem = () => {
-        navigate(`/posts/${props.title}`,{
+        navigate(`/post/${props.title}`,{
             state : props
         })
     }
