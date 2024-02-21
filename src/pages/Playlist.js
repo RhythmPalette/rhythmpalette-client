@@ -150,6 +150,7 @@ const Playlist = () => {
   const navigate = useNavigate();
   const [playlists, setPlaylists] = useState([]);
     const [checkedImages, setCheckedImages] = useState(images.map(()=> false));
+    const access_token = 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzdW5ueTExIiwiaWF0IjoxNzA4NDk4NTMwLCJleHAiOjE3MDg0OTk5NzB9.a28QA5BwEyKhRKnXXS2VQdRwvHPKHY-TpGXu8Y9s4K8';
 
   const toggleCheckbox = (index) => {
     const newCheckedImages = [...checkedImages];
@@ -159,38 +160,36 @@ const Playlist = () => {
 
       const createPlaylist= async () => {
         try {
-          const response = await fetch('http://52.78.99.156:8080/playlists', {
-          method: 'post',
-          headers: {
-            'Authorization': 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhc2QiLCJpYXQiOjE3MDg0NTg2OTksImV4cCI6MTcwODQ2MDEzOX0.DUG2UDlJmtydzrQM-RlofqkFYBoDMtrTdzF2fPIaSZs',
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            // 서버에 플레이리스트 정보 전송
-            name : "name"
-          }),
-        });
-        if (response.ok){
-    
-          const data = await response.json();
-          console.log('재생목록이 성공적으로 생성되었습니다.', response.data);
+          const response = await axios.post('http://52.78.99.156:8080/api/v1/playlists?',{
+            "name" : "playlist1"
+          },{
+            headers: {
+        'Authorization': 'Bearer' + access_token
+              
+            },
+            params:{
+              userId : 64
+            }
+          })
+          console.log(response);
+          console.log(response.data);
          
-        setPlaylists((prevPlaylists) => [...prevPlaylists, data]);
-        navigate('/profile');
-      } 
-      else {
-        console.error('플레이리스트 생성 실패:', response.statusText);
-      }
+        setPlaylists((prevPlaylists) => [...prevPlaylists, response]);
+        
+    
+     
         } catch (error) {
-          console.error('재생목록 가져오기 오류:', error);
+          console.error('재생목록 생성 오류:', error);
           
         }
       };
- 
+const makeList =()=>{
+createPlaylist();
+navigate(`/profile`);
 
-useEffect(() => {
-  createPlaylist();
-}, []);
+} 
+
+
 
   return (
     <Layout>
@@ -218,7 +217,7 @@ useEffect(() => {
       
             </ImageContainer>
             <ButtonContainer>
-                <Make onClick={createPlaylist}>게시물 넣어 생성하기</Make>
+                <Make onClick={makeList}>게시물 넣어 생성하기</Make>
                 <Skip>Skip</Skip>  
             </ButtonContainer>
             

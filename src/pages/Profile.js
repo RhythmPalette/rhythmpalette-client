@@ -7,6 +7,7 @@ import IconMusic from '../assets/IconMusic.svg'
 import PlaylistImg from '../assets/PlaylistImg.svg'
 import {Link} from 'react-router-dom'
 import SideNavBar from '../components/SideNavBar'
+import axios from 'axios'
 
 
 
@@ -287,29 +288,34 @@ const Profile = () => {
 const [selectedTab, setSelectedTab] = useState('myPost');
 const [posts, setPosts] = useState([]);
 const [playlists, setPlaylists] = useState([]);
-const [info, setInfo] = useState([]);
+const [info, setInfo] = useState();
+const access_token = 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzdW5ueTExIiwiaWF0IjoxNzA4NDk4NTMwLCJleHAiOjE3MDg0OTk5NzB9.a28QA5BwEyKhRKnXXS2VQdRwvHPKHY-TpGXu8Y9s4K8';
 
 
 
 useEffect(() => {
   const fetchPost = async () => {
     try {
-      const response = await fetch('http://52.78.99.156:8080/api/v1/posts/mypage', {
-      method: 'get',
+      const response = await axios.get('http://52.78.99.156:8080/api/v1/posts/mypage', {
       headers: {
-        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhc2QiLCJpYXQiOjE3MDg0NTg2OTksImV4cCI6MTcwODQ2MDEzOX0.DUG2UDlJmtydzrQM-RlofqkFYBoDMtrTdzF2fPIaSZs'
+        'Authorization': 'Bearer' + access_token
+      },
+      params:{
+        userId : 64,
+        pageable :{
+          "page": 0,
+          "size": 1,
+          "sort": [
+            "DESC"
+          ]
+        }
       }
     });
-    if (response.ok){
+      console.log(response);
+      console.log(response.data);
 
-      const data = await response.json();
-      console.log('게시물이 불러와졌습니다.', response.data);
+      setPosts(response);
 
-      setPosts(data);
-  }
-  else {
-    console.error('게시물 가져오기 실패:', response.statusText);
-    } 
     } catch (error) {
       console.error('게시물 가져오기 오류:', error);
     }
@@ -317,23 +323,19 @@ useEffect(() => {
 
   fetchPost();
 }, []);
-
+const [playListOk, setPlayListOk] = useState(false);
 useEffect(() => {
   const fetchPlaylist = async () => {
     try {
-      const response = await fetch('http://52.78.99.156:8080/playlists/{playlistid}', {
-      method: 'get',
+      const response = await axios.get('http://52.78.99.156:8080/api/v1/playlists/39', {
       headers: {
-        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkZCIsImlhdCI6MTcwODQyODMwMiwiZXhwIjoxNzA4NDI5NzQyfQ.wcAlnIPlwflC0XLf2c5fdA3L8MIdNBNtfnnXzw-0MGM'
+        'Authorization': 'Bearer' + access_token
       }
     });
-    if (response.ok){
-      const data = await response.json();
-      setPlaylists(data);
-  }
-  else {
-    console.error('플레이리스트 가져오기 실패:', response.statusText);
-    } 
+      console.log(response);
+      console.log(response.data);
+      setPlaylists(response);
+      setPlayListOk(!playListOk);
   }
   catch (error) {
       console.error('재생목록 가져오기 오류:', error);
@@ -343,24 +345,23 @@ useEffect(() => {
   fetchPlaylist();
 }, []);
 
-
+const [getInfoFirst,setGetInfoFirst] = useState(false);
 useEffect(() => {
   const fetchInfo = async () => {
     try {
-      const response = await fetch('http://52.78.99.156:8080/ap1/v1/user/{loginId}', {
-      method: 'get',
+      const response = await axios.get('http://52.78.99.156:8080/api/v1/user/sunny11', {
       headers: {
-        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkZCIsImlhdCI6MTcwODQyODMwMiwiZXhwIjoxNzA4NDI5NzQyfQ.wcAlnIPlwflC0XLf2c5fdA3L8MIdNBNtfnnXzw-0MGM'
+        'Authorization': 'Bearer' + access_token
       }
     });
-    if (response.ok){
-      const data = await response.json();
-      setInfo(data);
-  }
-  else {
-    console.error('사용자 정보 가져오기 실패:', response.statusText);
-    } 
-  }
+    console.log(response);
+    console.log(response.data);
+    console.log(response.data.data);
+
+      setInfo(response);
+      setGetInfoFirst(!getInfoFirst);
+  } 
+  
   catch (error) {
       console.error('사용자 정보 가져오기 오류:', error);
     }
@@ -384,21 +385,24 @@ const playlists = [
   return (
     <Layout>
         <SideNavBar />
+      
+        {getInfoFirst&&
+        (
         <PageContainer>
             <SearchingBar />
             <ProfileBar>
                 <ProfileImg src = {ProfileImage} alt = '프로필' />
                 <Info>
-                    <Name>
-                        <UserName> {info.nickname} </UserName>
+                    <Name>   
+                        <UserName> {info.data.data.nickname} </UserName>
                         <Link to ='/ProfileChange1'>
                         <ChangeImg src = {IconChange} alt = '수정' />
                         </Link>
                     </Name>
                     <MyInfo>
                         <Post> 게시물 {posts.length} </Post>
-                        <Follower> 팔로워 {info['Total Follower']} </Follower>
-                        <Following> 팔로잉 {info['Total Following']}</Following>
+                        <Follower> 팔로워 {info.data.data['Total Follower']} </Follower> 
+                         <Following> 팔로잉 {info.data.data['Total Following']}</Following>
                     </MyInfo>
                     <Music>
                         <MusicImg src = {IconMusic} alt = '음악' />
@@ -435,8 +439,9 @@ const playlists = [
             <Link to ="/playlist">
             <Button>+ 재생목록 추가</Button>
             </Link>
+            {playListOk&&playlists.data.posts&&(
             <PlaylistWrapper>
-            {playlists.map((playlist) => (
+          {playlists.data.posts.map((playlist) => (
             <PlistContainer key = {playlist.id}>
               <PlistImg src = {PlaylistImg} alt= '플레이리스트' />
               <PlistTitle>{playlist.title}</PlistTitle>
@@ -444,7 +449,8 @@ const playlists = [
               <PlistInfo>{playlist.musicCount}개의 음악</PlistInfo>
             </PlistContainer>
             ))}
-            </PlaylistWrapper>
+            </PlaylistWrapper>)}
+
           </div>
         )}
         {selectedTab === 'bookMark' && (
@@ -454,7 +460,7 @@ const playlists = [
         )}
 
         </PageContainer>
-        
+        )}
     </Layout>
     
   )
