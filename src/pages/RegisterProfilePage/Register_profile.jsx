@@ -266,8 +266,11 @@ const RegisterProfile = () => {
 
   const [profileImage, setProfileImage] = useState(null);
   const [nickname, setNickname] = useState("");
-  const [intro, setIntro] = useState("");
+  const [introduction, setIntro] = useState("");
   const [selectedGender, setSelectedGender] = useState(null);
+  const [selectedYear, setSelectedYear] = useState("");
+  const [selectedMonth, setSelectedMonth] = useState("");
+  const [selectedDay, setSelectedDay] = useState("");
 
   // 파일 선택 시 이벤트 처리 함수
   const handleFileChange = (e) => {
@@ -287,6 +290,17 @@ const RegisterProfile = () => {
   const handleGenderSelection = (gender) => {
     setSelectedGender(gender);
   };
+  const handleYearChange = (e) => {
+    setSelectedYear(e.target.value);
+  };
+
+  const handleMonthChange = (e) => {
+    setSelectedMonth(e.target.value);
+  };
+
+  const handleDayChange = (e) => {
+    setSelectedDay(e.target.value);
+  };
 
   const navigate = useNavigate();
   
@@ -294,16 +308,25 @@ const RegisterProfile = () => {
     return (
       profileImage !== null &&
       nickname.trim() !== "" &&
-      intro.trim() !== ""
+      introduction.trim() !== ""
     );
   };
 
   const handleNext = () => {
     if (isFormValid()) {
-      // 모든 입력이 올바르면 다음 페이지로 이동
-      navigate('/Favorite_categories');
+
+      console.log("전송할 데이터:", nickname, introduction, `${selectedYear}-${selectedMonth}-${selectedDay}`,selectedGender ); // 데이터 출력
+
+      navigate(`/Favorite_categories`, {
+        state: {
+          'nickname': nickname,
+          'introduction' : introduction,
+          'birth' : `${selectedYear}-${selectedMonth}-${selectedDay}`,
+          'gender' : selectedGender
+        }
+      });
     } else {
-      // 경고 메시지 등을 표시하거나 원하는 처리를 수행
+      // 유효하지 않은 폼에 대한 경고 또는 다른 작업 수행
       alert("모든 필수 항목을 입력해주세요.");
     }
   };
@@ -340,15 +363,15 @@ const RegisterProfile = () => {
         <InputWrapper>
           <Input
             placeholder='한줄 자기소개를 입력하세요'
-            value={intro}
+            value={introduction}
             onChange={(e) => {
               if (e.target.value.length <= maxIntroLength) {
                 setIntro(e.target.value);
               }
             }}
           />
-          <CharacterCount isOverLimit={intro.length > maxIntroLength}>
-            {intro.length}/{maxIntroLength}
+          <CharacterCount isOverLimit={introduction.length > maxIntroLength}>
+            {introduction.length}/{maxIntroLength}
           </CharacterCount>
         </InputWrapper>
         <Text2>생년월일</Text2>
@@ -356,21 +379,21 @@ const RegisterProfile = () => {
           <Text3>*선택</Text3>
           <Wrap3>
             <Wrap5>
-              <Select>
+              <Select onChange={handleYearChange} value={selectedYear}>
                 {Year_List.map((year, index) => (
                   <Option key={index}>{year}</Option>
                 ))}
               </Select>
             </Wrap5>
             <Wrap5>
-              <Select>
+              <Select onChange={handleMonthChange} value={selectedMonth}>
                 {Month_List.map((month, index) => (
                   <Option key={index}>{month}</Option>
                 ))}
               </Select>
             </Wrap5>
             <Wrap5>
-              <Select>
+              <Select onChange={handleDayChange} value={selectedDay}>
                 {Day_List.map((day, index) => (
                   <Option key={index}>{day}</Option>
                 ))}
@@ -384,15 +407,15 @@ const RegisterProfile = () => {
           <Wrap4>
             <GenderButton
               style={{borderTopLeftRadius:'10px', borderBottomLeftRadius: '10px'}}
-              selected={selectedGender === 'male'}
-              onClick={() => handleGenderSelection('male')}
+              selected={selectedGender === 'm'}
+              onClick={() => handleGenderSelection('m')}
             >
               남자
             </GenderButton>
             <GenderButton
               style={{borderBottomRightRadius:'10px', borderTopRightRadius: '10px'}}
-              selected={selectedGender === 'female'}
-              onClick={() => handleGenderSelection('female')}
+              selected={selectedGender === 'f'}
+              onClick={() => handleGenderSelection('f')}
             >
               여자
             </GenderButton>

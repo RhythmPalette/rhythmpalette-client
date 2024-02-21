@@ -263,7 +263,7 @@ const SignUp_email = () => {
         // 콘솔에 데이터 출력
         console.log('Name:', name);
         console.log('ID:', loginId);
-        console.log('email', email)
+        console.log('email:', email)
         console.log('Password:', password);
       } else {
         // 서버 응답이 실패이면 에러 메시지를 설정합니다.

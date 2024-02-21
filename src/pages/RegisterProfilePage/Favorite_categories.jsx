@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import Arrow from "./Img/화살표.svg";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 const Background = styled.div`
   width: 100vw;
@@ -80,6 +80,8 @@ const ArrowBtn = styled.button`
 
 const Favorite_categories = () => {
   const [selectedBoxes, setSelectedBoxes] = useState(Array(11).fill(false));
+  const location = useLocation();
+  const { nickname, introduction, birth, gender } = location.state || {};
 
   const handleBoxClick = (index) => {
     const newSelectedBoxes = [...selectedBoxes];
@@ -92,7 +94,26 @@ const Favorite_categories = () => {
   
   const navigate = useNavigate();
   const handleNext = () => {
-      navigate('/Profile_music');
+    // 이전 페이지에서 받아온 정보와 선택한 박스의 값을 합치기
+    const preferenceGenres = selectedBoxes
+      .map((selected, index) => (selected ? index + 1 : null))
+      .filter((genre) => genre !== null);
+
+    // 다음 페이지로 전송할 데이터 준비
+    const dataToSend = {
+      nickname,
+      introduction,
+      birth,
+      gender,
+      preferenceGenre1: preferenceGenres[0],
+      preferenceGenre2: preferenceGenres[1],
+      preferenceGenre3: preferenceGenres[2],
+      // 데이터를 콘솔에 출력
+    };
+    console.log("전송할 데이터:", dataToSend);
+
+    // 다음 페이지로 이동
+    navigate('/Profile_music', { state: dataToSend });
   }
 
   return (

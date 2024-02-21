@@ -203,46 +203,63 @@ const Error = styled.div`
 
 const Login = () => {
   const [identifier, setIdentifier] = useState('');
-  const [password, setPassword] = useState('');
+  const [pw, setPassword] = useState('');
   const [identifierError, setIdentifierError] = useState('');
   const [passwordError, setPasswordError] = useState('');
 
   const navigate = useNavigate();
 
-  const handleLogin = () => {
-    // 예제에서는 간단히 이메일이나 아이디가 'test@test.com'이고, 비밀번호가 'password'일 때를 로그인 성공으로 가정
-    const correctIdentifier = 'test@test.com'; 
-    const correctPassword = 'password';
+  const handleLogin = async () => {
+    try {
+      console.log('로그인 시도:', identifier, pw);
+      
+      const response = await fetch(
+        'http://ec2-52-78-99-156.ap-northeast-2.compute.amazonaws.com:8080/api/v1/auth/signin',
+        {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            loginId: identifier,
+            password: pw,
+          }),
+        }
+      );
 
-    // 이메일 또는 아이디 유효성 검사
-    if (identifier !== correctIdentifier) {
-      setIdentifierError('이메일 또는 아이디가 일치하지 않습니다.');
-    } else {
-      setIdentifierError('');
-    }
+      const data = await response.json();
 
-    // 비밀번호 유효성 검사
-    if (password !== correctPassword) {
-      setPasswordError('비밀번호가 일치하지 않습니다.');
-    } else {
-      setPasswordError('');
-    }
+      if (response.ok) {
+        // 로그인 성공 시 토큰을 저장하거나 다른 작업을 수행할 수 있음
+        console.log('로그인 성공:', data);
 
-    // 이메일 또는 아이디와 비밀번호가 일치하면 로그인 성공
-    if (identifier === correctIdentifier && password === correctPassword) {
-      navigate('/register_profile');
-      console.log('로그인 성공');
+        // 예시: 토큰 저장
+        const { token, refreshToken } = data;
+        localStorage.setItem('accessToken', token);
+        localStorage.setItem('refreshToken', refreshToken);
+
+        // 로그인 후 이동할 페이지로 navigate
+        navigate('/register_profile');
+      } else {
+        // 로그인 실패 시 에러 메시지 표시
+        const data = await response.json();
+        console.log('서버 응답:', data);
+        console.error('로그인 실패:', data.error);
+        setIdentifierError('이메일 또는 아이디가 일치하지 않습니다.');
+        setPasswordError('비밀번호가 일치하지 않습니다.')
+      }
+    } catch (error) {
+      console.error('로그인 오류:', error);
     }
   };
 
   const Rest_api_key='9ca8862f645265320a040503a774512d' //REST API KEY
   const redirect_uri = 'http://localhost:3000/kakaologin' //Redirect URI
-  // oauth 요청 URL
   const kakaoURL = `https://kauth.kakao.com/oauth/authorize?client_id=${Rest_api_key}&redirect_uri=${redirect_uri}&response_type=code`
-  const kakaoLogin = ()=>{
-    window.location.href = kakaoURL
-  }
-  // const code = new URL(window.location.href).searchParams.get("code");
+  const kakaoLogin = () => {
+    window.location.href = kakaoURL;
+  };
 
   return (
     <Background>
@@ -271,7 +288,7 @@ const Login = () => {
         </Password>
         <Input
           type="password"
-          value={password}
+          value={pw}
           onChange={(e) => setPassword(e.target.value)}
         />
         <Error>{passwordError && <div>{passwordError}</div>}</Error>
